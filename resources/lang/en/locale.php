@@ -30,7 +30,6 @@ return [
                 'move'             => 'Move',
                 'remove_mms'       => 'Remove MMS',
                 'new_server'       => 'Add New Server',
-                /*Version 3.1*/
                 'add_coverage'     => 'Add Coverage',
                 'update_coverage'  => 'Update Coverage',
         ],
@@ -736,8 +735,6 @@ return [
                 'plans_disabled'                               => 'Selected plans disabled',
                 'plans_deleted'                                => 'Selected plans deleted',
                 'send_spam_message'                            => 'Customer can send spam message',
-
-                /*Version 3.1*/
                 'select_plan_as_per_requirement'               => 'Select plan as per your requirement',
                 'show_in_customer'                             => 'Show In Customer',
                 'coverage_was_successfully_added'              => 'Plan coverage was successfully added',
@@ -1017,8 +1014,6 @@ return [
                 'subscription_warning_description'     => 'Send an email or SMS anytime when your subscription going to be expired',
                 'delete_invoices'                      => 'Do you want delete these invoices!',
                 'invoices_deleted'                     => 'Selected invoices deleted',
-
-                /*version 3.1*/
                 'current_plan_information'             => "Your Current Plan is <strong>:plan_name</strong>",
                 'active_until'                         => "Active until <strong>:date</strong>",
                 'current_plan_notification'            => "We will send you a notification upon Subscription expiration",

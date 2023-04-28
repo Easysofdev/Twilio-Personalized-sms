@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Ultimate SMS'),
+    'name' => env('APP_NAME', 'Twilio Personalized SMS'),
 
 
     /*
@@ -27,7 +27,7 @@ return [
     |
     */
 
-    'title' => env('APP_TITLE', 'Bulk SMS Application For Marketing'),
+    'title' => env('APP_TITLE', 'SMS Application For Marketing'),
 
 
     /*
@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'keyword'       => env('APP_KEYWORD', 'ultimate sms, codeglen, bulk sms, sms, sms marketing, laravel, framework'),
+    'keyword'       => env('APP_KEYWORD', 'bulk sms, sms, sms marketing'),
 
 
     /*
@@ -72,7 +72,7 @@ return [
     | This is the footer text of your application.
     |
     */
-    'footer_text'   => env('APP_FOOTER_TEXT', 'Copyright &copy; Codeglen - 2020'),
+    'footer_text'   => env('APP_FOOTER_TEXT', '&copy;'),
 
 
     /*
@@ -232,7 +232,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'country' => env('APP_COUNTRY', 'Bangladesh'),
+    'country' => env('APP_COUNTRY', 'Nigeria'),
 
 
     /*

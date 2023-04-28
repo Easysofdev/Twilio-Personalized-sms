@@ -391,14 +391,3 @@ Route::prefix('reports')->name('reports.')->group(function () {
     Route::post('/{uid}/destroy', 'ReportsController@destroy');
     Route::post('batch_action', 'ReportsController@batchAction')->name('batch_action');
 });
-
-/*
-|--------------------------------------------------------------------------
-| Theme Customizer
-|--------------------------------------------------------------------------
-|
-|
-|
-*/
-Route::get('customizer', 'ThemeCustomizerController@index')->name('theme.customizer');
-Route::post('customizer', 'ThemeCustomizerController@postCustomizer');

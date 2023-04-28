@@ -740,14 +740,6 @@ class Helper
                                                 ],
                                         ],
                                 ],
-                                [
-                                        "url"    => url(config('app.admin_path') . "/customizer"),
-                                        'slug'   => config('app.admin_path') . "/customizer",
-                                        "name"   => "Theme Customizer",
-                                        "i18n"   => "Theme Customizer",
-                                        "icon"   => "grid",
-                                        "access" => "general settings",
-                                ],
                         ],
                         "customer" => [
                                 [
