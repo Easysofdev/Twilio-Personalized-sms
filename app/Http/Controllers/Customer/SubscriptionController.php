@@ -131,14 +131,6 @@ class SubscriptionController extends CustomerBaseController
     public function renewPost(Subscription $subscription, PayPaymentRequest $request)
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.subscriptions.renew', $subscription->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $plan = $subscription->plan;
         $data = $this->subscriptions->payPayment($plan, $subscription, $request->except('_token'));
 
@@ -234,15 +226,6 @@ class SubscriptionController extends CustomerBaseController
      */
     public function cancel(Subscription $subscription): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $subscription->setEnded(Auth::user()->id);
 
@@ -264,14 +247,6 @@ class SubscriptionController extends CustomerBaseController
 
     public function checkoutPurchase(Plan $plan, Subscription $subscription, PayPaymentRequest $request)
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.subscriptions.purchase', $plan->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $data = $this->subscriptions->payPayment($plan, $subscription, $request->except('_token'));
 
         if (isset($data)) {
@@ -311,14 +286,6 @@ class SubscriptionController extends CustomerBaseController
      */
     public function preferences(Subscription $subscription, UpdatePreferencesRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.subscriptions.index')->withInput(['tab' => 'preferences'])->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if ($request->end_period_last_days) {
             $subscription->update([
                 'end_period_last_days' => $request->end_period_last_days,

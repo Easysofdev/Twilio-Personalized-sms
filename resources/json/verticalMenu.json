@@ -178,12 +178,6 @@
           "access": "view email_templates"
         },
         {
-          "url": "admin/update-application",
-          "name": "Update Application",
-          "i18n": "Update Application",
-          "access": "manage update_application"
-        },
-        {
           "url": "admin/maintenance-mode",
           "name": "Maintenance Mode",
           "i18n": "Maintenance Mode",

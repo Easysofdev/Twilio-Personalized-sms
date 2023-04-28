@@ -49,13 +49,6 @@ class PaymentMethodController extends AdminBaseController
      */
     public function activeToggle(PaymentMethods $gateway): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
 
             $this->authorize('view payment_gateways');
@@ -110,13 +103,6 @@ class PaymentMethodController extends AdminBaseController
      */
     public function update(PaymentMethods $payment_gateway, UpdatePaymentMethods $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.payment-gateways.show', $payment_gateway->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $options = $request->except('_token', '_method', 'name', 'type');
 
         $payment_gateway->name    = $request->name;

@@ -299,14 +299,6 @@ class KeywordController extends CustomerBaseController
     public function update(Keywords $keyword, CustomerUpdate $request): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.keywords.show', $keyword->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->keywords->updateByCustomer($keyword, $request->except('_method', '_token'));
 
         return redirect()->route('customer.keywords.show', $keyword->uid)->with([
@@ -325,13 +317,6 @@ class KeywordController extends CustomerBaseController
 
     public function removeMMS(Keywords $keyword): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         if ( ! $keyword->where('user_id', Auth::user()->id)->update(['reply_mms' => null])) {
             return response()->json([
@@ -357,13 +342,6 @@ class KeywordController extends CustomerBaseController
      */
     public function release(Keywords $keyword, $id): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('release_keywords');
 
@@ -385,13 +363,6 @@ class KeywordController extends CustomerBaseController
      */
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $ids      = $request->get('ids');
         $keywords = Keywords::where('user_id', Auth::user()->id)->whereIn('uid', $ids)->cursor();

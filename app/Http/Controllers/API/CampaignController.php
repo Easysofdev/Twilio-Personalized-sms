@@ -40,13 +40,6 @@ class CampaignController extends Controller
      */
     public function smsSend(Campaigns $campaign, SendAPISMS $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $input = $request->all();
 
         if ( ! isset($request->type)) {
@@ -174,14 +167,6 @@ class CampaignController extends Controller
      */
     public function viewSMS(Reports $uid): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('view_reports')) {
             $reports = Reports::select('uid', 'to', 'from', 'message', 'status', 'cost')->where('api_key', request()->user()->api_token)->find($uid->id);
             if ($reports) {
@@ -202,14 +187,6 @@ class CampaignController extends Controller
      */
     public function viewAllSMS(): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('view_reports')) {
             $reports = Reports::select('uid', 'to', 'from', 'message', 'status', 'cost')->where('api_key', request()->user()->api_token)->paginate(25);
             if ($reports) {

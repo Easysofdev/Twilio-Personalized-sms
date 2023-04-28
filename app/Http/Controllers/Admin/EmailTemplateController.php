@@ -72,13 +72,6 @@ class EmailTemplateController extends AdminBaseController
      */
     public function activeToggle(EmailTemplates $template): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
 
             $this->authorize('view email_templates');
@@ -111,13 +104,6 @@ class EmailTemplateController extends AdminBaseController
 
     public function update(EmailTemplates $email_template, EmailTemplateRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.email-templates.show', $email_template->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $email_template->update([
                 'subject' => $request->input('subject'),
                 'content' => $request->input('content'),

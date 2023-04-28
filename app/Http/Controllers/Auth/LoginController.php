@@ -220,14 +220,6 @@ class LoginController extends Controller
 
     public function redirectToProvider($provider): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('login')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (!in_array($provider, $this->supportedProviders, true)) {
             return redirect()->route('user.home')->with([
                 'status'  => 'error',
@@ -247,13 +239,6 @@ class LoginController extends Controller
      */
     public function handleProviderCallback($provider): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('login')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $data = Socialite::driver($provider)->user();
 
         try {
@@ -304,13 +289,6 @@ class LoginController extends Controller
      */
     public function debug()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('login')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $backUpCode = [];
         for ($i = 0; $i < 8; $i++) {
             $backUpCode[] = rand(100000, 999999);

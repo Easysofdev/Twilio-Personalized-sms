@@ -117,13 +117,6 @@ class AccountController extends Controller
          */
         public function updateAvatar(Request $request): RedirectResponse
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $user = Auth::user();
 
                 try {
@@ -160,14 +153,6 @@ class AccountController extends Controller
         public function removeAvatar(): JsonResponse
         {
 
-                if (config('app.env') == 'demo') {
-                        return response()->json([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
-
                 $user = Auth::user();
                 // Remove old images
                 $user->removeImage();
@@ -189,14 +174,6 @@ class AccountController extends Controller
          */
         public function switchView(Request $request): RedirectResponse
         {
-                if (config('app.env') == 'demo') {
-
-                        return redirect()->route(Helper::home_route())->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $user = Auth::user();
 
                 switch ($request->portal) {
@@ -259,13 +236,6 @@ class AccountController extends Controller
          */
         public function update(UpdateUserRequest $request): RedirectResponse
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $input = $request->all();
 
                 $data = $this->account->update($input);
@@ -286,13 +256,6 @@ class AccountController extends Controller
 
         public function changePassword(ChangePasswordRequest $request)
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->withInput(['tab' => 'security'])->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 Auth::user()->update([
                         'password' => Hash::make($request->password),
                 ]);
@@ -309,14 +272,6 @@ class AccountController extends Controller
 
         public function twoFactorAuthentication($status)
         {
-
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $user = Auth::user();
 
                 if ($status == 'disabled') {
@@ -343,13 +298,6 @@ class AccountController extends Controller
          */
         public function updateTwoFactorAuthentication($status, Request $request): RedirectResponse
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $request->validate([
                         'two_factor_code' => 'integer|required|min:6',
                 ]);
@@ -393,13 +341,6 @@ class AccountController extends Controller
          */
         public function generateTwoFactorAuthenticationCode(): RedirectResponse
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $user = Auth::user();
 
                 $backup_codes = $user->generateTwoFactorBackUpCode();
@@ -423,14 +364,6 @@ class AccountController extends Controller
          */
         public function updateInformation(UpdateUserInformationRequest $request): RedirectResponse
         {
-
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $input = $request->except('_token');
 
                 $customer = Auth::user()->customer;
@@ -474,20 +407,6 @@ class AccountController extends Controller
          */
         public function delete(Request $request)
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.account')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $this->account->delete();
 
 
@@ -584,13 +503,6 @@ class AccountController extends Controller
          */
         public function notificationToggle(Notifications $notification): JsonResponse
         {
-                if (config('app.env') == 'demo') {
-                        return response()->json([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 try {
 
                         if ($notification->update(['mark_read' => !$notification->mark_read])) {
@@ -618,14 +530,6 @@ class AccountController extends Controller
 
         public function notificationBatchAction(Request $request): JsonResponse
         {
-
-                if (config('app.env') == 'demo') {
-                        return response()->json([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $action = $request->get('action');
                 $ids    = $request->get('ids');
 
@@ -705,13 +609,6 @@ class AccountController extends Controller
 
         public function payTopUp(PayPayment $request)
         {
-                if (config('app.env') == 'demo') {
-                        return redirect()->route('user.home')->with([
-                                'status'  => 'error',
-                                'message' => 'Sorry! This option is not available in demo mode',
-                        ]);
-                }
-
                 $data = $this->account->payPayment($request->except('_token'));
 
                 if (isset($data->getData()->status)) {

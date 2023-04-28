@@ -200,14 +200,6 @@ class TemplateTagsController extends AdminBaseController
 
     public function store(StoreTag $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.tags.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $input          = $request->input();
         $tag            = strtolower(str_replace([" ", '-'], '_', $input['name']));
         $available_tags = ['email', 'username', 'company', 'first_name', 'last_name', 'birth_date', 'anniversary_date', 'address'];
@@ -240,13 +232,6 @@ class TemplateTagsController extends AdminBaseController
 
     public function update(TemplateTags $tag, UpdateTag $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.tags.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->template_tags->update($tag, $request->input());
 
         return redirect()->route('admin.tags.index')->with([
@@ -268,13 +253,6 @@ class TemplateTagsController extends AdminBaseController
      */
     public function activeToggle(TemplateTags $tag): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $this->authorize('edit tags');
 
@@ -304,14 +282,6 @@ class TemplateTagsController extends AdminBaseController
      */
     public function destroy(TemplateTags $tag): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete tags');
 
         $this->template_tags->destroy($tag);
@@ -334,14 +304,6 @@ class TemplateTagsController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -406,14 +368,6 @@ class TemplateTagsController extends AdminBaseController
      */
     public function export()
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.tags.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('view tags');
 

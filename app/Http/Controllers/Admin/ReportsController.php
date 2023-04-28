@@ -163,14 +163,6 @@ class ReportsController extends Controller
 
     public function destroy(Reports $uid): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if ( ! $uid->delete()) {
             return response()->json([
                     'status'  => 'error',
@@ -194,14 +186,6 @@ class ReportsController extends Controller
      */
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $ids = $request->get('ids');
 
         if (Reports::whereIn('uid', $ids)->delete()) {
@@ -285,14 +269,6 @@ class ReportsController extends Controller
      */
     public function export(Request $request)
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.reports.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view sms_history');
 
         Tool::resetMaxExecutionTime();

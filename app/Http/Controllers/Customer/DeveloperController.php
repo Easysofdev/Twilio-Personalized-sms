@@ -66,14 +66,6 @@ class DeveloperController extends Controller
     public function generate(): JsonResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $user        = Auth::user();
         $permissions = json_decode($user->customer->permissions, true);
 
@@ -103,14 +95,6 @@ class DeveloperController extends Controller
 
     public function sendingServer(Request $request)
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.developer.settings')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $status = Auth::user()->update([
                 'api_sending_server' => $request->sending_server,
         ]);

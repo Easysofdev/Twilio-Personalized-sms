@@ -191,14 +191,6 @@ class SenderIDController extends CustomerBaseController
     public function store(CustomSenderID $request): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.senderid.index')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->sender_ids->storeCustom($request->except('_token'));
 
         Notifications::create([
@@ -293,15 +285,6 @@ class SenderIDController extends CustomerBaseController
      */
     public function destroy(Senderid $senderid): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete_sender_id');
 
         $this->sender_ids->destroy($senderid, Auth::user()->id);
@@ -322,15 +305,6 @@ class SenderIDController extends CustomerBaseController
      */
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $ids    = $request->get('ids');
         $status = Senderid::where('user_id', Auth::user()->id)->whereIn('uid', $ids)->delete();
 

@@ -155,13 +155,6 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoices $invoice): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if ( ! $invoice->delete()) {
             return response()->json([
                     'status'  => 'error',
@@ -184,14 +177,7 @@ class InvoiceController extends Controller
      * @return JsonResponse
      */
     public function batchAction(Request $request): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        $ids = $request->get('ids');
+    {        $ids = $request->get('ids');
 
         if (Invoices::whereIn('uid', $ids)->delete()) {
             return response()->json([

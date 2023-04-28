@@ -214,13 +214,6 @@ class RoleController extends AdminBaseController
      */
     public function store(StoreAdminRole $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.roles.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->roles->store($request->input());
 
         return redirect()->route('admin.roles.index')->with([
@@ -277,13 +270,6 @@ class RoleController extends AdminBaseController
 
     public function update(Role $role, UpdateAdminRole $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.roles.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->roles->update($role, $request->input());
 
         return redirect()->route('admin.roles.index')->with([
@@ -304,13 +290,6 @@ class RoleController extends AdminBaseController
      */
     public function activeToggle(Role $role): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $this->authorize('edit roles');
 
@@ -344,14 +323,6 @@ class RoleController extends AdminBaseController
 
     public function destroy(Role $role): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete roles');
 
         $this->roles->destroy($role);
@@ -374,14 +345,6 @@ class RoleController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -448,13 +411,6 @@ class RoleController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.roles.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('edit roles');
 

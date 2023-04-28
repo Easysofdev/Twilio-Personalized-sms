@@ -219,13 +219,6 @@ class PlanController extends AdminBaseController
      */
     public function store(StorePlanRequest $request, Plan $plan): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         if (isset($request->is_popular)) {
             $popular = Plan::where('status', 1)->where('is_popular', 1)->first();
@@ -284,13 +277,6 @@ class PlanController extends AdminBaseController
      */
     public function update(Plan $plan, StorePlanRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('edit plans');
 
         if (isset($request->is_popular) && $plan->is_popular == 0) {
@@ -323,13 +309,6 @@ class PlanController extends AdminBaseController
      */
     public function settingFeatures(Request $request, Plan $plan): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('edit plans');
 
         if ( ! $request->has('sms_max') || $request->sms_max == null) {
@@ -411,13 +390,6 @@ class PlanController extends AdminBaseController
 
     public function updateSpeedLimit(SpeedLimitRequest $request, Plan $plan): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $sendingLimit = $request->input('sending_limit');
 
         if (isset($sendingLimit) && $sendingLimit != 'custom' && $sendingLimit != 'other') {
@@ -451,14 +423,6 @@ class PlanController extends AdminBaseController
 
     public function updateCuttingSystem(CuttingSystemRequest $request, Plan $plan): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->plans->updateCuttingSystem($plan, $request->except('_token'));
 
         return redirect()->route('admin.plans.show', $plan->uid)->withInput(['tab' => 'cutting_system'])->with([
@@ -479,13 +443,6 @@ class PlanController extends AdminBaseController
 
     public function addSendingServers(AddSendingServerRequest $request, Plan $plan): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $server = SendingServer::findByUid($request->sending_server_id);
         if ($server) {
 
@@ -542,13 +499,6 @@ class PlanController extends AdminBaseController
 
     public function updateFitness(Request $request, Plan $plan): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('edit plans');
 
         $sending_servers = $request->sending_servers;
@@ -590,13 +540,6 @@ class PlanController extends AdminBaseController
 
     public function setPrimary(SetPrimarySendingServerRequest $request, Plan $plan): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->plans->setPrimarySendingServer($plan, $request->input());
 
         return response()->json([
@@ -617,13 +560,6 @@ class PlanController extends AdminBaseController
 
     public function deletePlanSendingServer(SetPrimarySendingServerRequest $request, Plan $plan): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->plans->removeSendingServerByUid($plan, $request->input());
 
         return response()->json([
@@ -646,13 +582,6 @@ class PlanController extends AdminBaseController
 
     public function updatePricing(PlanPricingRequest $request, Plan $plan): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.show', $plan->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->plans->updatePricing($plan, $request->except('_token'));
 
         return redirect()->route('admin.plans.show', $plan->uid)->withInput(['tab' => 'pricing'])->with([
@@ -672,13 +601,6 @@ class PlanController extends AdminBaseController
      */
     public function copy(CopyPlanRequest $request, Plan $plan): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->plans->copy($plan, $request->only('plan_name'));
 
         return response()->json([
@@ -698,14 +620,7 @@ class PlanController extends AdminBaseController
      * @throws GeneralException
      */
     public function activeToggle(Plan $plan): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        try {
+    {        try {
             $this->authorize('manage plans');
 
             if ($plan->update(['status' => ! $plan->status])) {
@@ -735,14 +650,7 @@ class PlanController extends AdminBaseController
      * @throws AuthorizationException
      */
     public function destroy(Plan $plan): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        $this->authorize('delete plans');
+    {        $this->authorize('delete plans');
 
         Subscription::where('plan_id', $plan->id)->delete();
 
@@ -766,14 +674,7 @@ class PlanController extends AdminBaseController
      */
 
     public function batchAction(Request $request): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        $action = $request->get('action');
+    {        $action = $request->get('action');
         $ids    = $request->get('ids');
 
         switch ($action) {
@@ -839,13 +740,6 @@ class PlanController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('manage plans');
 
         $file_name = (new FastExcel($this->planGenerator()))->export(storage_path('Plan_'.time().'.xlsx'));
@@ -1053,14 +947,6 @@ class PlanController extends AdminBaseController
      */
     public function editCoveragePost(Plan $plan, PlansCoverageCountries $coverage, AddCoverageRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.plans.settings.edit_coverage', ['plan' => $plan->uid, 'coverage' => $coverage->uid])->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('manage plans');
 
 
@@ -1092,13 +978,6 @@ class PlanController extends AdminBaseController
      */
     public function activeCoverageToggle(Plan $plan, PlansCoverageCountries $coverage): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $this->authorize('manage plans');
 
@@ -1131,13 +1010,6 @@ class PlanController extends AdminBaseController
      */
     public function deleteCoverage(Plan $plan, PlansCoverageCountries $coverage): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $this->authorize('manage plans');
 

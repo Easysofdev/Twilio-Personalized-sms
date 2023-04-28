@@ -24,9 +24,9 @@ class ThemeCustomizerController extends AdminBaseController
         $this->authorize('general settings');
 
         $breadcrumbs = [
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Theme Customizer')],
-                ['name' => __('locale.menu.Theme Customizer')],
+            ['link' => url(config('app.admin_path') . "/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url(config('app.admin_path') . "/dashboard"), 'name' => __('locale.menu.Theme Customizer')],
+            ['name' => __('locale.menu.Theme Customizer')],
         ];
 
         return view('admin.ThemeCustomizer.index', compact('breadcrumbs'));
@@ -40,14 +40,6 @@ class ThemeCustomizerController extends AdminBaseController
      */
     public function postCustomizer(ThemeCustomizerRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.theme.customizer')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $input = $request->all();
 
         if (isset($request->sidebarCollapsed)) {
@@ -70,13 +62,13 @@ class ThemeCustomizerController extends AdminBaseController
         AppConfig::setEnv('THEME_NAVBAR_COLOR', $navbarColor);
 
         $customizer_settings = '
-        THEME_LAYOUT_TYPE='.$input['mainLayoutType'].'
-THEME_SKIN='.$input['theme'].'
-THEME_NAVBAR_TYPE='.$input['navbarType'].'
-THEME_FOOTER_TYPE='.$input['footerType'].'
-THEME_LAYOUT_WIDTH='.$input['layoutWidth'].'
-THEME_MENU_COLLAPSED='.$sidebarCollapsed.'
-THEME_BREADCRUMBS='.$pageHeader.'
+        THEME_LAYOUT_TYPE=' . $input['mainLayoutType'] . '
+THEME_SKIN=' . $input['theme'] . '
+THEME_NAVBAR_TYPE=' . $input['navbarType'] . '
+THEME_FOOTER_TYPE=' . $input['footerType'] . '
+THEME_LAYOUT_WIDTH=' . $input['layoutWidth'] . '
+THEME_MENU_COLLAPSED=' . $sidebarCollapsed . '
+THEME_BREADCRUMBS=' . $pageHeader . '
 ';
 
         // @ignoreCodingStandard
@@ -86,13 +78,13 @@ THEME_BREADCRUMBS='.$pageHeader.'
         $cleanArray = preg_grep("/$unwanted/i", $rows, PREG_GREP_INVERT);
 
         $cleanString = implode("\n", $cleanArray);
-        $env         = $cleanString.$customizer_settings;
+        $env         = $cleanString . $customizer_settings;
 
         file_put_contents(base_path('.env'), $env);
 
         return redirect()->route('admin.theme.customizer')->with([
-                'status'  => 'success',
-                'message' => 'Theme customizer was successfully saved',
+            'status'  => 'success',
+            'message' => 'Theme customizer was successfully saved',
         ]);
     }
 }

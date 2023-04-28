@@ -361,11 +361,6 @@ Route::resource('email-templates', 'EmailTemplateController', [
 //Maintenance Mode
 Route::get('maintenance-mode', 'SettingsController@maintenanceMode')->name('settings.maintenance_mode');
 
-//update application
-Route::get('update-application', 'SettingsController@updateApplication')->name('settings.update_application');
-Route::post('update-application', 'SettingsController@postUpdateApplication');
-Route::get('check-available-update', 'SettingsController@checkAvailableUpdate')->name('settings.check_update');
-
 //Plugins
 Route::get('plugins', 'PluginsController@plugins')->name('plugins');
 

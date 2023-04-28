@@ -226,13 +226,6 @@ class SubscriptionController extends AdminBaseController
      */
     public function store(StoreSubscription $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.subscriptions.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $response = $this->subscriptions->store($request->input());
 
 
@@ -282,13 +275,6 @@ class SubscriptionController extends AdminBaseController
      */
     public function approvePending(Subscription $subscription): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('manage subscription');
 
         $this->subscriptions->approvePending($subscription);
@@ -311,14 +297,6 @@ class SubscriptionController extends AdminBaseController
      */
     public function rejectPending(Subscription $subscription, Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('manage subscription');
 
         if ( ! $request->reason) {
@@ -347,14 +325,6 @@ class SubscriptionController extends AdminBaseController
      */
     public function cancel(Subscription $subscription): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('manage subscription');
 
         $subscription->setEnded(Auth::user()->id);
@@ -375,14 +345,6 @@ class SubscriptionController extends AdminBaseController
      */
     public function destroy(Subscription $subscription): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete subscription');
 
         $this->subscriptions->destroy($subscription);
@@ -405,14 +367,6 @@ class SubscriptionController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 

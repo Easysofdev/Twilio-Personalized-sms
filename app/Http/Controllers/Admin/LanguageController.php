@@ -84,14 +84,6 @@ class LanguageController extends AdminBaseController
     public function store(StoreLanguageRequest $request): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.languages.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->languages->store($request->input());
 
         return redirect()->route('admin.languages.index')->with([
@@ -113,13 +105,6 @@ class LanguageController extends AdminBaseController
      */
     public function activeToggle(Language $language): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
 
             $this->authorize('manage languages');
@@ -154,13 +139,6 @@ class LanguageController extends AdminBaseController
      */
     public function download(Language $language)
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.languages.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('manage languages');
 
@@ -201,13 +179,6 @@ class LanguageController extends AdminBaseController
      */
     public function uploadLanguage(UploadLanguageRequest $request, Language $language): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.languages.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->languages->upload($request->all(), $language);
 
@@ -252,13 +223,6 @@ class LanguageController extends AdminBaseController
      */
     public function destroy(Language $language): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('delete languages');
 

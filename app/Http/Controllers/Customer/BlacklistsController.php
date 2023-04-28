@@ -154,14 +154,6 @@ class BlacklistsController extends CustomerBaseController
     public function store(StoreBlacklist $request): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.blacklists.index')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->blacklists->store($request->input());
 
         return redirect()->route('customer.blacklists.index')->with([
@@ -179,13 +171,6 @@ class BlacklistsController extends CustomerBaseController
      */
     public function destroy(Blacklists $blacklist): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('delete_blacklist');
 
@@ -208,13 +193,6 @@ class BlacklistsController extends CustomerBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 

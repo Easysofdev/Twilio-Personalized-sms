@@ -713,14 +713,6 @@ class Helper
                                                         "access" => "view email_templates",
                                                         "icon"   => "mail",
                                                 ],
-                                                [
-                                                        "url"    => url(config('app.admin_path') . "/update-application"),
-                                                        'slug'   => config('app.admin_path') . "/update-application",
-                                                        "name"   => "Update Application",
-                                                        "i18n"   => "Update Application",
-                                                        "access" => "manage update_application",
-                                                        "icon"   => "upload",
-                                                ],
                                         ],
                                 ],
                                 [

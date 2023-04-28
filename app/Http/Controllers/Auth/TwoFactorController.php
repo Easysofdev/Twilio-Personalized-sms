@@ -73,14 +73,6 @@ class TwoFactorController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->back()->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $request->validate([
                 'two_factor_code' => 'integer|required|min:6',
         ]);
@@ -118,14 +110,6 @@ class TwoFactorController extends Controller
      */
     public function updateBackUpCode(Request $request)
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->back()->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $request->validate([
                 'two_factor_code' => 'integer|required|min:6',
         ]);
@@ -162,14 +146,6 @@ class TwoFactorController extends Controller
 
     public function resend(): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->back()->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $user = auth()->user();
         $user->generateTwoFactorCode();
         $user->notify(new TwoFactorCode());

@@ -58,14 +58,6 @@ class ContactsController extends Controller
      */
     public function storeContact(ContactGroups $group_id, StoreContact $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $data = $this->contactGroups->storeContact($group_id, $request->only('phone', 'first_name', 'last_name'));
 
         return $this->success($data->getData()->contact, $data->getData()->message);
@@ -82,14 +74,6 @@ class ContactsController extends Controller
      */
     public function searchContact(ContactGroups $group_id, Contacts $uid): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('view_contact')) {
 
             $data = Contacts::where('group_id', $group_id->id)->select('uid', 'phone', 'first_name', 'last_name')->where('uid', $uid->uid)->first();
@@ -111,13 +95,6 @@ class ContactsController extends Controller
      */
     public function updateContact(ContactGroups $group_id, Contacts $uid, StoreContact $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $input               = $request->only('phone', 'first_name', 'last_name');
         $input['contact_id'] = $uid->uid;
 
@@ -143,13 +120,6 @@ class ContactsController extends Controller
      */
     public function deleteContact(ContactGroups $group_id, Contacts $uid): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('delete_contact')) {
 
             $status = $this->contactGroups->contactDestroy($group_id, ['uid' => $uid->uid]);
@@ -173,14 +143,7 @@ class ContactsController extends Controller
      * @return JsonResponse
      */
     public function allContact(ContactGroups $group_id): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        if (request()->user()->tokenCan('view_contact')) {
+    {        if (request()->user()->tokenCan('view_contact')) {
             $data = Contacts::where('group_id', $group_id->id)->select('uid', 'phone', 'first_name', 'last_name')->paginate(25);
 
             return $this->success($data);
@@ -206,14 +169,6 @@ class ContactsController extends Controller
      */
     public function index(): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('view_contact_group')) {
 
             $data = ContactGroups::where('customer_id', request()->user()->id)->select('uid', 'name')->paginate(25);
@@ -235,14 +190,6 @@ class ContactsController extends Controller
 
     public function store(NewContactGroup $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $group = $this->contactGroups->store($request->input());
 
         if ($group) {
@@ -263,14 +210,6 @@ class ContactsController extends Controller
      */
     public function show(ContactGroups $group_id): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('view_contact_group')) {
             $data = ContactGroups::select('uid', 'name')->find($group_id->id);
 
@@ -292,14 +231,6 @@ class ContactsController extends Controller
 
     public function update(ContactGroups $contact, UpdateContactGroup $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $group = $this->contactGroups->update($contact, $request->input());
 
         if ($group) {
@@ -319,14 +250,6 @@ class ContactsController extends Controller
      */
     public function destroy(ContactGroups $contact): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (request()->user()->tokenCan('delete_contact_group')) {
 
             $this->contactGroups->destroy($contact);

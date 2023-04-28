@@ -230,14 +230,6 @@ class ContactsController extends CustomerBaseController
 
     public function store(NewContactGroup $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.index')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $group = $this->contactGroups->store($request->input());
 
         return redirect()->route('customer.contacts.show', $group->uid)->with([
@@ -324,13 +316,6 @@ class ContactsController extends CustomerBaseController
      */
     public function activeToggle(ContactGroups $contact): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $this->authorize('update_contact_group');
 
@@ -362,14 +347,6 @@ class ContactsController extends CustomerBaseController
      */
     public function copy(ContactGroups $contact, Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('create_contact_group');
 
         $totalData = ContactGroups::where('customer_id', auth()->user()->id)->count();
@@ -511,14 +488,6 @@ class ContactsController extends CustomerBaseController
 
     public function update(ContactGroups $contact, UpdateContactGroup $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.index')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $group = $this->contactGroups->update($contact, $request->except('_method', '_token'));
 
         return redirect()->route('customer.contacts.show', $group->uid)->with([
@@ -537,13 +506,6 @@ class ContactsController extends CustomerBaseController
      */
     public function destroy(ContactGroups $contact): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete_contact_group');
 
         $this->contactGroups->destroy($contact);
@@ -565,14 +527,6 @@ class ContactsController extends CustomerBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -787,14 +741,6 @@ class ContactsController extends CustomerBaseController
     public function updateContactStatus(ContactGroups $contact, Request $request): JsonResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->authorize('update_contact');
         $status = $this->contactGroups->updateContactStatus($contact, $request->only('id'));
         if ($status) {
@@ -821,14 +767,6 @@ class ContactsController extends CustomerBaseController
      */
     public function deleteContact(ContactGroups $contact, Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete_contact');
 
         $status = $this->contactGroups->contactDestroy($contact, $request->only('id'));
@@ -895,13 +833,6 @@ class ContactsController extends CustomerBaseController
      */
     public function updateContact(ContactGroups $contact, UpdateContact $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.show', $contact->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $status = $this->contactGroups->updateContact($contact, $request->except('_token'));
         if ($status) {
@@ -975,14 +906,6 @@ class ContactsController extends CustomerBaseController
                 return view('customer.Contacts.import_fields', compact('csv_data', 'contact', 'csv_data_file', 'breadcrumbs'));
             }
         } elseif (isset($request->recipients) && $request->recipients != null) {
-
-            if (config('app.env') == 'demo') {
-                return redirect()->route('customer.contacts.show', $contact->uid)->withInput(['tab' => 'contact'])->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-                ]);
-            }
-
             if ($request->delimiter == ';') {
                 $recipients = explode(';', $request->recipients);
             } elseif ($request->delimiter == ',') {
@@ -1054,14 +977,6 @@ class ContactsController extends CustomerBaseController
      */
     public function importProcessData(ContactGroups $contact, Request $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.show', $contact->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $data      = CsvData::find($request->csv_data_file_id);
         $csv_data  = json_decode($data->csv_data, true);
         $db_fields = $request->fields;
@@ -1148,14 +1063,6 @@ class ContactsController extends CustomerBaseController
 
     public function batchActionContact(ContactGroups $contact, Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -1279,13 +1186,6 @@ class ContactsController extends CustomerBaseController
      */
     public function exportContact(ContactGroups $contact)
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.show', $contact->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('view_contact');
 
@@ -1314,13 +1214,6 @@ class ContactsController extends CustomerBaseController
      */
     public function insertContactBySubscriptionForm(ContactGroups $contact, Request $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.show', $contact->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $rules = [
             'phone' => ['required', new Phone($request->phone)],
         ];
@@ -1383,13 +1276,6 @@ class ContactsController extends CustomerBaseController
      */
     public function message(ContactGroups $contact, UpdateContactGroupMessage $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.show', $contact->uid)->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $contact->{$request->message_form} = $request->message;
         $contact->save();
 
@@ -1408,15 +1294,7 @@ class ContactsController extends CustomerBaseController
      * @return JsonResponse
      */
     public function optInKeyword(ContactGroups $contact, Request $request): JsonResponse
-    {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        $keyword_name = $request->keyword_name;
+    {        $keyword_name = $request->keyword_name;
         if ($keyword_name) {
             $keyword = Keywords::where('user_id', Auth::user()->id)->where('keyword_name', $keyword_name)->first();
             if ($keyword) {
@@ -1460,14 +1338,6 @@ class ContactsController extends CustomerBaseController
      */
     public function optOutKeyword(ContactGroups $contact, Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $keyword_name = $request->keyword_name;
         if ($keyword_name) {
             $keyword = Keywords::where('user_id', Auth::user()->id)->where('keyword_name', $keyword_name)->first();
@@ -1513,15 +1383,7 @@ class ContactsController extends CustomerBaseController
      * @return JsonResponse
      */
     public function deleteOptInKeyword(ContactGroups $contact, Request $request): JsonResponse
-    {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        $keyword_id    = $request->id;
+    {        $keyword_id    = $request->id;
         $optin_keyword = ContactGroupsOptinKeywords::where('contact_group', $contact->id)->where('uid', $keyword_id)->delete();
         if ($optin_keyword) {
             return response()->json([
@@ -1546,14 +1408,6 @@ class ContactsController extends CustomerBaseController
      */
     public function deleteOptOutKeyword(ContactGroups $contact, Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $keyword_id     = $request->id;
         $optout_keyword = ContactGroupsOptoutKeywords::where('contact_group', $contact->id)->where('uid', $keyword_id)->delete();
         if ($optout_keyword) {
@@ -1590,14 +1444,6 @@ class ContactsController extends CustomerBaseController
      */
     public function export()
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.contacts.index')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view_contact');
 
         $file_name = (new FastExcel($this->contactGroupsGenerator()))->export(storage_path('ContactGroups_' . time() . '.xlsx'));

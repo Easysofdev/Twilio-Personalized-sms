@@ -220,12 +220,6 @@ class AdministratorController extends AdminBaseController
 
     public function store(StoreAdministrator $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.administrators.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
 
         $admin = $this->users->store($request->input());
 
@@ -284,13 +278,6 @@ class AdministratorController extends AdminBaseController
      */
     public function update(User $administrator, UpdateAdministrator $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.administrators.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->users->update($administrator, $request->input());
 
         // Upload and save image
@@ -319,12 +306,6 @@ class AdministratorController extends AdminBaseController
      */
     public function activeToggle(User $administrator): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
         try {
             $this->authorize('edit administrator');
 
@@ -356,13 +337,6 @@ class AdministratorController extends AdminBaseController
      */
     public function destroy(User $administrator): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete administrator');
 
         $this->users->destroy($administrator);
@@ -385,13 +359,6 @@ class AdministratorController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -459,14 +426,6 @@ class AdministratorController extends AdminBaseController
      */
     public function export()
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.administrators.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('edit administrator');
 
         $file_name = (new FastExcel($this->AdministratorGenerator()))->export(storage_path('Administrator_'.time().'.xlsx'));

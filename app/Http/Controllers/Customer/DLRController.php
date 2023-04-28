@@ -326,13 +326,6 @@ class DLRController extends Controller
      */
     public static function inboundDLR($to, $message, $sending_sever, $cost, $from = null, $media_url = null)
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry!! This options is not available in demo mode',
-            ]);
-        }
-
         $to = str_replace(['(', ')', '+', '-', ' '], '', trim($to));
 
         if ($from != null) {

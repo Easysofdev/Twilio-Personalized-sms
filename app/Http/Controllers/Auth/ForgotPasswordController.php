@@ -50,14 +50,6 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('password.request')->withInput($request->only('email'))->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $rules = [
                 'email' => 'required|email|exists:users',
         ];

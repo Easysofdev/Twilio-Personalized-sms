@@ -20,14 +20,6 @@ class APIController extends Controller
 
     public function me(): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $user = auth()->user();
 
         $data = [
@@ -51,14 +43,6 @@ class APIController extends Controller
      */
     public function balance(): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $data = [
                 'remaining_unit' => (Auth::user()->sms_unit == -1) ? __('locale.labels.unlimited') : Tool::format_number(Auth::user()->sms_unit),
                 'expired_on'     => Tool::customerDateTime(Auth::user()->customer->subscription->current_period_ends_at),

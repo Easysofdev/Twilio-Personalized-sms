@@ -174,13 +174,6 @@ class BlacklistsController extends AdminBaseController
 
     public function store(StoreBlacklist $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.blacklists.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->blacklists->store($request->input());
 
         return redirect()->route('admin.blacklists.index')->with([
@@ -199,12 +192,6 @@ class BlacklistsController extends AdminBaseController
      */
     public function destroy(Blacklists $blacklist): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
         $this->authorize('delete blacklist');
 
         $this->blacklists->destroy($blacklist);
@@ -227,13 +214,6 @@ class BlacklistsController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -280,12 +260,6 @@ class BlacklistsController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.blacklists.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
 
         $this->authorize('view blacklist');
 

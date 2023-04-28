@@ -249,13 +249,6 @@ class NumberController extends CustomerBaseController
      */
     public function release(PhoneNumbers $phone_number, $id): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('release_numbers');
 
         $this->numbers->release($phone_number, $id);
@@ -275,13 +268,6 @@ class NumberController extends CustomerBaseController
      */
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $ids     = $request->get('ids');
         $numbers = PhoneNumbers::where('user_id', Auth::user()->id)->whereIn('uid', $ids)->cursor();
 

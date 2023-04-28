@@ -36,15 +36,15 @@ class AppConfig extends Model
                 return [
                         [
                                 'setting' => 'app_name',
-                                'value'   => 'Ultimate SMS',
+                                'value'   => 'Twilio Personalized SMS',
                         ],
                         [
                                 'setting' => 'app_title',
-                                'value'   => 'Bulk SMS Application For Marketing',
+                                'value'   => 'SMS Application For Marketing',
                         ],
                         [
                                 'setting' => 'app_keyword',
-                                'value'   => 'ultimate sms, codeglen, bulk sms, sms, sms marketing, laravel, framework',
+                                'value'   => 'bulk sms, sms, sms marketing',
                         ],
                         [
                                 'setting' => 'license',
@@ -52,7 +52,7 @@ class AppConfig extends Model
                         ],
                         [
                                 'setting' => 'license_type',
-                                'value'   => 'Regular license',
+                                'value'   => '',
                         ],
                         [
                                 'setting' => 'valid_domain',
@@ -60,23 +60,23 @@ class AppConfig extends Model
                         ],
                         [
                                 'setting' => 'from_email',
-                                'value'   => 'akasham67@gmail.com',
+                                'value'   => 'ttebify@gmail.com',
                         ],
                         [
                                 'setting' => 'from_name',
-                                'value'   => 'Ultimate SMS',
+                                'value'   => 'Twilio Personalized SMS',
                         ],
                         [
                                 'setting' => 'company_address',
-                                'value'   => 'House#11, Block#B, <br>Rampura<br>Banasree Project<br>Dhaka<br>1219<br>Bangladesh',
+                                'value'   => '',
                         ],
                         [
                                 'setting' => 'software_version',
-                                'value'   => '3.0.1',
+                                'value'   => '1.0.0',
                         ],
                         [
                                 'setting' => 'footer_text',
-                                'value'   => 'Copyright &copy; Codeglen - 2020',
+                                'value'   => 'Copyright &copy; Ttebify - 2020',
                         ],
                         [
                                 'setting' => 'app_logo',
@@ -88,11 +88,11 @@ class AppConfig extends Model
                         ],
                         [
                                 'setting' => 'country',
-                                'value'   => 'Bangladesh',
+                                'value'   => '',
                         ],
                         [
                                 'setting' => 'timezone',
-                                'value'   => 'Asia/Dhaka',
+                                'value'   => '',
                         ],
                         [
                                 'setting' => 'app_stage',
@@ -156,7 +156,7 @@ class AppConfig extends Model
                         ],
                         [
                                 'setting' => 'two_factor',
-                                'value'   => false,
+                                'value'   => true,
                         ],
                         [
                                 'setting' => 'two_factor_send_by',
@@ -172,11 +172,11 @@ class AppConfig extends Model
                         ],
                         [
                                 'setting' => 'captcha_site_key',
-                                'value'   => '6Lfp3ugUAAAAANwwZcKZ9qfOS4ha-Wla15B4IGVh',
+                                'value'   => '',
                         ],
                         [
                                 'setting' => 'captcha_secret_key',
-                                'value'   => '6Lfp3ugUAAAAAFW1exmw0I4C8K33mhkLdraWF8PA',
+                                'value'   => '',
                         ],
                         [
                                 'setting' => 'login_with_facebook',
@@ -244,7 +244,7 @@ class AppConfig extends Model
                         ],
                         [
                                 'setting' => 'notification_email',
-                                'value'   => 'akasham67@gmail.com',
+                                'value'   => 'ttebify@gmail.com',
                         ],
                         [
                                 'setting' => 'sender_id_notification_email',

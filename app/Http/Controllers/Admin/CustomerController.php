@@ -241,14 +241,6 @@ class CustomerController extends AdminBaseController
      */
     public function store(StoreCustomerRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $customer = $this->customers->store($request->input());
 
         // Upload and save image
@@ -343,13 +335,6 @@ class CustomerController extends AdminBaseController
      */
     public function updateAvatar(User $customer, UpdateAvatarRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.show', $customer->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             // Upload and save image
             if ($request->hasFile('image')) {
@@ -395,14 +380,6 @@ class CustomerController extends AdminBaseController
      */
     public function removeAvatar(User $customer): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         // Remove old images
         $customer->removeImage();
         $customer->image = null;
@@ -426,13 +403,6 @@ class CustomerController extends AdminBaseController
 
     public function update(User $customer, UpdateCustomerRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.show', $customer->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->customers->update($customer, $request->input());
 
         return redirect()->route('admin.customers.show', $customer->uid)->withInput(['tab' => 'account'])->with([
@@ -452,13 +422,6 @@ class CustomerController extends AdminBaseController
      */
     public function updateInformation(User $customer, UpdateInformationRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.show', $customer->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->customers->updateInformation($customer, $request->except('_token'));
 
         return redirect()->route('admin.customers.show', $customer->uid)->withInput(['tab' => 'information'])->with([
@@ -478,13 +441,6 @@ class CustomerController extends AdminBaseController
      */
     public function permissions(User $customer, PermissionRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.show', $customer->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->customers->permissions($customer, $request->only('permissions'));
 
         return redirect()->route('admin.customers.show', $customer->uid)->withInput(['tab' => 'permission'])->with([
@@ -504,14 +460,7 @@ class CustomerController extends AdminBaseController
      * @throws GeneralException
      */
     public function activeToggle(User $customer): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        try {
+    {        try {
             $this->authorize('edit customer');
 
             if ($customer->update(['status' => ! $customer->status])) {
@@ -544,14 +493,6 @@ class CustomerController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -598,13 +539,6 @@ class CustomerController extends AdminBaseController
      */
     public function destroy(User $customer): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete customer');
 
         PhoneNumbers::where('user_id', $customer->id)->update([
@@ -663,14 +597,6 @@ class CustomerController extends AdminBaseController
      */
     public function export()
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('edit customer');
 
         $file_name = (new FastExcel($this->customerGenerator()))->export(storage_path('Customers_'.time().'.xlsx'));
@@ -689,13 +615,6 @@ class CustomerController extends AdminBaseController
      */
     public function addUnit(User $customer, AddUnitRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
 
             if ($customer->sms_unit != '-1') {
@@ -748,13 +667,6 @@ class CustomerController extends AdminBaseController
      */
     public function removeUnit(User $customer, AddUnitRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.customers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
 
             if ($customer->sms_unit != '-1') {

@@ -114,13 +114,6 @@ class CampaignController extends CustomerBaseController
      */
     public function postQuickSend(Campaigns $campaign, QuickSendRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sms.quick_send')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
@@ -234,13 +227,6 @@ class CampaignController extends CustomerBaseController
      */
     public function storeCampaign(Campaigns $campaign, CampaignBuilderRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sms.campaign_builder')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
@@ -378,14 +364,6 @@ class CampaignController extends CustomerBaseController
      */
     public function importProcess(Campaigns $campaign, Request $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sms.import')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
@@ -530,13 +508,6 @@ class CampaignController extends CustomerBaseController
      */
     public function postVoiceQuickSend(Campaigns $campaign, VoiceQuickSendRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.voice.quick_send')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
@@ -637,13 +608,6 @@ class CampaignController extends CustomerBaseController
      */
     public function storeVoiceCampaign(Campaigns $campaign, VoiceCampaignBuilderRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.voice.campaign_builder')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
@@ -1154,13 +1118,6 @@ class CampaignController extends CustomerBaseController
      */
     public function postWhatsAppQuickSend(Campaigns $campaign, WhatsAppQuickSendRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.whatsapp.quick_send')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
@@ -1257,13 +1214,6 @@ class CampaignController extends CustomerBaseController
      */
     public function storeWhatsAppCampaign(Campaigns $campaign, WhatsAppCampaignBuilderRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.whatsapp.quick_send')->with([
-                'status'  => 'error',
-                'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {

@@ -158,13 +158,6 @@ class SpamWordController extends AdminBaseController
 
     public function store(StoreWord $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.spam-word.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->spam_words->store($request->input());
 
         return redirect()->route('admin.spam-word.index')->with([
@@ -187,14 +180,6 @@ class SpamWordController extends AdminBaseController
 
     public function destroy(SpamWord $spam_word): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete spam_word');
 
         $this->spam_words->destroy($spam_word);
@@ -217,13 +202,6 @@ class SpamWordController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -271,13 +249,6 @@ class SpamWordController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.spam-word.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view spam_word');
 
         $file_name = (new FastExcel($this->SpamWordGenerator()))->export(storage_path('spam_word_'.time().'.xlsx'));

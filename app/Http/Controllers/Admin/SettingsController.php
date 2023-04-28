@@ -119,14 +119,6 @@ class SettingsController extends AdminBaseController
     public function postGeneral(PostGeneralRequest $request): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.general')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         if (isset($request->app_logo) && $request->hasFile('app_logo') && $request->file('app_logo')->isValid()) {
             AppConfig::uploadFile($request->file('app_logo'), 'app_logo');
         }
@@ -189,13 +181,6 @@ class SettingsController extends AdminBaseController
      */
     public function email(SystemEmailRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.general')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->settings->systemEmail($request->except('_token'));
 
@@ -214,13 +199,6 @@ class SettingsController extends AdminBaseController
      */
     public function authentication(AuthenticationRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.general')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->settings->authentication($request->except('_token'));
 
@@ -240,13 +218,6 @@ class SettingsController extends AdminBaseController
      */
     public function notifications(NotificationsRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.general')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->settings->notifications($request->except('_token'));
 
@@ -265,14 +236,6 @@ class SettingsController extends AdminBaseController
      */
     public function pusher(PusherRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.general')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->settings->pusherSettings($request->except('_token'));
 
         return redirect()->route('admin.settings.general')->withInput(['tab' => 'pusher'])->with([
@@ -289,13 +252,6 @@ class SettingsController extends AdminBaseController
      */
     public function license(LicenseRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.general')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $purchase_code    = $request->input('license');
         $get_data = array();
@@ -349,31 +305,11 @@ class SettingsController extends AdminBaseController
         return view('admin.settings.system_settings', compact('breadcrumbs'));
     }
 
-    public function updateApplication()
-    {
-        $breadcrumbs = [
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Settings')],
-                ['name' => __('locale.menu.All Settings')],
-        ];
-
-
-        return view('admin.settings.UpdateApplication.index', compact('breadcrumbs'));
-
-    }
-
     /**
      * @return RedirectResponse
      */
     public function checkAvailableUpdate(): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.update_application')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $app_version      = config('app.version');
         $get_verification = 'https://support.codeglen.com/version/';
@@ -405,13 +341,6 @@ class SettingsController extends AdminBaseController
 
     public function postUpdateApplication(UpdateVersionRequest $request)
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.settings.update_application')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $purchase_code = $request->input('purchase_code');
         $domain_name   = config('app.url');
 

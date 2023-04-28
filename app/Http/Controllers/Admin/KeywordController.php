@@ -211,13 +211,6 @@ class KeywordController extends AdminBaseController
 
     public function store(StoreKeywordsRequest $request, Keywords $keyword): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.keywords.create')->withInput($request->except('_token'))->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->keywords->store($request->except('_token'), $keyword::billingCycleValues());
 
         return redirect()->route('admin.keywords.index')->with([
@@ -263,13 +256,6 @@ class KeywordController extends AdminBaseController
 
     public function update(Keywords $keyword, UpdateKeywordsRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.keywords.show', $keyword->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->keywords->update($keyword, $request->all(), $keyword::billingCycleValues());
 
         return redirect()->route('admin.keywords.show', $keyword->uid)->with([
@@ -288,13 +274,6 @@ class KeywordController extends AdminBaseController
 
     public function removeMMS(Keywords $keyword): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if ( ! $keyword->update(['reply_mms' => null])) {
             return response()->json([
                     'status'  => 'error',
@@ -318,13 +297,6 @@ class KeywordController extends AdminBaseController
      */
     public function destroy(Keywords $keyword): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete keywords');
 
         $this->keywords->destroy($keyword);
@@ -348,14 +320,6 @@ class KeywordController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -412,13 +376,6 @@ class KeywordController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.keywords.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view keywords');
 
         $file_name = (new FastExcel($this->keywordGenerator()))->export(storage_path('Keyword_'.time().'.xlsx'));

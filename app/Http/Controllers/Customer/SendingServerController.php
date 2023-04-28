@@ -253,14 +253,6 @@ class SendingServerController extends CustomerBaseController
     public function store(StoreSendingServerRequest $request): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sending-servers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->authorize('create_sending_servers');
 
         $this->sendingServers->store($request->input());
@@ -336,14 +328,6 @@ class SendingServerController extends CustomerBaseController
 
     public function update(SendingServer $sendingServer, StoreSendingServerRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sending-servers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('create_sending_servers');
 
         $this->sendingServers->update($sendingServer, $request->input());
@@ -367,14 +351,6 @@ class SendingServerController extends CustomerBaseController
     public function activeToggle(SendingServer $server): JsonResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->authorize('create_sending_servers');
 
         $server->update(['status' => ! $server->status]);
@@ -397,14 +373,6 @@ class SendingServerController extends CustomerBaseController
      */
     public function destroy(SendingServer $sendingServer): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('create_sending_servers');
 
         $this->sendingServers->destroy($sendingServer, Auth::user()->id);
@@ -428,13 +396,6 @@ class SendingServerController extends CustomerBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -490,13 +451,6 @@ class SendingServerController extends CustomerBaseController
 
     public function addCustomServer(StoreCustomServer $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sending-servers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('create_sending_servers');
 
@@ -521,13 +475,6 @@ class SendingServerController extends CustomerBaseController
 
     public function updateCustomServer(SendingServer $sendingServer, StoreCustomServer $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.sending-servers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('create_sending_servers');
 
         $this->sendingServers->updateCustom($sendingServer, $request->input());

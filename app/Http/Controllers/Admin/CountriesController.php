@@ -172,15 +172,6 @@ class CountriesController extends AdminBaseController
      */
     public function store(StoreCountryRequest $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.languages.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->countries->store($request->input());
 
         return redirect()->route('admin.countries.index')->with([
@@ -202,13 +193,6 @@ class CountriesController extends AdminBaseController
      */
     public function activeToggle(Country $country): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
 
             $this->authorize('general settings');
@@ -242,14 +226,6 @@ class CountriesController extends AdminBaseController
      */
     public function destroy(Country $country): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->authorize('general settings');
 
         PlansCoverageCountries::where('country_id', $country->id)->delete();

@@ -123,13 +123,6 @@ class ChatBoxController extends Controller
      */
     public function sent(Campaigns $campaign, SentRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.chatbox.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('chat_box');
 
@@ -239,13 +232,6 @@ class ChatBoxController extends Controller
      */
     public function reply(ChatBox $box, Campaigns $campaign, Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('chat_box');
 

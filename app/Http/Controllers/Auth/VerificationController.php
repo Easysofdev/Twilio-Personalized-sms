@@ -85,14 +85,6 @@ class VerificationController extends Controller
     public function verificationSend(): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->back()->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         request()->user()->sendEmailVerificationNotification();
 
         return back()->with('status', 'resent');

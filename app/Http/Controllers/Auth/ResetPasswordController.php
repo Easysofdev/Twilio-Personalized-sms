@@ -57,13 +57,6 @@ class ResetPasswordController extends Controller
 
     public function reset(Request $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('login')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $request->validate([
                 'token'    => 'required',
                 'email'    => 'required|email',

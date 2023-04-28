@@ -216,13 +216,6 @@ class CurrencyController extends AdminBaseController
 
     public function store(StoreCurrencyRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.currencies.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->currencies->store($request->input());
 
         return redirect()->route('admin.currencies.index')->with([
@@ -242,13 +235,6 @@ class CurrencyController extends AdminBaseController
 
     public function update(Currency $currency, UpdateCurrencyRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.currencies.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->currencies->update($currency, $request->input());
 
         return redirect()->route('admin.currencies.index')->with([
@@ -265,14 +251,7 @@ class CurrencyController extends AdminBaseController
      * @throws AuthorizationException
      */
     public function destroy(Currency $currency): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        $this->authorize('delete currencies');
+    {        $this->authorize('delete currencies');
 
         $this->currencies->destroy($currency);
 
@@ -295,13 +274,6 @@ class CurrencyController extends AdminBaseController
      */
     public function activeToggle(Currency $currency): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         try {
             $this->authorize('edit currencies');
 
@@ -335,13 +307,6 @@ class CurrencyController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -407,13 +372,6 @@ class CurrencyController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.currencies.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('manage currencies');
 
         $file_name = (new FastExcel($this->currencyGenerator()))->export(storage_path('Currency_'.time().'.xlsx'));

@@ -191,13 +191,6 @@ class ReportsController extends Controller
 
     public function destroy(Reports $uid): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         if ( ! $uid->delete()) {
             return response()->json([
@@ -222,13 +215,6 @@ class ReportsController extends Controller
      */
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $ids = $request->get('ids');
 
         if (Reports::whereIn('uid', $ids)->where('user_id', auth()->user()->id)->delete()) {
@@ -625,13 +611,6 @@ class ReportsController extends Controller
      */
     public function postEditCampaign(Campaigns $campaign, Request $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $input    = $request->except('_token');
         $sms_type = $input['sms_type'];
 
@@ -1133,13 +1112,6 @@ class ReportsController extends Controller
      */
     public function export(Request $request)
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.reports.all')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view_reports');
 
         Tool::resetMaxExecutionTime();
@@ -1207,13 +1179,6 @@ class ReportsController extends Controller
      */
     public function exportSent()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.reports.all')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view_reports');
 
         $file_name = (new FastExcel($this->reportsGenerator('from')))->export(storage_path('Reports_'.time().'.xlsx'));
@@ -1231,13 +1196,6 @@ class ReportsController extends Controller
      */
     public function exportReceive()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.reports.all')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view_reports');
 
         $file_name = (new FastExcel($this->reportsGenerator('to')))->export(storage_path('Reports_'.time().'.xlsx'));
@@ -1255,13 +1213,6 @@ class ReportsController extends Controller
      */
     public function exportCampaign(Campaigns $campaign)
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.reports.all')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view_reports');
 
         $file_name = (new FastExcel($this->campaignReportsGenerator($campaign->id)))->export(storage_path('Reports_'.time().'.xlsx'));
@@ -1290,13 +1241,6 @@ class ReportsController extends Controller
      */
     public function campaignExport()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.reports.all')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view_reports');
 
         $file_name = (new FastExcel($this->campaignGenerator()))->export(storage_path('Campaign_'.time().'.xlsx'));
@@ -1315,14 +1259,6 @@ class ReportsController extends Controller
      */
     public function campaignDelete(Campaigns $campaign): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if ( ! $campaign->delete()) {
             return response()->json([
                     'status'  => 'error',
@@ -1347,15 +1283,6 @@ class ReportsController extends Controller
      */
     public function campaignBatchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $ids = $request->get('ids');
 

@@ -20,16 +20,9 @@ class LanguageController extends Controller
     public function swap($locale): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->back()->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $availLocale = Session::get('availableLocale');
 
-        if ( ! isset($availLocale)) {
+        if (!isset($availLocale)) {
             $availLocale = Language::where('status', 1)->select('code')->cursor()->map(function ($name) {
                 return $name->code;
             })->toArray();
@@ -53,10 +46,10 @@ class LanguageController extends Controller
         }
 
         Auth::user()->update([
-                'locale' => $locale,
+            'locale' => $locale,
         ]);
 
-        if (Auth::user()->active_portal == 'customer' && Auth::user()->is_customer == 1){
+        if (Auth::user()->active_portal == 'customer' && Auth::user()->is_customer == 1) {
             return redirect()->route('user.home');
         }
         return redirect()->route('admin.home');
@@ -67,11 +60,11 @@ class LanguageController extends Controller
 
         $availLocale = Session::get('available_languages');
 
-        if ( ! isset($availLocale)) {
+        if (!isset($availLocale)) {
             $availLocale = Language::where('status', 1)->cursor()->map(function ($lang) {
                 return [
-                        'name' => $lang->name,
-                        'code' => $lang->code,
+                    'name' => $lang->name,
+                    'code' => $lang->code,
                 ];
             })->toArray();
 

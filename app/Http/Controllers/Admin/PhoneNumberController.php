@@ -236,14 +236,6 @@ class PhoneNumberController extends AdminBaseController
     public function store(StoreNumber $request, PhoneNumbers $numbers): RedirectResponse
     {
 
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.phone-numbers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
-
         $this->numbers->store($request->input(), $numbers::billingCycleValues());
 
         return redirect()->route('admin.phone-numbers.index')->with([
@@ -263,14 +255,6 @@ class PhoneNumberController extends AdminBaseController
 
     public function update(PhoneNumbers $phone_number, UpdateNumber $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.phone-numbers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->numbers->update($phone_number, $request->except('_method', '_token'), $phone_number::billingCycleValues());
 
         return redirect()->route('admin.phone-numbers.index')->with([
@@ -289,14 +273,6 @@ class PhoneNumberController extends AdminBaseController
      */
     public function destroy(PhoneNumbers $phone_number): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('delete phone_numbers');
 
         $this->numbers->destroy($phone_number);
@@ -319,13 +295,6 @@ class PhoneNumberController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -382,13 +351,6 @@ class PhoneNumberController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.phone-numbers.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('view phone_numbers');
 

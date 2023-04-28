@@ -231,13 +231,6 @@ class SenderIDController extends AdminBaseController
 
     public function store(StoreSenderidRequest $request, Senderid $senderid): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.senderid.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->sender_ids->store($request->input(), $senderid::billingCycleValues());
 
@@ -258,13 +251,6 @@ class SenderIDController extends AdminBaseController
 
     public function update(Senderid $senderid, UpdateSenderidRequest $request): RedirectResponse
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.senderid.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->sender_ids->update($senderid, $request->input(), $senderid::billingCycleValues());
 
         return redirect()->route('admin.senderid.index')->with([
@@ -282,13 +268,6 @@ class SenderIDController extends AdminBaseController
      */
     public function destroy(Senderid $senderid): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $this->authorize('delete sender_id');
 
@@ -312,14 +291,6 @@ class SenderIDController extends AdminBaseController
 
     public function batchAction(Request $request): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $action = $request->get('action');
         $ids    = $request->get('ids');
 
@@ -385,13 +356,6 @@ class SenderIDController extends AdminBaseController
      */
     public function export()
     {
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.senderid.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('view sender_id');
 
         $file_name = (new FastExcel($this->senderidGenerator()))->export(storage_path('Senderid_'.time().'.xlsx'));
@@ -524,14 +488,6 @@ class SenderIDController extends AdminBaseController
 
     public function storePlan(StoreSenderidPlan $request, Senderid $senderid): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('admin.senderid.plan')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->sender_ids->storePlan($request->except('_token'), $senderid::billingCycleValues());
 
         return redirect()->route('admin.senderid.plan')->with([
@@ -550,14 +506,6 @@ class SenderIDController extends AdminBaseController
      */
     public function deletePlan(SenderidPlan $plan): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         if ( ! $plan->delete()) {
             throw new GeneralException(__('locale.exceptions.something_went_wrong'));
         }
@@ -578,13 +526,6 @@ class SenderIDController extends AdminBaseController
      */
     public function deleteBatchPlan(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
 
         $ids    = $request->get('ids');
         $status = SenderidPlan::whereIn('uid', $ids)->delete();

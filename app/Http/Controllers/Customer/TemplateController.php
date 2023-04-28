@@ -208,14 +208,6 @@ class TemplateController extends Controller
      */
     public function store(StoreTemplate $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.templates.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->templates->store($request->input());
 
         return redirect()->route('customer.templates.index')->with([
@@ -237,14 +229,6 @@ class TemplateController extends Controller
 
     public function update(Templates $template, UpdateTemplate $request): RedirectResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return redirect()->route('customer.templates.index')->with([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->templates->update($template, $request->input());
 
         return redirect()->route('customer.templates.index')->with([
@@ -263,14 +247,6 @@ class TemplateController extends Controller
      */
     public function destroy(Templates $template): JsonResponse
     {
-
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('sms_template');
 
         $this->templates->destroy($template);
@@ -293,14 +269,7 @@ class TemplateController extends Controller
      * @throws GeneralException
      */
     public function activeToggle(Templates $template): JsonResponse
-    {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-        try {
+    {        try {
             $this->authorize('sms_template');
 
             if ($template->update(['status' => ! $template->status])) {
@@ -331,13 +300,6 @@ class TemplateController extends Controller
 
     public function batchAction(Request $request): JsonResponse
     {
-        if (config('app.env') == 'demo') {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Sorry! This option is not available in demo mode',
-            ]);
-        }
-
         $this->authorize('sms_template');
 
         $action = $request->get('action');
