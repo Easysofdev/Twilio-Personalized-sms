@@ -599,7 +599,7 @@ return [
                 "Campaign Builder"   => "Campaign Builder",
                 "Quick Send"         => "Quick Send",
                 "Send Using File"    => "Send Using File",
-                "Developers"         => "Developers",
+                // "Developers"         => "Developers",
                 "Plugins"            => "Plugins",
                 "All Messages"       => "All Messages",
                 "Received Messages"  => "Received Messages",

@@ -997,14 +997,14 @@ class Helper
                                         "access" => "chat_box",
                                 ],
 
-                                [
+/*                                 [
                                         "url"    => url("developers"),
                                         'slug'   => "developers",
                                         "name"   => "Developers",
                                         "i18n"   => "Developers",
                                         "icon"   => "terminal",
                                         "access" => "developers",
-                                ],
+                                ], */
                         ],
                 ];
         }

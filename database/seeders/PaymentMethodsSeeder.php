@@ -24,8 +24,8 @@ class PaymentMethodsSeeder extends Seeder
                                 'name'    => 'Stripe',
                                 'type'    => 'stripe',
                                 'options' => json_encode([
-                                        'publishable_key' => 'pk_test_AnS4Ov8GS92XmHeVCDRPIZF4',
-                                        'secret_key'      => 'sk_test_iS0xwfgzBF6cmPBBkgO13sjd',
+                                        'publishable_key' => 'pk_test_51N27HdHtyLwpdT8M7pdpI6jq6AYAAt06FWhCsuZi3CUHWoMlLfiXMYbiBkfdtDPWlJdw7lYsc2GQ3NaYmlQoMZZt00scejwhSD',
+                                        'secret_key'      => 'sk_test_51N27HdHtyLwpdT8M01CJ3k1L9E210CfuAsaswSfqffdK0RGFquW4nM9TgGL9GbpR3TXQj8L0HqD7g9shPdxIPnN9006JkZ8zfg',
                                         'environment'     => 'sandbox',
                                 ]),
                                 'status'  => true,
