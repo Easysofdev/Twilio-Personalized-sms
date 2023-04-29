@@ -5,7 +5,8 @@
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
-        "production": "mix --production"
+        "clean": "rm -rf public/js public/css public/fonts public/images",
+        "production": "npm run clean && mix --production"
     },
     "devDependencies": {
         "axios": "^0.21",
