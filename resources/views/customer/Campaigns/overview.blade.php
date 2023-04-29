@@ -117,7 +117,7 @@
                     stroke: {
                         width: 4
                     },
-                    colors: ['#7367F0', '#EA5455'],
+                    colors: ['#f55a00', '#EA5455'],
                 }
 
                 let customerChart = new ApexCharts(

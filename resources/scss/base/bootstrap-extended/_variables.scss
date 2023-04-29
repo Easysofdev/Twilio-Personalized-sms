@@ -29,8 +29,9 @@ $green: #28c76f !default; //$success
 $blue: #00cfe8 !default; //$info
 $orange: #ff9f43 !default; //$warning
 $red: #ea5455 !default; //$danger
+$deeporange: #f55a00;
 
-$primary: $purple !default;
+$primary: $deeporange !default;
 $secondary: #82868b !default;
 $success: $green !default;
 $danger: $red !default;

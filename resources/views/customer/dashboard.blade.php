@@ -89,7 +89,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-8 col-sm-6 col-12">
+            <div class="col-lg-12 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-header"></div>
                     <div class="card-body">
@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-sm-6 col-12">
+            {{-- <div class="col-lg-4 col-sm-6 col-12">
                 <div class="card">
                     <div class="card-body">
                         <h3 class="text-primary">{{ __('locale.labels.current_plan') }}</h3>
@@ -121,7 +121,7 @@
                                 data-feather="info"></i> {{ __('locale.labels.more_info') }}</a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
 
@@ -249,7 +249,7 @@
 
             $(window).on("load", function() {
 
-                let $primary = '#7367F0';
+                let $primary = '#f55a00';
                 let $success = '#00db89';
                 let $strok_color = '#b9c3cd';
                 let $label_color = '#e7eef7';
@@ -623,7 +623,7 @@
 
             $(window).on("load", function() {
 
-                let $primary = '#7367F0';
+                let $primary = '#f55a00';
                 let $success = '#00db89';
                 let $strok_color = '#b9c3cd';
                 let $label_color = '#e7eef7';
@@ -1010,7 +1010,7 @@
                     stroke: {
                         width: 4
                     },
-                    colors: ['#7367F0', '#EA5455'],
+                    colors: ['#f55a00', '#EA5455'],
                 }
 
                 let smsHistoryChart = new ApexCharts(

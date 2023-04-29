@@ -16,12 +16,6 @@
 @section('content')
     <div class="auth-wrapper auth-cover">
         <div class="auth-inner row m-0">
-            <!-- Brand logo-->
-            <a class="brand-logo" href="{{ route('login') }}">
-                <img src="{{ asset(config('app.logo')) }}" alt="{{ config('app.name') }}" />
-            </a>
-            <!-- /Brand logo-->
-
             <!-- Left Text-->
             <div class="col-lg-3 d-none d-lg-flex align-items-center p-0">
                 <div class="w-100 d-lg-flex align-items-center justify-content-center">

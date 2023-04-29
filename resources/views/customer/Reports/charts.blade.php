@@ -215,7 +215,7 @@
 
             $(window).on("load", function () {
 
-                let $primary = '#7367F0';
+                let $primary = '#f55a00';
                 let $success = '#00db89';
                 let $strok_color = '#b9c3cd';
                 let $label_color = '#e7eef7';
@@ -644,7 +644,7 @@
 
             $(window).on("load", function () {
 
-                let $primary = '#7367F0';
+                let $primary = '#f55a00';
                 let $success = '#00db89';
                 let $strok_color = '#b9c3cd';
                 let $label_color = '#e7eef7';

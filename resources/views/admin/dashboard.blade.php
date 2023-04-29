@@ -219,7 +219,7 @@
 
         $(window).on("load", function () {
 
-            let $primary = '#7367F0';
+            let $primary = '#f55a00';
             let $strok_color = '#b9c3cd';
             let $label_color = '#e7eef7';
             let $purple = '#df87f2';
@@ -505,7 +505,7 @@
                     columnWidth: '70%'
                 }
             },
-            colors: ['#7367F0'],
+            colors: ['#f55a00'],
             series: {!! $customer_growth->dataSet() !!},
             grid: {
                 borderColor: '#e7eef7',
@@ -591,7 +591,7 @@
             stroke: {
                 width: 5
             },
-            colors: ['#7367F0', '#EA5455'],
+            colors: ['#f55a00', '#EA5455'],
             fill: {
                 type: 'gradient',
                 gradient: {
