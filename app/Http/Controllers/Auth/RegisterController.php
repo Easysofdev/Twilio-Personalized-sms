@@ -78,7 +78,6 @@ class RegisterController extends Controller
             'address'    => ['required', 'string'],
             'city'       => ['required', 'string'],
             'country'    => ['required', 'string'],
-            'plans'      => ['required'],
             'locale'     => ['required', 'string', 'min:2', 'max:2'],
         ];
 
@@ -101,7 +100,6 @@ class RegisterController extends Controller
             'address'    => ['required', 'string'],
             'city'       => ['required', 'string'],
             'country'    => ['required', 'string'],
-            'plans'      => ['required'],
             'locale'     => ['required', 'string', 'min:2', 'max:2'],
         ];
 
@@ -111,79 +109,12 @@ class RegisterController extends Controller
             return redirect()->route('register')->withInput()->withErrors($v->errors());
         }
 
-        $plan = Plan::find($data['plans']);
-        if ($plan->price == 0.00) {
-
-            $user = $this->account->register($data);
-
-            $subscription                         = new Subscription();
-            $subscription->user_id                = $user->id;
-            $subscription->start_at               = Carbon::now();
-            $subscription->status                 = Subscription::STATUS_ACTIVE;
-            $subscription->plan_id                = $plan->getBillableId();
-            $subscription->end_period_last_days   = '10';
-            $subscription->current_period_ends_at = $subscription->getPeriodEndsAt(Carbon::now());
-            $subscription->end_at                 = null;
-            $subscription->end_by                 = null;
-            $subscription->payment_method_id      = null;
-            $subscription->save();
-
-            // add transaction
-            $subscription->addTransaction(SubscriptionTransaction::TYPE_SUBSCRIBE, [
-                'end_at'                 => $subscription->end_at,
-                'current_period_ends_at' => $subscription->current_period_ends_at,
-                'status'                 => SubscriptionTransaction::STATUS_SUCCESS,
-                'title'                  => trans('locale.subscription.subscribed_to_plan', ['plan' => $subscription->plan->getBillableName()]),
-                'amount'                 => $subscription->plan->getBillableFormattedPrice(),
-            ]);
-
-            // add log
-            $subscription->addLog(SubscriptionLog::TYPE_ADMIN_PLAN_ASSIGNED, [
-                'plan'  => $subscription->plan->getBillableName(),
-                'price' => $subscription->plan->getBillableFormattedPrice(),
-            ]);
-
-            $user->sms_unit = $plan->getOption('sms_max');
-            $user->save();
-
-            if (config('account.verify_account')) {
-                $user->sendEmailVerificationNotification();
-            }
-
-            return redirect()->route('user.home')->with([
-                'status'  => 'success',
-                'message' => __('locale.payment_gateways.payment_successfully_made'),
-            ]);
-        }
-
-        $user         = $this->account->register($data);
-        $user->email_verified_at = Carbon::now();
+        $user = $this->account->register($data);
         $user->save();
-        $callback_data = $this->subscriptions->payRegisterPayment($plan, $data, $user);
 
-        if (isset($callback_data->getData()->status)) {
-
-            if ($callback_data->getData()->status == 'success') {
-
-                if ($data['payment_methods'] == 'stripe') {
-                    return view('auth.payment.stripe', [
-                        'session_id'      => $callback_data->getData()->session_id,
-                        'publishable_key' => $callback_data->getData()->publishable_key,
-                    ]);
-                }
-
-                return redirect()->to($callback_data->getData()->redirect_url);
-            }
-
-            return redirect()->route('register')->with([
-                'status'  => 'error',
-                'message' => $callback_data->getData()->message,
-            ]);
-        }
-
-        return redirect()->route('register')->with([
-            'status'  => 'error',
-            'message' => __('locale.exceptions.something_went_wrong'),
+        return redirect()->route('user.home')->with([
+            'status'  => 'success',
+            'message' => __('locale.auth.registration_successfully_done'),
         ]);
     }
 
@@ -194,14 +125,10 @@ class RegisterController extends Controller
             'blankPage' => true,
         ];
         $languages       = Language::where('status', 1)->get();
-        $plans           = Plan::where('status', true)->where('show_in_customer', true)->cursor();
-        $payment_methods = PaymentMethods::where('status', 1)->get();
 
         return view('/auth/register', [
             'pageConfigs'     => $pageConfigs,
-            'languages'       => $languages,
-            'plans'           => $plans,
-            'payment_methods' => $payment_methods,
+            'languages'       => $languages
         ]);
     }
 }
