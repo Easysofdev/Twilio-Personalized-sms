@@ -72,7 +72,6 @@ class EloquentAccountRepository extends EloquentBaseRepository implements Accoun
             'is_customer' => true,
         ], true);
 
-        //
         if (config('account.verify_account')) {
             $user->sendEmailVerificationNotification();
         }

@@ -31,7 +31,6 @@
                     <div class="bs-stepper register-multi-steps-wizard shadow-none">
                         <div class="bs-stepper-header px-0" role="tablist">
 
-
                             <div class="step" data-target="#account-details" role="tab" id="account-details-trigger">
                                 <button type="button" class="step-trigger">
                                     <span class="bs-stepper-box">
@@ -43,7 +42,6 @@
                                     </span>
                                 </button>
                             </div>
-
 
                             <div class="line">
                                 <i data-feather="chevron-right" class="font-medium-2"></i>
@@ -63,21 +61,8 @@
                                 </button>
                             </div>
 
-
                             <div class="line">
                                 <i data-feather="chevron-right" class="font-medium-2"></i>
-                            </div>
-                            <div class="step" data-target="#billing" role="tab" id="billing-trigger">
-                                <button type="button" class="step-trigger">
-                                    <span class="bs-stepper-box">
-                                        <i data-feather="credit-card" class="font-medium-3"></i>
-                                    </span>
-
-                                    <span class="bs-stepper-label">
-                                        <span class="bs-stepper-title">{{ __('locale.labels.billing') }}</span>
-                                        <span class="bs-stepper-subtitle">{{ __('locale.labels.payment_details') }}</span>
-                                    </span>
-                                </button>
                             </div>
                         </div>
 
@@ -143,8 +128,8 @@
                                             <div class="input-group input-group-merge form-password-toggle">
                                                 <input type="password" id="password_confirmation"
                                                     class="form-control @error('password_confirmation') is-invalid @enderror"
-                                                    value="{{ old('password_confirmation') }}"
-                                                    name="password_confirmation" required />
+                                                    value="{{ old('password_confirmation') }}" name="password_confirmation"
+                                                    required />
                                                 <span class="input-group-text cursor-pointer"><i
                                                         data-feather="eye"></i></span>
                                             </div>
@@ -173,21 +158,6 @@
                                                         {{ $language->name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div>
-                                        <div class="mb-1">
-
-                                            @if (config('no-captcha.registration'))
-                                                <fieldset class="form-label-group position-relative">
-                                                    {{ no_captcha()->input('g-recaptcha-response') }}
-                                                </fieldset>
-                                            @endif
-
-                                            @if (config('no-captcha.registration'))
-                                                @error('g-recaptcha-response')
-                                                    <span
-                                                        class="text-danger">{{ __('locale.labels.g-recaptcha-response') }}</span>
-                                                @enderror
-                                            @endif
                                         </div>
 
                                         <p class="mt-2">
@@ -336,78 +306,6 @@
                                         </div>
                                     </div>
 
-
-                                    <p class="mt-1 mb-1">
-                                        <a href="{{ url('login') }}">
-                                            <i data-feather="chevron-left"></i> {{ __('locale.auth.back_to_login') }}
-                                        </a>
-                                    </p>
-
-                                    <div class="d-flex justify-content-between mt-2">
-                                        <button class="btn btn-primary btn-prev" type="button">
-                                            <i data-feather="chevron-left" class="align-middle me-sm-25 me-0"></i>
-                                            <span
-                                                class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
-                                        </button>
-                                        <button class="btn btn-primary btn-next" type="button">
-                                            <span
-                                                class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
-                                            <i data-feather="chevron-right" class="align-middle ms-sm-25 ms-0"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-
-                                <div id="billing" class="content get_form_data" role="tabpanel"
-                                    aria-labelledby="billing-trigger">
-                                    <div class="content-header mb-2">
-                                        <h2 class="fw-bolder mb-75">{{ __('locale.labels.select_plan') }}</h2>
-                                        <span>{{ __('locale.plans.select_plan_as_per_requirement') }}</span>
-                                    </div>
-
-                                    <!-- select plan options -->
-                                    <div class="row custom-options-checkable gx-3 gy-2">
-
-                                        @foreach ($plans as $plan)
-                                            <div class="col-md-4">
-                                                <input class="custom-option-item-check" type="radio" name="plans"
-                                                    id="{{ $plan->id }}" value="{{ $plan->id }}" />
-                                                <label class="custom-option-item text-center p-1"
-                                                    for="{{ $plan->id }}">
-                                                    <span
-                                                        class="custom-option-item-title h3 fw-bolder">{{ $plan->name }}</span>
-                                                    <span class="d-block m-75">{{ $plan->description }}</span>
-                                                    <span class="plan-price">
-                                                        <span
-                                                            class="pricing-value fw-bolder text-primary">{{ \App\Library\Tool::format_price($plan->price, $plan->currency->format) }}</span>
-                                                        <sub
-                                                            class="pricing-duration text-body font-medium-1 fw-bold">/{{ $plan->displayFrequencyTime() }}</sub>
-                                                    </span>
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    <!-- / select plan options -->
-
-                                    <div class="content-header my-2 py-1">
-                                        <h2 class="fw-bolder mb-75">{{ __('locale.labels.payment_options') }}</h2>
-                                        <span>{{ __('locale.payment_gateways.accepted_payment_option') }}</span>
-                                    </div>
-
-                                    <div class="row gx-2">
-                                        <ul class="other-payment-options list-unstyled">
-                                            @foreach ($payment_methods as $method)
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input type="radio" name="payment_methods"
-                                                            class="form-check-input" value="{{ $method->type }}" checked>
-                                                        <label class="form-check-label">{{ $method->name }}</label>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-
                                     <p class="mt-1 mb-1">
                                         <a href="{{ url('login') }}">
                                             <i data-feather="chevron-left"></i> {{ __('locale.auth.back_to_login') }}
@@ -424,10 +322,7 @@
                                             <span class="align-middle d-sm-inline-block d-none">Submit</span>
                                         </button>
                                     </div>
-
                                 </div>
-
-
                             </form>
                         </div>
                     </div>
@@ -505,18 +400,3 @@
         });
     </script>
 @endsection
-
-@if (config('no-captcha.registration'))
-    @push('scripts')
-        {{ no_captcha()->script() }}
-        {{ no_captcha()->getApiScript() }}
-
-        <script>
-            grecaptcha.ready(() => {
-                window.noCaptcha.render('register', (token) => {
-                    document.querySelector('#g-recaptcha-response').value = token;
-                });
-            });
-        </script>
-    @endpush
-@endif

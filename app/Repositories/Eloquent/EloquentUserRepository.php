@@ -102,7 +102,6 @@ class EloquentUserRepository extends EloquentBaseRepository implements UserRepos
                     'tickets'      => 'yes',
                     'sender_id'    => 'yes',
                     'keyword'      => 'yes',
-                    'subscription' => 'yes',
                     'promotion'    => 'yes',
                     'profile'      => 'yes',
                 ]),
