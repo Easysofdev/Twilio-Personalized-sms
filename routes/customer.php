@@ -237,7 +237,7 @@ Route::prefix('messages')->name('messages.')->group(function () {
         Route::get('/send', 'CampaignController@quickSend')->name('send_message');
         Route::post('/send', 'CampaignController@postQuickSend');
         Route::get('/campaign-builder', 'CampaignController@campaignBuilder')->name('campaign_builder');
-        Route::get('/create-campaign', 'CampaignController@createCampaign')->name('create_campaign');
+        Route::get('/create-campaign', 'CampaignController@createCampaign')->name('get_create_campaign');
         Route::post('/create-campaign', 'CampaignController@postCreateCampaign')->name('create_campaign');
         Route::post('/campaign-builder', 'CampaignController@storeCampaign');
         Route::get('/import', 'CampaignController@import')->name('import');

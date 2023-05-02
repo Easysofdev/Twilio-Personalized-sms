@@ -31,7 +31,7 @@
 
             @can('sms_campaign_builder')
                 <div class="btn-group">
-                    <a href="{{ route('customer.messages.create_campaign') }}"
+                    <a href="{{ route('customer.messages.get_create_campaign') }}"
                         class="btn btn-success waves-light waves-effect fw-bold mx-1"> {{ __('locale.campaigns.create_campaign') }} <i
                             data-feather="plus-circle"></i></a>
                 </div>
