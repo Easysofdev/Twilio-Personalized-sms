@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         //  $this->call(SenderIDSeeder::class);
         $this->call(SendingServerSeeder::class);
         //  $this->call(SpamWordSeeder::class);
-        $this->call(PlanSeeder::class);
+        // $this->call(PlanSeeder::class);
         $this->call(TemplateTagsSeeder::class);
     }
 }
