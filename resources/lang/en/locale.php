@@ -85,6 +85,7 @@ return [
                 'published_at'                          => 'Published at',
                 'added_at'                              => 'Added at',
                 'created_at'                            => 'Created at',
+                'created_by'                            => 'Created by',
                 'updated_at'                            => 'Updated at',
                 'deleted_at'                            => 'Deleted at',
                 'no_value'                              => 'No value',
@@ -96,6 +97,10 @@ return [
                 'by'                                    => 'by',
                 'status'                                => 'Status',
                 'delivered'                             => 'Delivered',
+                'responded'                             => 'Responded',
+                'stop'                                  => 'Stop',
+                'spam'                                  => 'Spam',
+                'segments'                              => 'Segments',
                 'new'                                   => 'New',
                 'failed'                                => 'Failed',
                 'queued'                                => 'Queued',
@@ -385,6 +390,8 @@ return [
                 'payment_required'                      => 'Payment Required',
                 'pay'                                   => 'Pay',
                 'sms_credit'                            => 'Sms Unit',
+                'single_blast'                          => 'Single blast',
+                'burst'                                 => 'Burst',
                 'whatsapp_credit'                       => 'WhatsApp Credit',
                 'cutting_system_available'              => 'Cutting system available',
                 'api_access'                            => 'API Access',
@@ -423,6 +430,8 @@ return [
                 'processing'                            => 'Processing',
                 'run_at'                                => 'Run At',
                 'scheduled'                             => 'Scheduled',
+                'hook'                                  => 'Hook',
+                'personal'                              => 'Personal',
                 'paused'                                => 'Paused',
                 'delivered_at'                          => 'Delivered At',
                 'checkout'                              => 'Checkout',
@@ -549,6 +558,7 @@ return [
 
         'menu' => [
                 "Dashboard"          => "Dashboard",
+                "Create Campaign"    => "Create Campaign",
                 "Customer"           => "Customer",
                 "Customers"          => "Customers",
                 "Subscriptions"      => "Subscriptions",
@@ -1212,6 +1222,7 @@ return [
 
         'campaigns' => [
                 'schedule_campaign'                               => 'Schedule campaign',
+                'create_campaign'                                 => 'Create campaign',
                 'schedule_campaign_note'                          => 'Set a specific date, time, and frequency for your campaign',
                 'send_copy_via_email'                             => 'Send a copy of this message via email',
                 'create_template_based_message'                   => 'Create template based on this message',

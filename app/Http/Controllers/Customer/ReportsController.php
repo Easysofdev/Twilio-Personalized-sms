@@ -62,9 +62,9 @@ class ReportsController extends Controller
         }
 
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
-                ['name' => $name],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
+            ['name' => $name],
         ];
 
 
@@ -83,16 +83,16 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $columns = [
-                0 => 'responsive_id',
-                1 => 'uid',
-                2 => 'uid',
-                3 => 'created_at',
-                4 => 'send_by',
-                5 => 'sms_type',
-                6 => 'from',
-                7 => 'to',
-                8 => 'cost',
-                9 => 'status',
+            0 => 'responsive_id',
+            1 => 'uid',
+            2 => 'uid',
+            3 => 'created_at',
+            4 => 'send_by',
+            5 => 'sms_type',
+            6 => 'from',
+            7 => 'to',
+            8 => 'cost',
+            9 => 'status',
         ];
 
         $totalData = Reports::where('user_id', auth()->user()->id)->count();
@@ -108,31 +108,31 @@ class ReportsController extends Controller
         if (empty($request->input('search.value')) && empty($recipient)) {
 
             $sms_reports = Reports::where('user_id', auth()->user()->id)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } elseif ($recipient != null) {
             $sms_reports = Reports::where('user_id', auth()->user()->id)
-                    ->where('to', $recipient)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->where('to', $recipient)
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
             $search = $request->input('search.value');
 
             $sms_reports = Reports::where('user_id', auth()->user()->id)->whereLike(['uid', 'send_by', 'sms_type', 'from', 'to', 'cost', 'status', 'created_at'], $search)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
             $totalFiltered = Reports::where('user_id', auth()->user()->id)->whereLike(['uid', 'send_by', 'sms_type', 'from', 'to', 'cost', 'status', 'created_at'], $search)->count();
         }
 
         $data = [];
-        if ( ! empty($sms_reports)) {
+        if (!empty($sms_reports)) {
             foreach ($sms_reports as $report) {
                 if ($report->created_at == null) {
                     $created_at = null;
@@ -150,20 +150,18 @@ class ReportsController extends Controller
                 $nestedData['cost']          = $report->cost;
                 $nestedData['status']        = str_limit($report->status, 20);
                 $data[]                      = $nestedData;
-
             }
         }
 
         $json_data = [
-                "draw"            => intval($request->input('draw')),
-                "recordsTotal"    => intval($totalData),
-                "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data,
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data,
         ];
 
         echo json_encode($json_data);
         exit();
-
     }
 
     /**
@@ -176,10 +174,9 @@ class ReportsController extends Controller
     public function viewReports(Reports $uid): JsonResponse
     {
         return response()->json([
-                'status' => 'success',
-                'data'   => $uid,
+            'status' => 'success',
+            'data'   => $uid,
         ]);
-
     }
 
     /**
@@ -192,18 +189,17 @@ class ReportsController extends Controller
     public function destroy(Reports $uid): JsonResponse
     {
 
-        if ( ! $uid->delete()) {
+        if (!$uid->delete()) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.exceptions.something_went_wrong'),
+                'status'  => 'error',
+                'message' => __('locale.exceptions.something_went_wrong'),
             ]);
         }
 
         return response()->json([
-                'status'  => 'success',
-                'message' => __('locale.campaigns.sms_was_successfully_deleted'),
+            'status'  => 'success',
+            'message' => __('locale.campaigns.sms_was_successfully_deleted'),
         ]);
-
     }
 
     /**
@@ -219,14 +215,14 @@ class ReportsController extends Controller
 
         if (Reports::whereIn('uid', $ids)->where('user_id', auth()->user()->id)->delete()) {
             return response()->json([
-                    'status'  => 'success',
-                    'message' => __('locale.campaigns.sms_was_successfully_deleted'),
+                'status'  => 'success',
+                'message' => __('locale.campaigns.sms_was_successfully_deleted'),
             ]);
         }
 
         return response()->json([
-                'status'  => 'error',
-                'message' => __('locale.exceptions.something_went_wrong'),
+            'status'  => 'error',
+            'message' => __('locale.exceptions.something_went_wrong'),
         ]);
     }
 
@@ -242,9 +238,9 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
-                ['name' => __('locale.menu.Received Messages')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
+            ['name' => __('locale.menu.Received Messages')],
         ];
 
         return view('customer.Reports.received_messages', compact('breadcrumbs'));
@@ -263,15 +259,15 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $columns = [
-                0 => 'responsive_id',
-                1 => 'uid',
-                2 => 'uid',
-                3 => 'created_at',
-                5 => 'sms_type',
-                6 => 'from',
-                7 => 'to',
-                8 => 'cost',
-                9 => 'status',
+            0 => 'responsive_id',
+            1 => 'uid',
+            2 => 'uid',
+            3 => 'created_at',
+            5 => 'sms_type',
+            6 => 'from',
+            7 => 'to',
+            8 => 'cost',
+            9 => 'status',
         ];
 
         $totalData = Reports::where('user_id', auth()->user()->id)->where('send_by', 'to')->count();
@@ -285,23 +281,23 @@ class ReportsController extends Controller
 
         if (empty($request->input('search.value'))) {
             $sms_reports = Reports::where('user_id', auth()->user()->id)->where('send_by', 'to')->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
             $search = $request->input('search.value');
 
             $sms_reports = Reports::where('user_id', auth()->user()->id)->where('send_by', 'to')->whereLike(['uid', 'sms_type', 'from', 'to', 'cost', 'status', 'created_at'], $search)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
             $totalFiltered = Reports::where('user_id', auth()->user()->id)->where('send_by', 'to')->whereLike(['uid', 'sms_type', 'from', 'to', 'cost', 'status', 'created_at'], $search)->count();
         }
 
         $data = [];
-        if ( ! empty($sms_reports)) {
+        if (!empty($sms_reports)) {
             foreach ($sms_reports as $report) {
                 if ($report->created_at == null) {
                     $created_at = null;
@@ -318,20 +314,18 @@ class ReportsController extends Controller
                 $nestedData['cost']          = $report->cost;
                 $nestedData['status']        = str_limit($report->status, 20);
                 $data[]                      = $nestedData;
-
             }
         }
 
         $json_data = [
-                "draw"            => intval($request->input('draw')),
-                "recordsTotal"    => intval($totalData),
-                "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data,
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data,
         ];
 
         echo json_encode($json_data);
         exit();
-
     }
 
     /**
@@ -345,9 +339,9 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
-                ['name' => __('locale.menu.Sent Messages')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
+            ['name' => __('locale.menu.Sent Messages')],
         ];
 
         return view('customer.Reports.sent_messages', compact('breadcrumbs'));
@@ -366,15 +360,15 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $columns = [
-                0 => 'responsive_id',
-                1 => 'uid',
-                2 => 'uid',
-                3 => 'created_at',
-                5 => 'sms_type',
-                6 => 'from',
-                7 => 'to',
-                8 => 'cost',
-                9 => 'status',
+            0 => 'responsive_id',
+            1 => 'uid',
+            2 => 'uid',
+            3 => 'created_at',
+            5 => 'sms_type',
+            6 => 'from',
+            7 => 'to',
+            8 => 'cost',
+            9 => 'status',
         ];
 
         $totalData = Reports::where('user_id', auth()->user()->id)->where('send_by', 'from')->count();
@@ -388,23 +382,23 @@ class ReportsController extends Controller
 
         if (empty($request->input('search.value'))) {
             $sms_reports = Reports::where('user_id', auth()->user()->id)->where('send_by', 'from')->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
             $search = $request->input('search.value');
 
             $sms_reports = Reports::where('user_id', auth()->user()->id)->where('send_by', 'from')->whereLike(['uid', 'sms_type', 'from', 'to', 'cost', 'status', 'created_at'], $search)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
             $totalFiltered = Reports::where('user_id', auth()->user()->id)->where('send_by', 'from')->whereLike(['uid', 'sms_type', 'from', 'to', 'cost', 'status', 'created_at'], $search)->count();
         }
 
         $data = [];
-        if ( ! empty($sms_reports)) {
+        if (!empty($sms_reports)) {
             foreach ($sms_reports as $report) {
                 if ($report->created_at == null) {
                     $created_at = null;
@@ -421,20 +415,18 @@ class ReportsController extends Controller
                 $nestedData['cost']          = $report->cost;
                 $nestedData['status']        = str_limit($report->status, 20);
                 $data[]                      = $nestedData;
-
             }
         }
 
         $json_data = [
-                "draw"            => intval($request->input('draw')),
-                "recordsTotal"    => intval($totalData),
-                "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data,
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data,
         ];
 
         echo json_encode($json_data);
         exit();
-
     }
 
 
@@ -449,14 +441,13 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
-                ['name' => __('locale.menu.Campaigns')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Reports')],
+            ['name' => __('locale.menu.Campaigns')],
         ];
 
         return view('customer.Reports.campaigns', compact('breadcrumbs'));
     }
-
 
     /**
      * search campaign data
@@ -471,15 +462,15 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $columns = [
-                0 => 'responsive_id',
-                1 => 'uid',
-                2 => 'uid',
-                3 => 'campaign_name',
-                4 => 'contacts',
-                5 => 'sms_type',
-                6 => 'schedule_type',
-                7 => 'status',
-                8 => 'uid',
+            0 => 'responsive_id',
+            1 => 'uid',
+            2 => 'uid',
+            3 => 'campaign_name',
+            4 => 'contacts',
+            5 => 'sms_type',
+            6 => 'schedule_type',
+            7 => 'status',
+            8 => 'uid',
         ];
 
         $totalData = Campaigns::where('user_id', auth()->user()->id)->count();
@@ -493,30 +484,30 @@ class ReportsController extends Controller
 
         if (empty($request->input('search.value'))) {
             $campaigns = Campaigns::where('user_id', auth()->user()->id)->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
             $search = $request->input('search.value');
 
             $campaigns = Campaigns::where('user_id', auth()->user()->id)->whereLike(['uid', 'campaign_name', 'sms_type', 'schedule_type', 'created_at', 'status'], $search)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
             $totalFiltered = Campaigns::where('user_id', auth()->user()->id)->whereLike(['uid', 'campaign_name', 'sms_type', 'schedule_type', 'created_at', 'status'], $search)->count();
         }
 
         $data = [];
-        if ( ! empty($campaigns)) {
+        if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
 
                 $nestedData['responsive_id'] = '';
                 $nestedData['uid']           = $campaign->uid;
                 $nestedData['campaign_name'] = "<div>
                                                         <p class='text-bold-600'> $campaign->campaign_name </p>
-                                                        <p class='text-muted'>".__('locale.labels.created_at').': '.Tool::formatHumanTime($campaign->created_at)."</p>
+                                                        <p class='text-muted'>" . __('locale.labels.created_at') . ': ' . Tool::formatHumanTime($campaign->created_at) . "</p>
                                                    </div>";
                 $nestedData['contacts']      = Tool::number_with_delimiter($campaign->contactCount($campaign->cache));
                 $nestedData['sms_type']      = $campaign->getSMSType();
@@ -532,20 +523,18 @@ class ReportsController extends Controller
 
                 $nestedData['delete'] = __('locale.buttons.delete');
                 $data[]               = $nestedData;
-
             }
         }
 
         $json_data = [
-                "draw"            => intval($request->input('draw')),
-                "recordsTotal"    => intval($totalData),
-                "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data,
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data,
         ];
 
         echo json_encode($json_data);
         exit();
-
     }
 
     public function editCampaign(Campaigns $campaign)
@@ -553,15 +542,15 @@ class ReportsController extends Controller
 
         if ($campaign->upload_type == 'file') {
             return redirect()->route('customer.reports.campaigns')->with([
-                    'status'  => 'info',
-                    'message' => __('locale.campaigns.you_are_not_able_to_update_file_import_campaign'),
+                'status'  => 'info',
+                'message' => __('locale.campaigns.you_are_not_able_to_update_file_import_campaign'),
             ]);
         }
 
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url("/reports/campaigns"), 'name' => __('locale.menu.Reports')],
-                ['name' => __('locale.menu.Campaign Builder')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url("/reports/campaigns"), 'name' => __('locale.menu.Reports')],
+            ['name' => __('locale.menu.Campaign Builder')],
         ];
 
 
@@ -619,8 +608,8 @@ class ReportsController extends Controller
         if (empty($sending_servers)) {
 
             return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_server_not_available'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_server_not_available'),
             ]);
         }
 
@@ -629,10 +618,10 @@ class ReportsController extends Controller
             if (isset($input['originator'])) {
                 if ($input['originator'] == 'sender_id') {
 
-                    if ( ! isset($input['sender_id'])) {
+                    if (!isset($input['sender_id'])) {
                         return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
@@ -641,14 +630,14 @@ class ReportsController extends Controller
                     if (is_array($sender_id) && count($sender_id) > 0) {
                         $invalid   = [];
                         $senderids = Senderid::where('user_id', Auth::user()->id)
-                                ->where('status', 'active')
-                                ->select('sender_id')
-                                ->cursor()
-                                ->pluck('sender_id')
-                                ->all();
+                            ->where('status', 'active')
+                            ->select('sender_id')
+                            ->cursor()
+                            ->pluck('sender_id')
+                            ->all();
 
                         foreach ($sender_id as $sender) {
-                            if ( ! in_array($sender, $senderids)) {
+                            if (!in_array($sender, $senderids)) {
                                 $invalid[] = $sender;
                             }
                         }
@@ -656,20 +645,20 @@ class ReportsController extends Controller
                         if (count($invalid)) {
 
                             return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
                             ]);
                         }
                     } else {
 
                         return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 } else {
 
-                    if ( ! isset($input['phone_number'])) {
+                    if (!isset($input['phone_number'])) {
                         $sender_id = CampaignsSenderid::where('campaign_id', $campaign->id)->pluck('sender_id')->toArray();
                     } else {
                         $sender_id = $input['phone_number'];
@@ -679,68 +668,68 @@ class ReportsController extends Controller
                     if (isset($sender_id) && is_array($sender_id) && count($sender_id) > 0) {
                         $type_supported = [];
                         PhoneNumbers::where('user_id', Auth::user()->id)
-                                ->where('status', 'assigned')
-                                ->cursor()
-                                ->reject(function ($number) use ($sender_id, &$type_supported, &$invalid) {
-                                    if (in_array($number->number, $sender_id) && ! str_contains($number->capabilities, 'sms')) {
-                                        return $type_supported[] = $number->number;
-                                    }
+                            ->where('status', 'assigned')
+                            ->cursor()
+                            ->reject(function ($number) use ($sender_id, &$type_supported, &$invalid) {
+                                if (in_array($number->number, $sender_id) && !str_contains($number->capabilities, 'sms')) {
+                                    return $type_supported[] = $number->number;
+                                }
 
-                                    return $sender_id;
-                                })->all();
+                                return $sender_id;
+                            })->all();
 
                         if (count($type_supported)) {
 
                             return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $type_supported[0]]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $type_supported[0]]),
                             ]);
                         }
                     } else {
 
                         return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 }
             } else {
 
                 return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                        'status'  => 'error',
-                        'message' => __('locale.sender_id.sender_id_required'),
+                    'status'  => 'error',
+                    'message' => __('locale.sender_id.sender_id_required'),
                 ]);
             }
         } else {
             if (isset($input['originator'])) {
                 if ($input['originator'] == 'sender_id') {
-                    if ( ! isset($input['sender_id'])) {
+                    if (!isset($input['sender_id'])) {
 
                         return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
                     $sender_id = $input['sender_id'];
                 } else {
 
-                    if ( ! isset($input['phone_number'])) {
+                    if (!isset($input['phone_number'])) {
 
                         return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.phone_numbers_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.phone_numbers_required'),
                         ]);
                     }
 
                     $sender_id = $input['phone_number'];
                 }
 
-                if ( ! is_array($sender_id) || count($sender_id) <= 0) {
+                if (!is_array($sender_id) || count($sender_id) <= 0) {
 
                     return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                            'status'  => 'error',
-                            'message' => __('locale.sender_id.sender_id_required'),
+                        'status'  => 'error',
+                        'message' => __('locale.sender_id.sender_id_required'),
                     ]);
                 }
             }
@@ -758,10 +747,10 @@ class ReportsController extends Controller
             foreach ($contact_groups as $group) {
                 $total             += $group->subscribersCount($group->cache);
                 $campaign_groups[] = [
-                        'campaign_id'     => $campaign->id,
-                        'contact_list_id' => $group->id,
-                        'created_at'      => Carbon::now(),
-                        'updated_at'      => Carbon::now(),
+                    'campaign_id'     => $campaign->id,
+                    'contact_list_id' => $group->id,
+                    'created_at'      => Carbon::now(),
+                    'updated_at'      => Carbon::now(),
                 ];
             }
         }
@@ -802,10 +791,10 @@ class ReportsController extends Controller
             foreach ($recipients->chunk(500) as $chunk) {
                 foreach ($chunk as $number) {
                     $numbers[] = [
-                            'campaign_id' => $campaign->id,
-                            'recipient'   => preg_replace("/\r/", "", $number),
-                            'created_at'  => Carbon::now(),
-                            'updated_at'  => Carbon::now(),
+                        'campaign_id' => $campaign->id,
+                        'recipient'   => preg_replace("/\r/", "", $number),
+                        'created_at'  => Carbon::now(),
+                        'updated_at'  => Carbon::now(),
                     ];
                 }
             }
@@ -819,8 +808,8 @@ class ReportsController extends Controller
 
         if ($total == 0) {
             return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.contact_not_found'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.contact_not_found'),
             ]);
         }
 
@@ -866,11 +855,11 @@ class ReportsController extends Controller
 
             if ($price > $balance) {
                 return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                        'status'  => 'error',
-                        'message' => __('locale.campaigns.not_enough_balance', [
-                                'current_balance' => $balance,
-                                'campaign_price'  => $price,
-                        ]),
+                    'status'  => 'error',
+                    'message' => __('locale.campaigns.not_enough_balance', [
+                        'current_balance' => $balance,
+                        'campaign_price'  => $price,
+                    ]),
                 ]);
             }
         }
@@ -880,8 +869,8 @@ class ReportsController extends Controller
         foreach ($sender_id as $id) {
 
             $data = [
-                    'campaign_id' => $campaign->id,
-                    'sender_id'   => $id,
+                'campaign_id' => $campaign->id,
+                'sender_id'   => $id,
             ];
 
             if (isset($input['originator'])) {
@@ -899,7 +888,7 @@ class ReportsController extends Controller
         // if schedule is available then check date, time and timezone
         if (isset($input['schedule']) && $input['schedule'] == "true") {
 
-            $schedule_date = $input['schedule_date'].' '.$input['schedule_time'];
+            $schedule_date = $input['schedule_date'] . ' ' . $input['schedule_time'];
             $schedule_time = Tool::systemTimeFromString($schedule_date, $input['timezone']);
 
             $campaign->timezone      = $input['timezone'];
@@ -913,7 +902,7 @@ class ReportsController extends Controller
             } else {
                 // working with recurring schedule
                 //if schedule time frequency is not one time then check frequency details
-                $recurring_date = $input['recurring_date'].' '.$input['recurring_time'];
+                $recurring_date = $input['recurring_date'] . ' ' . $input['recurring_time'];
                 $recurring_end  = Tool::systemTimeFromString($recurring_date, $input['timezone']);
 
                 $campaign->schedule_type = Campaigns::TYPE_RECURRING;
@@ -938,10 +927,10 @@ class ReportsController extends Controller
         }
         //update cache
         $campaign->cache = json_encode([
-                'ContactCount'         => $total,
-                'DeliveredCount'       => 0,
-                'FailedDeliveredCount' => 0,
-                'NotDeliveredCount'    => 0,
+            'ContactCount'         => $total,
+            'DeliveredCount'       => 0,
+            'FailedDeliveredCount' => 0,
+            'NotDeliveredCount'    => 0,
         ]);
 
         $campaign->message = $input['message'];
@@ -959,14 +948,14 @@ class ReportsController extends Controller
 
         if ($camp) {
             return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                    'status'  => 'success',
-                    'message' => __('locale.campaigns.campaign_successfully_updated'),
+                'status'  => 'success',
+                'message' => __('locale.campaigns.campaign_successfully_updated'),
             ]);
         }
 
         return redirect()->route('customer.reports.campaign.edit', $campaign->uid)->with([
-                'status'  => 'error',
-                'message' => __('locale.exceptions.something_went_wrong'),
+            'status'  => 'error',
+            'message' => __('locale.exceptions.something_went_wrong'),
         ]);
     }
 
@@ -974,9 +963,9 @@ class ReportsController extends Controller
     public function campaignOverview(Campaigns $campaign)
     {
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url("/reports/campaigns"), 'name' => __('locale.menu.Reports')],
-                ['name' => __('locale.menu.Overview')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url("/reports/campaigns"), 'name' => __('locale.menu.Reports')],
+            ['name' => __('locale.menu.Overview')],
         ];
 
 
@@ -997,14 +986,14 @@ class ReportsController extends Controller
         $this->authorize('view_reports');
 
         $columns = [
-                0 => 'responsive_id',
-                1 => 'uid',
-                2 => 'uid',
-                3 => 'created_at',
-                6 => 'from',
-                7 => 'to',
-                8 => 'cost',
-                9 => 'status',
+            0 => 'responsive_id',
+            1 => 'uid',
+            2 => 'uid',
+            3 => 'created_at',
+            6 => 'from',
+            7 => 'to',
+            8 => 'cost',
+            9 => 'status',
         ];
 
         $totalData = Reports::where('user_id', auth()->user()->id)->where('campaign_id', $campaign->id)->count();
@@ -1018,23 +1007,23 @@ class ReportsController extends Controller
 
         if (empty($request->input('search.value'))) {
             $sms_reports = Reports::where('user_id', auth()->user()->id)->where('campaign_id', $campaign->id)->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
             $search = $request->input('search.value');
 
             $sms_reports = Reports::where('user_id', auth()->user()->id)->where('campaign_id', $campaign->id)->whereLike(['uid', 'from', 'to', 'cost', 'status', 'created_at'], $search)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
             $totalFiltered = Reports::where('user_id', auth()->user()->id)->where('campaign_id', $campaign->id)->whereLike(['uid', 'from', 'to', 'cost', 'status', 'created_at'], $search)->count();
         }
 
         $data = [];
-        if ( ! empty($sms_reports)) {
+        if (!empty($sms_reports)) {
             foreach ($sms_reports as $report) {
                 if ($report->created_at == null) {
                     $created_at = null;
@@ -1050,15 +1039,14 @@ class ReportsController extends Controller
                 $nestedData['cost']          = $report->cost;
                 $nestedData['status']        = str_limit($report->status, 20);
                 $data[]                      = $nestedData;
-
             }
         }
 
         $json_data = [
-                "draw"            => intval($request->input('draw')),
-                "recordsTotal"    => intval($totalData),
-                "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data,
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data,
         ];
 
         echo json_encode($json_data);
@@ -1082,8 +1070,6 @@ class ReportsController extends Controller
                 yield $report;
             }
         }
-
-
     }
 
 
@@ -1117,10 +1103,9 @@ class ReportsController extends Controller
         Tool::resetMaxExecutionTime();
 
 
-        $file_name = (new FastExcel($this->exportData($request)))->export(storage_path('Reports_'.time().'.xlsx'));
+        $file_name = (new FastExcel($this->exportData($request)))->export(storage_path('Reports_' . time() . '.xlsx'));
 
         return response()->download($file_name);
-
     }
 
 
@@ -1135,10 +1120,10 @@ class ReportsController extends Controller
         $end_date   = null;
 
         if ($request->start_date && $request->end_date) {
-            $start_time = $request->start_date.' '.$request->start_time;
+            $start_time = $request->start_date . ' ' . $request->start_time;
             $start_date = Tool::systemTimeFromString($start_time, Auth::user()->timezone);
 
-            $end_time = $request->end_date.' '.$request->end_time;
+            $end_time = $request->end_date . ' ' . $request->end_time;
             $end_date = Tool::systemTimeFromString($end_time, Auth::user()->timezone);
         }
 
@@ -1181,7 +1166,7 @@ class ReportsController extends Controller
     {
         $this->authorize('view_reports');
 
-        $file_name = (new FastExcel($this->reportsGenerator('from')))->export(storage_path('Reports_'.time().'.xlsx'));
+        $file_name = (new FastExcel($this->reportsGenerator('from')))->export(storage_path('Reports_' . time() . '.xlsx'));
 
         return response()->download($file_name);
     }
@@ -1198,7 +1183,7 @@ class ReportsController extends Controller
     {
         $this->authorize('view_reports');
 
-        $file_name = (new FastExcel($this->reportsGenerator('to')))->export(storage_path('Reports_'.time().'.xlsx'));
+        $file_name = (new FastExcel($this->reportsGenerator('to')))->export(storage_path('Reports_' . time() . '.xlsx'));
 
         return response()->download($file_name);
     }
@@ -1215,7 +1200,7 @@ class ReportsController extends Controller
     {
         $this->authorize('view_reports');
 
-        $file_name = (new FastExcel($this->campaignReportsGenerator($campaign->id)))->export(storage_path('Reports_'.time().'.xlsx'));
+        $file_name = (new FastExcel($this->campaignReportsGenerator($campaign->id)))->export(storage_path('Reports_' . time() . '.xlsx'));
 
         return response()->download($file_name);
     }
@@ -1243,7 +1228,7 @@ class ReportsController extends Controller
     {
         $this->authorize('view_reports');
 
-        $file_name = (new FastExcel($this->campaignGenerator()))->export(storage_path('Campaign_'.time().'.xlsx'));
+        $file_name = (new FastExcel($this->campaignGenerator()))->export(storage_path('Campaign_' . time() . '.xlsx'));
 
         return response()->download($file_name);
     }
@@ -1259,18 +1244,17 @@ class ReportsController extends Controller
      */
     public function campaignDelete(Campaigns $campaign): JsonResponse
     {
-        if ( ! $campaign->delete()) {
+        if (!$campaign->delete()) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.exceptions.something_went_wrong'),
+                'status'  => 'error',
+                'message' => __('locale.exceptions.something_went_wrong'),
             ]);
         }
 
         return response()->json([
-                'status'  => 'success',
-                'message' => __('locale.campaigns.campaign_was_successfully_deleted'),
+            'status'  => 'success',
+            'message' => __('locale.campaigns.campaign_was_successfully_deleted'),
         ]);
-
     }
 
 
@@ -1288,14 +1272,14 @@ class ReportsController extends Controller
 
         if (Campaigns::whereIn('uid', $ids)->where('user_id', auth()->user()->id)->delete()) {
             return response()->json([
-                    'status'  => 'success',
-                    'message' => __('locale.campaigns.campaign_was_successfully_deleted'),
+                'status'  => 'success',
+                'message' => __('locale.campaigns.campaign_was_successfully_deleted'),
             ]);
         }
 
         return response()->json([
-                'status'  => 'error',
-                'message' => __('locale.exceptions.something_went_wrong'),
+            'status'  => 'error',
+            'message' => __('locale.exceptions.something_went_wrong'),
         ]);
     }
 
@@ -1303,34 +1287,33 @@ class ReportsController extends Controller
     public function viewCharts()
     {
         $breadcrumbs = [
-                ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['name' => __('locale.menu.View Charts')],
+            ['link' => url("/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['name' => __('locale.menu.View Charts')],
         ];
 
         $sms_outgoing = Reports::currentMonth()
-                ->where('user_id', Auth::user()->id)
-                ->selectRaw('Day(created_at) as day, count(send_by) as outgoing,send_by')
-                ->where('send_by', "from")
-                ->groupBy('day')->pluck('day', 'outgoing')->flip()->sortKeys();
+            ->where('user_id', Auth::user()->id)
+            ->selectRaw('Day(created_at) as day, count(send_by) as outgoing,send_by')
+            ->where('send_by', "from")
+            ->groupBy('day')->pluck('day', 'outgoing')->flip()->sortKeys();
 
         $sms_incoming = Reports::currentMonth()
-                ->where('user_id', Auth::user()->id)
-                ->selectRaw('Day(created_at) as day, count(send_by) as incoming,send_by')
-                ->where('send_by', "to")
-                ->groupBy('day')->pluck('day', 'incoming')->flip()->sortKeys();
+            ->where('user_id', Auth::user()->id)
+            ->selectRaw('Day(created_at) as day, count(send_by) as incoming,send_by')
+            ->where('send_by', "to")
+            ->groupBy('day')->pluck('day', 'incoming')->flip()->sortKeys();
 
 
         $outgoing = (new LarapexChart)->lineChart()
-                ->addData(__('locale.labels.outgoing'), $sms_outgoing->values()->toArray())
-                ->setXAxis($sms_outgoing->keys()->toArray());
+            ->addData(__('locale.labels.outgoing'), $sms_outgoing->values()->toArray())
+            ->setXAxis($sms_outgoing->keys()->toArray());
 
 
         $incoming = (new LarapexChart)->lineChart()
-                ->addData(__('locale.labels.incoming'), $sms_incoming->values()->toArray())
-                ->setXAxis($sms_incoming->keys()->toArray());
+            ->addData(__('locale.labels.incoming'), $sms_incoming->values()->toArray())
+            ->setXAxis($sms_incoming->keys()->toArray());
 
 
         return view('customer.Reports.charts', compact('breadcrumbs', 'sms_incoming', 'sms_outgoing', 'outgoing', 'incoming'));
     }
-
 }

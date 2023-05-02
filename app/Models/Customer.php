@@ -73,9 +73,7 @@ class Customer extends Model
                 $uid = uniqid();
             }
             $item->uid = $uid;
-            if (config('app.env') != 'demo') {
-                $item->permissions = self::customerPermissions();
-            }
+            $item->permissions = self::customerPermissions();
         });
     }
 

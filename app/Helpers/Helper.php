@@ -54,7 +54,7 @@ class Helper
                 $allOptions = [
                         'mainLayoutType'         => ['vertical', 'horizontal'],
                         'theme'                  => ['light' => 'light', 'dark' => 'dark-layout', 'bordered' => 'bordered-layout', 'semi-dark' => 'semi-dark-layout'],
-                        'sidebarCollapsed'       => [true, false],
+                        'sidebarCollapsed'       => [false, true],
                         'showMenu'               => [true, false],
                         'layoutWidth'            => ['full', 'boxed'],
                         'navbarColor'            => ['bg-primary', 'bg-info', 'bg-warning', 'bg-success', 'bg-danger', 'bg-dark'],
@@ -206,10 +206,10 @@ class Helper
          */
         public static function countries(): array
         {
-                $countries   = [];        
+                $countries   = [];
                 $countries[] = ['code' => 'GB', 'name' => 'United Kingdom', 'd_code' => '+44'];
                 $countries[] = ['code' => 'US', 'name' => 'United States', 'd_code' => '+1'];
-        
+
                 return $countries;
         }
 
@@ -521,6 +521,14 @@ class Helper
                                         "access" => "access_backend",
                                 ],
                                 [
+                                        "url"    => url("reports/campaigns"),
+                                        'slug'   => "campaigns",
+                                        "name"   => "Campaigns",
+                                        "i18n"   => "Campaigns",
+                                        "access" => "view_reports",
+                                        "icon"   => "server",
+                                ],
+                                [
                                         "url"     => "",
                                         "name"    => "Reports",
                                         "i18n"    => "Reports",
@@ -550,14 +558,6 @@ class Helper
                                                         "i18n"   => "Sent Messages",
                                                         "access" => "view_reports",
                                                         "icon"   => "phone-outgoing",
-                                                ],
-                                                [
-                                                        "url"    => url("reports/campaigns"),
-                                                        'slug'   => "reports/campaigns",
-                                                        "name"   => "Campaigns",
-                                                        "i18n"   => "Campaigns",
-                                                        "access" => "view_reports",
-                                                        "icon"   => "pie-chart",
                                                 ],
                                         ],
                                 ],
@@ -633,14 +633,6 @@ class Helper
                                         "icon"    => "message-square",
                                         "access"  => "sms_campaign_builder|sms_quick_send|sms_bulk_messages",
                                         "submenu" => [
-                                                [
-                                                        "url"    => url("sms/campaign-builder"),
-                                                        'slug'   => "sms/campaign-builder",
-                                                        "name"   => "Campaign Builder",
-                                                        "i18n"   => "Campaign Builder",
-                                                        "access" => "sms_campaign_builder",
-                                                        "icon"   => "server",
-                                                ],
                                                 [
                                                         "url"    => url("sms/quick-send"),
                                                         'slug'   => "sms/quick-send",
@@ -766,15 +758,6 @@ class Helper
                                         "icon"   => "slack",
                                         "access" => "chat_box",
                                 ],
-
-/*                                 [
-                                        "url"    => url("developers"),
-                                        'slug'   => "developers",
-                                        "name"   => "Developers",
-                                        "i18n"   => "Developers",
-                                        "icon"   => "terminal",
-                                        "access" => "developers",
-                                ], */
                         ],
                 ];
         }
