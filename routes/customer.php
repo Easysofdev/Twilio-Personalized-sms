@@ -237,6 +237,8 @@ Route::prefix('sms')->name('sms.')->group(function () {
         Route::get('/quick-send', 'CampaignController@quickSend')->name('quick_send');
         Route::post('/quick-send', 'CampaignController@postQuickSend');
         Route::get('/campaign-builder', 'CampaignController@campaignBuilder')->name('campaign_builder');
+        Route::get('/create-campaign', 'CampaignController@createCampaign')->name('create_campaign');
+        Route::post('/create-campaign', 'CampaignController@postCreateCampaign')->name('create_campaign');
         Route::post('/campaign-builder', 'CampaignController@storeCampaign');
         Route::get('/import', 'CampaignController@import')->name('import');
         Route::post('/import', 'CampaignController@importCampaign');

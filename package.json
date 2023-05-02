@@ -4,9 +4,9 @@
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
+        "hot": "yarn clean && mix watch --hot",
         "clean": "rm -rf public/js public/css public/fonts public/images",
-        "production": "npm run clean && mix --production"
+        "production": "yarn clean && mix --production"
     },
     "devDependencies": {
         "axios": "^0.21",

@@ -16,27 +16,48 @@
     <!-- Basic table -->
     <section id="datatables-basic">
         <div class="mb-3 mt-2">
-            @if(Auth::user()->customer->getOption('delete_sms_history') == 'yes')
+            @can('sms_campaign_builder')
                 <div class="btn-group">
-                    <button
-                            class="btn btn-primary fw-bold dropdown-toggle me-1"
-                            type="button"
-                            id="bulk_actions"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
+                    <button class="btn btn-primary fw-bold dropdown-toggle" type="button" id="bulk_actions"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ __('locale.labels.actions') }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bulk_actions">
-                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="stop-circle"></i> {{ __('locale.datatables.bulk_delete') }}</a>
+                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="trash"></i>
+                            {{ __('locale.datatables.bulk_delete') }}</a>
+                    </div>
+                </div>
+            @endcan
+
+            @can('sms_campaign_builder')
+                <div class="btn-group">
+                    <a href="{{ route('customer.sms.create_campaign') }}"
+                        class="btn btn-success waves-light waves-effect fw-bold mx-1"> {{ __('locale.campaigns.create_campaign') }} <i
+                            data-feather="plus-circle"></i></a>
+                </div>
+            @endcan
+
+        </div>
+        <div class="mb-3 mt-2">
+            @if (Auth::user()->customer->getOption('delete_sms_history') == 'yes')
+                <div class="btn-group">
+                    <button class="btn btn-primary fw-bold dropdown-toggle me-1" type="button" id="bulk_actions"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ __('locale.labels.actions') }}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="bulk_actions">
+                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="stop-circle"></i>
+                            {{ __('locale.datatables.bulk_delete') }}</a>
                     </div>
                 </div>
             @endif
 
 
-            @if(Auth::user()->customer->getOption('list_export') == 'yes')
+            @if (Auth::user()->customer->getOption('list_export') == 'yes')
                 <div class="btn-group">
-                    <a href="{{route('customer.reports.campaign.export')}}" class="btn btn-info waves-light waves-effect fw-bold"> {{__('locale.buttons.export')}} <i data-feather="file-text"></i></a>
+                    <a href="{{ route('customer.reports.campaign.export') }}"
+                        class="btn btn-info waves-light waves-effect fw-bold"> {{ __('locale.buttons.export') }} <i
+                            data-feather="file-text"></i></a>
                 </div>
             @endif
 
@@ -46,17 +67,22 @@
                 <div class="card">
                     <table class="table datatables-basic">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>{{ __('locale.labels.id') }}</th>
-                            <th>{{__('locale.labels.name')}}</th>
-                            <th>{{__('locale.menu.Contacts')}}</th>
-                            <th>{{__('locale.labels.sms_type')}} </th>
-                            <th>{{__('locale.labels.campaigns_type')}}</th>
-                            <th>{{__('locale.labels.status')}}</th>
-                            <th width="10%">{{__('locale.labels.actions')}}</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>{{ __('locale.labels.id') }}</th>
+                                <th>{{ __('locale.labels.name') }}</th>
+                                <th>{{ __('locale.labels.type') }}</th>
+                                <th>{{ __('locale.labels.created_by') }}</th>
+                                <th>{{ __('locale.labels.created_at') }} </th>
+                                <th>{{ __('locale.labels.sent') }} </th>
+                                <th>{{ __('locale.labels.delivered') }} </th>
+                                <th>{{ __('locale.labels.responded') }} </th>
+                                <th>{{ __('locale.labels.stop') }} </th>
+                                <th>{{ __('locale.labels.spam') }} </th>
+                                <th>{{ __('locale.labels.segments') }} </th>
+                                <th width="10%">{{ __('locale.labels.actions') }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -88,14 +114,14 @@
 @section('page-script')
     {{-- Page js files --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             "use strict"
 
             //show response message
             function showResponseMessage(data) {
 
                 if (data.status === 'success') {
-                    toastr['success'](data.message, '{{__('locale.labels.success')}}!!', {
+                    toastr['success'](data.message, '{{ __('locale.labels.success') }}!!', {
                         closeButton: true,
                         positionClass: 'toast-top-right',
                         progressBar: true,
@@ -104,13 +130,14 @@
                     });
                     dataListView.draw();
                 } else {
-                    toastr['warning']("{{__('locale.exceptions.something_went_wrong')}}", '{{ __('locale.labels.warning') }}!', {
-                        closeButton: true,
-                        positionClass: 'toast-top-right',
-                        progressBar: true,
-                        newestOnTop: true,
-                        rtl: isRtl
-                    });
+                    toastr['warning']("{{ __('locale.exceptions.something_went_wrong') }}",
+                        '{{ __('locale.labels.warning') }}!', {
+                            closeButton: true,
+                            positionClass: 'toast-top-right',
+                            progressBar: true,
+                            newestOnTop: true,
+                            rtl: isRtl
+                        });
                 }
             }
 
@@ -126,23 +153,47 @@
                     "url": "{{ route('customer.reports.search.campaigns') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": {_token: "{{csrf_token()}}"}
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
                 },
-                "columns": [
-                    {"data": 'responsive_id', orderable: false, searchable: false},
-                    {"data": "uid"},
-                    {"data": "uid"},
-                    {"data": "campaign_name"},
-                    {"data": "contacts", orderable: false, searchable: false},
-                    {"data": "sms_type"},
-                    {"data": "schedule_type"},
-                    {"data": "status"},
-                    {"data": "action", orderable: false, searchable: false}
+                "columns": [{
+                        "data": 'responsive_id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "uid"
+                    },
+                    {
+                        "data": "uid"
+                    },
+                    {
+                        "data": "campaign_name"
+                    },
+                    {
+                        "data": "contacts",
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "sms_type"
+                    },
+                    {
+                        "data": "schedule_type"
+                    },
+                    {
+                        "data": "status"
+                    },
+                    {
+                        "data": "action",
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
 
                 searchDelay: 1500,
-                columnDefs: [
-                    {
+                columnDefs: [{
                         // For Responsive
                         className: 'control',
                         orderable: false,
@@ -154,7 +205,7 @@
                         targets: 1,
                         orderable: false,
                         responsivePriority: 3,
-                        render: function (data) {
+                        render: function(data) {
                             return (
                                 '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="" id="' +
                                 data +
@@ -164,8 +215,7 @@
                             );
                         },
                         checkboxes: {
-                            selectAllRender:
-                                '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                            selectAllRender: '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                             selectRow: true
                         }
                     },
@@ -178,26 +228,40 @@
                         targets: -1,
                         title: '{{ __('locale.labels.actions') }}',
                         orderable: false,
-                        render: function (data, type, full) {
+                        render: function(data, type, full) {
                             let $actions = '';
 
-                            if(full['camp_status'] === 'queued' || full['camp_status'] === 'scheduled'){
-                                $actions += '<a href="' + full['show'] + '" class="text-primary mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title=' + full['show_label'] + '>' +
-                                feather.icons['edit'].toSvg({class: 'font-medium-4'}) +
-                                '</a>';
+                            if (full['camp_status'] === 'queued' || full['camp_status'] ===
+                                'scheduled') {
+                                $actions += '<a href="' + full['show'] +
+                                    '" class="text-primary mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title=' +
+                                    full['show_label'] + '>' +
+                                    feather.icons['edit'].toSvg({
+                                        class: 'font-medium-4'
+                                    }) +
+                                    '</a>';
                             }
 
-                            if(full['camp_status'] === 'delivered' || full['camp_status'] === 'processing' || full['camp_status'] === 'failed' || full['camp_status'] === 'cancelled'){
-                                $actions += '<a href="' + full['overview'] + '" class="text-primary mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title=' + full['overview_label'] + '>' +
-                                feather.icons['bar-chart'].toSvg({class: 'font-medium-4'}) +
-                                '</a>';
+                            if (full['camp_status'] === 'delivered' || full['camp_status'] ===
+                                'processing' || full['camp_status'] === 'failed' || full[
+                                    'camp_status'] === 'cancelled') {
+                                $actions += '<a href="' + full['overview'] +
+                                    '" class="text-primary mx-1" data-bs-toggle="tooltip" data-bs-placement="top" title=' +
+                                    full['overview_label'] + '>' +
+                                    feather.icons['bar-chart'].toSvg({
+                                        class: 'font-medium-4'
+                                    }) +
+                                    '</a>';
                             }
 
                             return (
                                 $actions +
 
-                                '<span class="action-delete text-danger cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title=' + full['delete'] + ' data-id=' + full['uid'] + '>' +
-                                feather.icons['trash'].toSvg({class: 'font-medium-4'}) +
+                                '<span class="action-delete text-danger cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title=' +
+                                full['delete'] + ' data-id=' + full['uid'] + '>' +
+                                feather.icons['trash'].toSvg({
+                                    class: 'font-medium-4'
+                                }) +
                                 '</span>'
                             );
                         }
@@ -220,16 +284,18 @@
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
-                            header: function (row) {
+                            header: function(row) {
                                 let data = row.data();
                                 return 'Details of ' + data['uid'];
                             }
                         }),
                         type: 'column',
-                        renderer: function (api, rowIdx, columns) {
-                            let data = $.map(columns, function (col) {
-                                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                                    ? '<tr data-dt-row="' +
+                        renderer: function(api, rowIdx, columns) {
+                            let data = $.map(columns, function(col) {
+                                return col.title !==
+                                    '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
                                     col.rowIdx +
                                     '" data-dt-column="' +
                                     col.columnIndex +
@@ -241,25 +307,31 @@
                                     '<td>' +
                                     col.data +
                                     '</td>' +
-                                    '</tr>'
-                                    : '';
+                                    '</tr>' :
+                                    '';
                             }).join('');
 
-                            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+                            return data ? $('<table class="table"/>').append('<tbody>' + data +
+                                '</tbody>') : false;
                         }
                     }
                 },
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
+                aLengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100]
+                ],
                 select: {
                     style: "multi"
                 },
-                order: [[2, "desc"]],
+                order: [
+                    [2, "desc"]
+                ],
                 displayLength: 10,
             });
 
 
             // On Delete
-            Table.delegate(".action-delete", "click", function (e) {
+            Table.delegate(".action-delete", "click", function(e) {
                 e.stopPropagation();
                 let id = $(this).data('id');
                 Swal.fire({
@@ -273,37 +345,39 @@
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url('/reports/campaigns')}}" + '/' + id + '/delete',
+                            url: "{{ url('/reports/campaigns') }}" + '/' + id + '/delete',
                             type: "POST",
                             data: {
-                                _token: "{{csrf_token()}}"
+                                _token: "{{ csrf_token() }}"
                             },
-                            success: function (data) {
+                            success: function(data) {
                                 showResponseMessage(data);
                             },
-                            error: function (reject) {
+                            error: function(reject) {
                                 if (reject.status === 422) {
                                     let errors = reject.responseJSON.errors;
-                                    $.each(errors, function (key, value) {
-                                        toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
+                                    $.each(errors, function(key, value) {
+                                        toastr['warning'](value[0],
+                                            "{{ __('locale.labels.attention') }}", {
+                                                closeButton: true,
+                                                positionClass: 'toast-top-right',
+                                                progressBar: true,
+                                                newestOnTop: true,
+                                                rtl: isRtl
+                                            });
                                     });
                                 } else {
-                                    toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                        positionClass: 'toast-top-right',
-                                        containerId: 'toast-top-right',
-                                        progressBar: true,
-                                        closeButton: true,
-                                        newestOnTop: true
-                                    });
+                                    toastr['warning'](reject.responseJSON.message,
+                                        "{{ __('locale.labels.attention') }}", {
+                                            positionClass: 'toast-top-right',
+                                            containerId: 'toast-top-right',
+                                            progressBar: true,
+                                            closeButton: true,
+                                            newestOnTop: true
+                                        });
                                 }
                             }
                         })
@@ -312,27 +386,27 @@
             });
 
             //Bulk Delete
-            $(".bulk-delete").on('click', function (e) {
+            $(".bulk-delete").on('click', function(e) {
 
                 e.preventDefault();
 
                 Swal.fire({
-                    title: "{{__('locale.labels.are_you_sure')}}",
-                    text: "{{__('locale.campaigns.delete_campaigns')}}",
+                    title: "{{ __('locale.labels.are_you_sure') }}",
+                    text: "{{ __('locale.campaigns.delete_campaigns') }}",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: "{{__('locale.labels.delete_selected')}}",
+                    confirmButtonText: "{{ __('locale.labels.delete_selected') }}",
                     customClass: {
                         confirmButton: 'btn btn-primary',
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         let campaigns_id = [];
                         let rows_selected = dataListView.column(1).checkboxes.selected();
 
-                        $.each(rows_selected, function (index, rowId) {
+                        $.each(rows_selected, function(index, rowId) {
                             campaigns_id.push(rowId)
                         });
 
@@ -342,44 +416,47 @@
                                 url: "{{ route('customer.reports.campaign.batch_action') }}",
                                 type: "POST",
                                 data: {
-                                    _token: "{{csrf_token()}}",
+                                    _token: "{{ csrf_token() }}",
                                     action: 'destroy',
                                     ids: campaigns_id
                                 },
-                                success: function (data) {
+                                success: function(data) {
                                     showResponseMessage(data);
                                 },
-                                error: function (reject) {
+                                error: function(reject) {
                                     if (reject.status === 422) {
                                         let errors = reject.responseJSON.errors;
-                                        $.each(errors, function (key, value) {
-                                            toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                                        $.each(errors, function(key, value) {
+                                            toastr['warning'](value[0],
+                                                "{{ __('locale.labels.attention') }}", {
+                                                    closeButton: true,
+                                                    positionClass: 'toast-top-right',
+                                                    progressBar: true,
+                                                    newestOnTop: true,
+                                                    rtl: isRtl
+                                                });
+                                        });
+                                    } else {
+                                        toastr['warning'](reject.responseJSON.message,
+                                            "{{ __('locale.labels.attention') }}", {
                                                 closeButton: true,
                                                 positionClass: 'toast-top-right',
                                                 progressBar: true,
                                                 newestOnTop: true,
                                                 rtl: isRtl
                                             });
-                                        });
-                                    } else {
-                                        toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
                                     }
                                 }
                             })
                         } else {
-                            toastr['warning']("{{__('locale.labels.at_least_one_data')}}", "{{__('locale.labels.attention')}}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
+                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}",
+                                "{{ __('locale.labels.attention') }}", {
+                                    closeButton: true,
+                                    positionClass: 'toast-top-right',
+                                    progressBar: true,
+                                    newestOnTop: true,
+                                    rtl: isRtl
+                                });
                         }
 
                     }
