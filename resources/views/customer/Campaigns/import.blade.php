@@ -38,7 +38,7 @@
                     <div class="card-content">
                         <div class="card-body">
 
-                            <form class="form form-vertical" action="{{ route('customer.sms.import') }}" method="post" enctype="multipart/form-data">
+                            <form class="form form-vertical" action="{{ route('customer.messages.import') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-12">

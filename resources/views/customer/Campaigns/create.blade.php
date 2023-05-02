@@ -15,7 +15,7 @@
                     <div class="card-content">
                         <div class="card-body">
 
-                            <form class="form form-vertical" action="{{ route('customer.sms.create_campaign') }}"
+                            <form class="form form-vertical" action="{{ route('customer.messages.create_campaign') }}"
                                 method="post">
                                 @csrf
 

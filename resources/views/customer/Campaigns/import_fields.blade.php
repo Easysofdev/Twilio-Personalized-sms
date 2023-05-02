@@ -15,7 +15,7 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="card-body">
-                            <form class="form" action="{{ route('customer.sms.import_process') }}" method="post">
+                            <form class="form" action="{{ route('customer.messages.import_process') }}" method="post">
                                 @csrf
                                 <div class="row">
                                     <div class="table-responsive">

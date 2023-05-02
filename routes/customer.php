@@ -233,9 +233,9 @@ Route::get('invoices/{invoice}/print', 'InvoiceController@print')->name('invoice
 |
 */
 
-Route::prefix('sms')->name('sms.')->group(function () {
-        Route::get('/quick-send', 'CampaignController@quickSend')->name('quick_send');
-        Route::post('/quick-send', 'CampaignController@postQuickSend');
+Route::prefix('messages')->name('messages.')->group(function () {
+        Route::get('/send', 'CampaignController@quickSend')->name('send_message');
+        Route::post('/send', 'CampaignController@postQuickSend');
         Route::get('/campaign-builder', 'CampaignController@campaignBuilder')->name('campaign_builder');
         Route::get('/create-campaign', 'CampaignController@createCampaign')->name('create_campaign');
         Route::post('/create-campaign', 'CampaignController@postCreateCampaign')->name('create_campaign');
@@ -243,37 +243,6 @@ Route::prefix('sms')->name('sms.')->group(function () {
         Route::get('/import', 'CampaignController@import')->name('import');
         Route::post('/import', 'CampaignController@importCampaign');
         Route::post('/import_process', 'CampaignController@importProcess')->name('import_process');
-});
-
-Route::prefix('voice')->name('voice.')->group(function () {
-        Route::get('/quick-send', 'CampaignController@voiceQuickSend')->name('quick_send');
-        Route::post('/quick-send', 'CampaignController@postVoiceQuickSend');
-        Route::get('/campaign-builder', 'CampaignController@voiceCampaignBuilder')->name('campaign_builder');
-        Route::post('/campaign-builder', 'CampaignController@storeVoiceCampaign');
-        Route::get('/import', 'CampaignController@voiceImport')->name('import');
-        Route::post('/import', 'CampaignController@importVoiceCampaign');
-        Route::post('/import_process', 'CampaignController@voiceImportProcess')->name('import_process');
-});
-
-Route::prefix('mms')->name('mms.')->group(function () {
-        Route::get('/quick-send', 'CampaignController@mmsQuickSend')->name('quick_send');
-        Route::post('/quick-send', 'CampaignController@postMMSQuickSend');
-        Route::get('/campaign-builder', 'CampaignController@mmsCampaignBuilder')->name('campaign_builder');
-        Route::post('/campaign-builder', 'CampaignController@storeMMSCampaign');
-        Route::get('/import', 'CampaignController@mmsImport')->name('import');
-        Route::post('/import', 'CampaignController@importMMSCampaign');
-        Route::post('/import_process', 'CampaignController@mmsImportProcess')->name('import_process');
-});
-
-
-Route::prefix('whatsapp')->name('whatsapp.')->group(function () {
-        Route::get('/quick-send', 'CampaignController@whatsappQuickSend')->name('quick_send');
-        Route::post('/quick-send', 'CampaignController@postWhatsAppQuickSend');
-        Route::get('/campaign-builder', 'CampaignController@whatsappCampaignBuilder')->name('campaign_builder');
-        Route::post('/campaign-builder', 'CampaignController@storeWhatsAppCampaign');
-        Route::get('/import', 'CampaignController@whatsappImport')->name('import');
-        Route::post('/import', 'CampaignController@importWhatsAppCampaign');
-        Route::post('/import_process', 'CampaignController@whatsappImportProcess')->name('import_process');
 });
 
 Route::post('templates/show-data/{id}', 'CampaignController@templateData')->name('templates.show_data');

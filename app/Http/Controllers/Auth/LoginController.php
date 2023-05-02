@@ -88,16 +88,7 @@ class LoginController extends Controller
             'remember_me' => 'boolean',
         ];
 
-        if (config('no-captcha.login')) {
-            $rules['g-recaptcha-response'] = ['required', new CaptchaRule()];
-        }
-
-        $messages = [
-            'g-recaptcha-response.required' => __('locale.auth.recaptcha_required'),
-            'g-recaptcha-response.captcha'  => __('locale.auth.recaptcha_required'),
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return redirect()->back()->withInput($request->only('email'))->with([
@@ -126,7 +117,6 @@ class LoginController extends Controller
                     'message' => __('locale.auth.disabled'),
                 ]);
             }
-
 
             $user = Auth::user();
 
