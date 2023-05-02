@@ -42,22 +42,6 @@
                 <div class="card">
                     <div class="card-header">
                         <div>
-                            <h2 class="fw-bolder mb-0">{{ \App\Models\Plan::count() }}</h2>
-                            <p class="card-text">{{ __('locale.menu.Plan') }}</p>
-                        </div>
-                        <div class="avatar bg-light-success p-50 m-0">
-                            <div class="avatar-content">
-                                <i data-feather="credit-card" class="font-medium-5"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-sm-6 col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div>
                             <h2 class="fw-bolder mb-0">{{ \App\Models\Reports::count() }}</h2>
                             <p class="card-text">{{ __('locale.labels.sms_send') }}</p>
                         </div>
