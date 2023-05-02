@@ -212,47 +212,47 @@ class UserSeeder extends Seeder
                 //
                 //        $supervisor->roles()->save($authorRole);
                 //
-                $customers = $user->create([
-                        'first_name'        => 'Justice',
-                        'last_name'         => 'Ekemezie',
-                        'image'             => null,
-                        'email'             => 'justiceekemezie2000@gmail.com',
-                        'password'          => bcrypt($defaultPassword),
-                        'status'            => true,
-                        'is_admin'          => false,
-                        'is_customer'       => true,
-                        'locale'            => app()->getLocale(),
-                        'timezone'          => config('app.timezone'),
-                        'email_verified_at' => now(),
-                ]);
+                // $customers = $user->create([
+                //         'first_name'        => 'Justice',
+                //         'last_name'         => 'Ekemezie',
+                //         'image'             => null,
+                //         'email'             => 'justiceekemezie2000@gmail.com',
+                //         'password'          => bcrypt($defaultPassword),
+                //         'status'            => true,
+                //         'is_admin'          => false,
+                //         'is_customer'       => true,
+                //         'locale'            => app()->getLocale(),
+                //         'timezone'          => config('app.timezone'),
+                //         'email_verified_at' => now(),
+                // ]);
                 //
                 //
-                $customers->api_token = $customers->createToken('justiceekemezie2000@gmail.com')->plainTextToken;
-                $customers->save();
+                // $customers->api_token = $customers->createToken('justiceekemezie2000@gmail.com')->plainTextToken;
+                // $customers->save();
                 //
-                $customer->create([
-                        'user_id'            => $customers->id,
-                        'company'            => 'Ttebify LLC',
-                        'website'            => 'https://ttebify.com',
-                        'address'            => 'Abuja, Nigeria',
-                        'city'               => 'Abuja',
-                        'postcode'           => '902101',
-                        'financial_address'  => 'Abuja, Nigeria',
-                        'financial_city'     => 'Abuja',
-                        'financial_postcode' => '902101',
-                        'tax_number'         => '21-4330267',
-                        'state'              => 'Abuja',
-                        'country'            => 'Nigeria',
-                        'phone'              => '09121738252',
-                        'notifications'      => json_encode([
-                                'login'        => 'yes',
-                                'sender_id'    => 'yes',
-                                'keyword'      => 'yes',
-                                'subscription' => 'yes',
-                                'promotion'    => 'yes',
-                                'profile'      => 'yes',
-                        ]),
-                ]);
+                // $customer->create([
+                //         'user_id'            => $customers->id,
+                //         'company'            => 'Ttebify LLC',
+                //         'website'            => 'https://ttebify.com',
+                //         'address'            => 'Abuja, Nigeria',
+                //         'city'               => 'Abuja',
+                //         'postcode'           => '902101',
+                //         'financial_address'  => 'Abuja, Nigeria',
+                //         'financial_city'     => 'Abuja',
+                //         'financial_postcode' => '902101',
+                //         'tax_number'         => '21-4330267',
+                //         'state'              => 'Abuja',
+                //         'country'            => 'Nigeria',
+                //         'phone'              => '09121738252',
+                //         'notifications'      => json_encode([
+                //                 'login'        => 'yes',
+                //                 'sender_id'    => 'yes',
+                //                 'keyword'      => 'yes',
+                //                 'subscription' => 'yes',
+                //                 'promotion'    => 'yes',
+                //                 'profile'      => 'yes',
+                //         ]),
+                // ]);
                 //
                 //
                 //        $customer_two = $user->create([
