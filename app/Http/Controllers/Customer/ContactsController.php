@@ -655,7 +655,7 @@ class ContactsController extends CustomerBaseController
                 $nestedData['show_label']       = __('locale.buttons.edit');
                 $nestedData['conversion']       = route('customer.reports.all', ['recipient' => $singleContact->phone]);
                 $nestedData['conversion_label'] = __('locale.contacts.view_conversion');
-                $nestedData['send_sms']         = route('customer.sms.quick_send', ['recipient' => $singleContact->phone]);
+                $nestedData['send_sms']         = route('customer.messages.quick_send', ['recipient' => $singleContact->phone]);
                 $nestedData['send_sms_label']   = __('locale.contacts.send_message');
                 $nestedData['delete']           = __('locale.buttons.delete');;
                 $data[] = $nestedData;

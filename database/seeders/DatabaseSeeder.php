@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PaymentMethodsSeeder::class);
         $this->call(BlacklistSeeder::class);
         //  $this->call(KeywordsSeeder::class);
-         $this->call(PhoneNumberSeeder::class);
-         $this->call(SenderIDSeeder::class);
+        //  $this->call(PhoneNumberSeeder::class);
+        //  $this->call(SenderIDSeeder::class);
         $this->call(SendingServerSeeder::class);
         //  $this->call(SpamWordSeeder::class);
         $this->call(PlanSeeder::class);
