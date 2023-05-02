@@ -179,7 +179,7 @@ class UserSeeder extends Seeder
                         'first_name'        => 'Super',
                         'last_name'         => 'Admin',
                         'image'             => null,
-                        'email'             => 'ttebify@gmail.com',
+                        'email'             => 'admin@byztester.com',
                         'password'          => bcrypt($defaultPassword),
                         'status'            => true,
                         'is_admin'          => true,
@@ -188,7 +188,7 @@ class UserSeeder extends Seeder
                         'email_verified_at' => now(),
                 ]);
 
-                $superAdmin->api_token = $superAdmin->createToken('ttebify@gmail.com')->plainTextToken;
+                $superAdmin->api_token = $superAdmin->createToken('admin@byztester.com')->plainTextToken;
                 $superAdmin->save();
 
                 $superAdmin->roles()->save($superAdminRole);
