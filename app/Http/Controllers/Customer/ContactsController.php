@@ -179,8 +179,7 @@ class ContactsController extends CustomerBaseController
             "data"            => $data,
         ];
 
-        echo json_encode($json_data);
-        exit();
+        return response()->json($json_data);
     }
 
 
@@ -193,23 +192,16 @@ class ContactsController extends CustomerBaseController
 
     public function create()
     {
-        if (Auth::user()->customer->activeSubscription() == null) {
-            return redirect()->route('user.home')->with([
-                'status'  => 'error',
-                'message' => __('locale.customer.no_active_subscription'),
-            ]);
-        }
-
         $this->authorize('create_contact_group');
-        $totalData = ContactGroups::where('customer_id', auth()->user()->id)->count();
-        $list_max  = Auth::user()->customer->getOption('list_max');
+        // $totalData = ContactGroups::where('customer_id', auth()->user()->id)->count();
+/*         $list_max  = Auth::user()->customer->getOption('list_max');
 
         if ($list_max != '-1' && $list_max < $totalData) {
             return redirect()->route('customer.contacts.index')->with([
                 'status'  => 'error',
                 'message' => __('locale.contacts.max_list_quota', ['max_list' => $list_max]),
             ]);
-        }
+        } */
 
         $breadcrumbs = [
             ['link' => url('dashboard'), 'name' => __('locale.menu.Dashboard')],
@@ -260,10 +252,10 @@ class ContactsController extends CustomerBaseController
         ];
 
         if (Auth::user()->customer->getOption('sender_id_verification') == 'yes') {
-            $sender_ids    = Senderid::where('user_id', auth()->user()->id)->cursor();
+            // $sender_ids    = Senderid::where('user_id', auth()->user()->id)->cursor();
             $phone_numbers = PhoneNumbers::where('user_id', auth()->user()->id)->cursor();
         } else {
-            $sender_ids    = null;
+            // $sender_ids    = null;
             $phone_numbers = null;
         }
         $template_tags          = TemplateTags::cursor();
@@ -278,29 +270,8 @@ class ContactsController extends CustomerBaseController
 
         $import_history = ImportJobHistory::where('import_id', $contact->uid)->where('type', 'import_contact')->cursor();
 
-        $plan_id = Auth::user()->customer->activeSubscription()->plan_id;
 
-        // Check the customer has permissions using sending servers and has his own sending servers
-        if (Auth::user()->customer->getOption('create_sending_server') == 'yes') {
-            if (PlansSendingServer::where('plan_id', $plan_id)->count()) {
-
-                $sending_server = SendingServer::where('user_id', Auth::user()->id)->where('plain', 1)->where('status', true)->get();
-
-                if ($sending_server->count() == 0) {
-                    $sending_server_ids = PlansSendingServer::where('plan_id', $plan_id)->pluck('sending_server_id')->toArray();
-                    $sending_server     = SendingServer::where('plain', 1)->where('status', true)->whereIn('id', $sending_server_ids)->get();
-                }
-            } else {
-                $sending_server_ids = PlansSendingServer::where('plan_id', $plan_id)->pluck('sending_server_id')->toArray();
-                $sending_server     = SendingServer::where('plain', 1)->where('status', true)->whereIn('id', $sending_server_ids)->get();
-            }
-        } else {
-            // If customer don't have permission creating sending servers
-            $sending_server_ids = PlansSendingServer::where('plan_id', $plan_id)->pluck('sending_server_id')->toArray();
-            $sending_server     = SendingServer::where('plain', 1)->where('status', true)->whereIn('id', $sending_server_ids)->get();
-        }
-
-        return view('customer.contactGroups.show', compact('breadcrumbs', 'contact', 'sender_ids', 'phone_numbers', 'contact_groups', 'template_tags', 'opt_in_keywords', 'opt_out_keywords', 'remain_opt_in_keywords', 'remain_opt_out_keywords', 'import_history', 'sending_server'));
+        return view('customer.contactGroups.show', compact('breadcrumbs', 'contact', 'phone_numbers', 'contact_groups', 'template_tags', 'opt_in_keywords', 'opt_out_keywords', 'remain_opt_in_keywords', 'remain_opt_out_keywords', 'import_history'));
     }
 
 
@@ -349,7 +320,7 @@ class ContactsController extends CustomerBaseController
     {
         $this->authorize('create_contact_group');
 
-        $totalData = ContactGroups::where('customer_id', auth()->user()->id)->count();
+        /* $totalData = ContactGroups::where('customer_id', auth()->user()->id)->count();
         $list_max  = Auth::user()->customer->getOption('list_max');
 
         if ($list_max != '-1' && $list_max < $totalData) {
@@ -357,11 +328,11 @@ class ContactsController extends CustomerBaseController
                 'status'  => 'error',
                 'message' => __('locale.contacts.max_list_quota', ['max_list' => $list_max]),
             ]);
-        }
+        } */
 
-        $subscriber_per_list_max = Contacts::where('group_id', $contact->id)->count();
+        // $subscriber_per_list_max = Contacts::where('group_id', $contact->id)->count();
 
-        if (Auth::user()->customer->getOption('subscriber_per_list_max') != '-1' && $subscriber_per_list_max > Auth::user()->customer->getOption('subscriber_per_list_max')) {
+        /* if (Auth::user()->customer->getOption('subscriber_per_list_max') != '-1' && $subscriber_per_list_max > Auth::user()->customer->getOption('subscriber_per_list_max')) {
             $subscriber_max = Contacts::where('customer_id', Auth::user()->id)->count();
             if (Auth::user()->customer->getOption('subscriber_max') != '-1' && $subscriber_max > Auth::user()->customer->getOption('subscriber_max')) {
                 return response()->json([
@@ -374,7 +345,7 @@ class ContactsController extends CustomerBaseController
                 'status'  => 'error',
                 'message' => __('locale.contacts.subscriber_per_list_max_quota', ['subscriber_per_list_max' => Auth::user()->customer->getOption('subscriber_per_list_max')]),
             ]);
-        }
+        } */
 
         $new_group       = $contact->replicate();
         $new_group->name = $request->group_name;
@@ -685,7 +656,7 @@ class ContactsController extends CustomerBaseController
     {
         $this->authorize('create_contact');
 
-        $subscriber_per_list_max = Contacts::where('group_id', $contact->id)->count();
+/*         $subscriber_per_list_max = Contacts::where('group_id', $contact->id)->count();
 
         if (Auth::user()->customer->getOption('subscriber_per_list_max') != '-1' && $subscriber_per_list_max > Auth::user()->customer->getOption('subscriber_per_list_max')) {
             $subscriber_max = Contacts::where('customer_id', Auth::user()->id)->count();
@@ -700,7 +671,7 @@ class ContactsController extends CustomerBaseController
                 'status'  => 'error',
                 'message' => __('locale.contacts.subscriber_per_list_max_quota', ['subscriber_per_list_max' => Auth::user()->customer->getOption('subscriber_per_list_max')]),
             ]);
-        }
+        } */
 
         $breadcrumbs = [
             ['link' => url('dashboard'), 'name' => __('locale.menu.Dashboard')],
@@ -1294,7 +1265,8 @@ class ContactsController extends CustomerBaseController
      * @return JsonResponse
      */
     public function optInKeyword(ContactGroups $contact, Request $request): JsonResponse
-    {        $keyword_name = $request->keyword_name;
+    {
+        $keyword_name = $request->keyword_name;
         if ($keyword_name) {
             $keyword = Keywords::where('user_id', Auth::user()->id)->where('keyword_name', $keyword_name)->first();
             if ($keyword) {
@@ -1383,7 +1355,8 @@ class ContactsController extends CustomerBaseController
      * @return JsonResponse
      */
     public function deleteOptInKeyword(ContactGroups $contact, Request $request): JsonResponse
-    {        $keyword_id    = $request->id;
+    {
+        $keyword_id    = $request->id;
         $optin_keyword = ContactGroupsOptinKeywords::where('contact_group', $contact->id)->where('uid', $keyword_id)->delete();
         if ($optin_keyword) {
             return response()->json([
