@@ -270,7 +270,6 @@ class ContactsController extends CustomerBaseController
 
         $import_history = ImportJobHistory::where('import_id', $contact->uid)->where('type', 'import_contact')->cursor();
 
-
         return view('customer.contactGroups.show', compact('breadcrumbs', 'contact', 'phone_numbers', 'contact_groups', 'template_tags', 'opt_in_keywords', 'opt_out_keywords', 'remain_opt_in_keywords', 'remain_opt_out_keywords', 'import_history'));
     }
 
@@ -626,7 +625,7 @@ class ContactsController extends CustomerBaseController
                 $nestedData['show_label']       = __('locale.buttons.edit');
                 $nestedData['conversion']       = route('customer.reports.all', ['recipient' => $singleContact->phone]);
                 $nestedData['conversion_label'] = __('locale.contacts.view_conversion');
-                $nestedData['send_sms']         = route('customer.messages.quick_send', ['recipient' => $singleContact->phone]);
+                $nestedData['send_sms']         = route('customer.messages.send_message', ['recipient' => $singleContact->phone]);
                 $nestedData['send_sms_label']   = __('locale.contacts.send_message');
                 $nestedData['delete']           = __('locale.buttons.delete');;
                 $data[] = $nestedData;

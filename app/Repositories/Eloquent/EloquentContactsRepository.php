@@ -326,7 +326,7 @@ class EloquentContactsRepository extends EloquentBaseRepository implements Conta
                         ContactsCustomField::create($value);
                     }
                 }
-                $data = array_except($input, ['custom', 'contact_id']);
+                $data = Arr::except($input, ['custom', 'contact_id']);
                 if ($contact->update($data)) {
                     return true;
                 }

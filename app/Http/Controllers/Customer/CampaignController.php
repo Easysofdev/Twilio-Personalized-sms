@@ -98,7 +98,7 @@ class CampaignController extends CustomerBaseController
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
-                return redirect()->route('customer.messages.quick_send')->with([
+                return redirect()->route('customer.messages.send_message')->with([
                     'status'  => 'error',
                     'message' => 'Purchased plan is not active. Please contact support team.',
                 ]);
@@ -202,7 +202,7 @@ class CampaignController extends CustomerBaseController
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
-                return redirect()->route('customer.messages.quick_send')->with([
+                return redirect()->route('customer.messages.send_message')->with([
                     'status'  => 'error',
                     'message' => 'Purchased plan is not active. Please contact support team.',
                 ]);
