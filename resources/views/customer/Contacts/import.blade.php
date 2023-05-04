@@ -23,57 +23,13 @@
                                         <div class="mb-1">
                                             <div class='form-check form-switch form-check-primary form-switch-xl'>
                                                 <input type="checkbox" class="form-check-input" name="option_toggle"
-                                                    id="option_toggle" checked>
+                                                    id="option_toggle">
                                                 <label class="form-check-label" for="option_toggle">
                                                     <span
                                                         class="switch-text-left">{{ __('locale.labels.import_file') }}</span>
                                                     <span
                                                         class="switch-text-right">{{ __('locale.labels.paste_text') }}</span>
                                                 </label>
-                                            </div>
-                                        </div>
-
-                                        <div class="import_file">
-
-                                            <div class="mb-1 mt-2">
-                                                <p class="text-uppercase">{{ __('locale.labels.sample_file') }}</p>
-                                                <a href="{{ route('sample.file') }}"
-                                                    class="btn btn-primary fw-bold text-uppercase">
-                                                    <i data-feather="file-text"></i>
-                                                    {{ __('locale.labels.download_sample_file') }}
-                                                </a>
-
-                                            </div>
-                                            <div class="mb-1">
-                                                <label for="import_file"
-                                                    class="form-label">{{ __('locale.labels.import_file') }}</label>
-                                                <div class="us-file-zone us-clickable">
-                                                    <input type="file" name="import_file" class="us-file upload-file"
-                                                        id="import_file" accept="text/csv">
-                                                    <div class="us-file-message">
-                                                        {{ __('locale.filezone.click_here_to_upload') }}
-                                                    </div>
-                                                    <div class="us-file-footer">
-                                                        {!! __('locale.contacts.include_country_code_for_successful_import') !!}
-                                                        {!! __('locale.contacts.only_supported_file') !!}
-                                                    </div>
-                                                </div>
-                                                @error('import_file')
-                                                    <div class="text-danger">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-
-                                            </div>
-
-
-                                            <div class="mb-1">
-                                                <div class="form-check me-3 me-lg-5">
-                                                    <input type="checkbox" checked value="true" name="header"
-                                                        class="form-check-input">
-                                                    <label
-                                                        class="form-check-label">{{ __('locale.filezone.file_contains_header_row') }}?</label>
-                                                </div>
                                             </div>
                                         </div>
 
@@ -127,6 +83,52 @@
 
                                         </div>
 
+                                        <div class="import_file">
+
+                                            <div class="mb-1 mt-2">
+                                                <p class="text-uppercase">{{ __('locale.labels.sample_file') }}</p>
+                                                <a href="{{ route('sample.file') }}"
+                                                    class="btn btn-primary fw-bold text-uppercase">
+                                                    <i data-feather="file-text"></i>
+                                                    {{ __('locale.labels.download_sample_file') }}
+                                                </a>
+
+                                            </div>
+                                            <div class="mb-1">
+                                                <label for="import_file"
+                                                    class="form-label">{{ __('locale.labels.import_file') }}</label>
+                                                <div class="us-file-zone us-clickable">
+                                                    <input type="file" name="import_file" class="us-file upload-file"
+                                                        id="import_file" accept="text/csv">
+                                                    <div class="us-file-message">
+                                                        {{ __('locale.filezone.click_here_to_upload') }}
+                                                    </div>
+                                                    <div class="us-file-footer">
+                                                        {!! __('locale.contacts.include_country_code_for_successful_import') !!}
+                                                        {!! __('locale.contacts.only_supported_file') !!}
+                                                    </div>
+                                                </div>
+                                                @error('import_file')
+                                                    <div class="text-danger">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+
+                                            </div>
+
+
+                                            <div class="mb-1">
+                                                <div class="form-check me-3 me-lg-5">
+                                                    <input type="checkbox" checked value="true" name="header"
+                                                        class="form-check-input">
+                                                    <label
+                                                        class="form-check-label">{{ __('locale.filezone.file_contains_header_row') }}?</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
 
                                     </div>
                                 </div>
@@ -175,7 +177,7 @@
             }, 200);
         }
 
-        $('.paste_text').hide();
+        $('.import_file').hide();
 
         $('#option_toggle').on('click', function() {
             if (this.checked) {
