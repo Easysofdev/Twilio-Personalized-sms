@@ -18,14 +18,14 @@ class DatabaseSeeder extends Seeder
         $this->call(Countries::class);
         $this->call(LanguageSeeder::class);
         $this->call(UserSeeder::class);
-        // $this->call(CurrenciesSeeder::class); <<== TODO
+        $this->call(CurrenciesSeeder::class);
         $this->call(EmailTemplateSeeder::class);
         $this->call(PaymentMethodsSeeder::class);
-        // $this->call(BlacklistSeeder::class);
+        $this->call(BlacklistSeeder::class);
         //  $this->call(KeywordsSeeder::class);
         //  $this->call(PhoneNumberSeeder::class);
         //  $this->call(SenderIDSeeder::class);
-        // $this->call(SendingServerSeeder::class); <== TODO
+        $this->call(SendingServerSeeder::class);
         //  $this->call(SpamWordSeeder::class);
         // $this->call(PlanSeeder::class);
         $this->call(TemplateTagsSeeder::class);
