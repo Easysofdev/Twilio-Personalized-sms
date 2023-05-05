@@ -5,7 +5,7 @@
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "yarn clean && mix watch --hot",
-        "clean": "rm -rf public/js public/css public/fonts public/images",
+        "clean": "rm -rf public/js public/css public/css-rtl public/data public/vendors public/mix-manifest.json public/fonts public/images",
         "production": "yarn clean && mix --production"
     },
     "devDependencies": {
