@@ -5,6 +5,7 @@ namespace Database\Seeders;
 
 use App\Models\Plan;
 use App\Models\PlansSendingServer;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -22,9 +23,11 @@ class PlanSeeder extends Seeder
                 DB::table('plans_sending_servers')->truncate();
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+                $user = User::first();
+                
                 $plans = [
                         [
-                                'user_id'              => 1,
+                                'user_id'              => $user->id,
                                 'currency_id'          => 1,
                                 'name'                 => 'Free',
                                 'description'          => 'A simple start for everyone',
@@ -37,7 +40,7 @@ class PlanSeeder extends Seeder
                                 'tax_billing_required' => false,
                         ],
                         [
-                                'user_id'              => 1,
+                                'user_id'              => $user->id,
                                 'currency_id'          => 1,
                                 'name'                 => 'Standard',
                                 'description'          => 'For small to medium businesses',
@@ -51,7 +54,7 @@ class PlanSeeder extends Seeder
                                 'tax_billing_required' => true,
                         ],
                         [
-                                'user_id'              => 1,
+                                'user_id'              => $user->id,
                                 'currency_id'          => 1,
                                 'name'                 => 'Enterprise',
                                 'description'          => 'Solution for big organizations',

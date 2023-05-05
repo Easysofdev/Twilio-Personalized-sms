@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\PhoneNumbers;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,9 +22,11 @@ class PhoneNumberSeeder extends Seeder
                 DB::table('phone_numbers')->truncate();
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+                $user = User::first();
+                
                 $phone_numbers = [
                         [
-                                'user_id'          => 1,
+                                'user_id'          => $user->id,
                                 'number'           => '8801721970168',
                                 'status'           => 'available',
                                 'capabilities'     => json_encode(['sms', 'voice', 'mms', 'whatsapp']),
@@ -57,7 +60,7 @@ class PhoneNumberSeeder extends Seeder
                                 'currency_id'      => 1,
                         ],
                         [
-                                'user_id'          => 1,
+                                'user_id'          => $user->id,
                                 'number'           => '8801521970168',
                                 'status'           => 'available',
                                 'price'            => 5,

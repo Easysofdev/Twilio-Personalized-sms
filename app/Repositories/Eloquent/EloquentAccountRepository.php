@@ -76,8 +76,10 @@ class EloquentAccountRepository extends EloquentBaseRepository implements Accoun
             $user->sendEmailVerificationNotification();
         }
 
+        $user = User::first();
+
         Notifications::create([
-            'user_id'           => 1,
+            'user_id'           => $user->id,
             'notification_for'  => 'admin',
             'notification_type' => 'user',
             'message'           => $user->displayName() . ' Registered',

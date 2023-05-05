@@ -10,6 +10,7 @@ use App\Models\Notifications;
 use App\Models\PaymentMethods;
 use App\Models\Senderid;
 use App\Models\SenderidPlan;
+use App\Models\User;
 use App\Repositories\Contracts\SenderIDRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -193,8 +194,10 @@ class SenderIDController extends CustomerBaseController
 
         $this->sender_ids->storeCustom($request->except('_token'));
 
+        $user = User::first();
+        
         Notifications::create([
-            'user_id'           => 1,
+            'user_id'           => $user->id,
             'notification_for'  => 'admin',
             'notification_type' => 'senderid',
             'message'           => 'New Sender ID request from ' . Auth::user()->displayName(),

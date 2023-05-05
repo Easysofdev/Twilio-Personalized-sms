@@ -27,8 +27,10 @@ class PaymentController extends Controller
 
     public function createNotification($type = null, $name = null, $user_name = null)
     {
+        $user = User::first();
+
         Notifications::create([
-            'user_id'           => 1,
+            'user_id'           => $user->id,
             'notification_for'  => 'admin',
             'notification_type' => $type,
             'message'           => $name . ' Purchased By ' . $user_name,

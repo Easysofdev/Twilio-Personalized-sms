@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\SendingServer;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -20,10 +21,12 @@ class SendingServerSeeder extends Seeder
                 DB::table('sending_servers')->truncate();
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+                $user = User::first();
+                
                 $sending_servers = [
                         [
                                 'name'            => 'Twilio',
-                                'user_id'         => 1,
+                                'user_id'         => $user->id,
                                 'settings'        => 'Twilio',
                                 'account_sid'     => 'account_sid',
                                 'auth_token'      => 'auth_token',
