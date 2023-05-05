@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(CurrenciesSeeder::class); <<== TODO
         $this->call(EmailTemplateSeeder::class);
         $this->call(PaymentMethodsSeeder::class);
-        $this->call(BlacklistSeeder::class);
+        // $this->call(BlacklistSeeder::class);
         //  $this->call(KeywordsSeeder::class);
         //  $this->call(PhoneNumberSeeder::class);
         //  $this->call(SenderIDSeeder::class);
