@@ -194,7 +194,7 @@ class ContactsController extends CustomerBaseController
     {
         $this->authorize('create_contact_group');
         // $totalData = ContactGroups::where('customer_id', auth()->user()->id)->count();
-/*         $list_max  = Auth::user()->customer->getOption('list_max');
+        /*         $list_max  = Auth::user()->customer->getOption('list_max');
 
         if ($list_max != '-1' && $list_max < $totalData) {
             return redirect()->route('customer.contacts.index')->with([
@@ -655,7 +655,7 @@ class ContactsController extends CustomerBaseController
     {
         $this->authorize('create_contact');
 
-/*         $subscriber_per_list_max = Contacts::where('group_id', $contact->id)->count();
+        /*         $subscriber_per_list_max = Contacts::where('group_id', $contact->id)->count();
 
         if (Auth::user()->customer->getOption('subscriber_per_list_max') != '-1' && $subscriber_per_list_max > Auth::user()->customer->getOption('subscriber_per_list_max')) {
             $subscriber_max = Contacts::where('customer_id', Auth::user()->id)->count();
