@@ -48,7 +48,7 @@ class CampaignController extends Controller
             $sms_type = $request->type;
         }
 
-        if ($sms_type == 'plain' || $sms_type == 'unicode' || $sms_type == 'voice' || $sms_type == 'mms' || $sms_type == 'whatsapp') {
+        if ($sms_type == 'plain' || $sms_type == 'unicode' || $sms_type == 'mms') {
 
             if ($sms_type == 'voice' && $request->gender == null && $request->language == null) {
                 return response()->json([

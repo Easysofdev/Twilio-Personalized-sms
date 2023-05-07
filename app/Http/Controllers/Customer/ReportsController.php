@@ -834,21 +834,6 @@ class ReportsController extends Controller
                 $price      = $total * $unit_price;
             }
 
-            if ($sms_type == 'voice') {
-                $unit_price = $priceOption['voice_sms'];
-                $price      = $total * $unit_price;
-            }
-
-            if ($sms_type == 'mms') {
-                $unit_price = $priceOption['mms_sms'];
-                $price      = $total * $unit_price;
-            }
-
-            if ($sms_type == 'whatsapp') {
-                $unit_price = $priceOption['whatsapp_sms'];
-                $price      = $total * $unit_price;
-            }
-
             $price *= $sms_count;
 
             $balance = Auth::user()->sms_unit;

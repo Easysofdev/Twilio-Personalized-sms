@@ -240,8 +240,6 @@ class EloquentSendingServerRepository extends EloquentBaseRepository implements 
                                 'two_way'         => true,
                                 'plain'           => true,
                                 'mms'             => true,
-                                'voice'           => true,
-                                'whatsapp'        => true,
                                 'sms_per_request' => 1,
                                 'quota_value'     => 60,
                                 'quota_base'      => 1,

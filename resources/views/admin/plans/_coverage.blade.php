@@ -80,35 +80,6 @@
 
                                         <div class="col-md-6 col-12">
                                             <div class="mb-1">
-                                                <label for="voice_sms" class="required form-label">{{__('locale.labels.voice_sms')}}</label>
-                                                <input type="number" id="voice_sms" class="form-control @error('voice_sms') is-invalid @enderror"
-                                                       value="{{ old('voice_sms',  $options['voice_sms'] ?? null) }}"
-                                                       name="voice_sms" required>
-                                                @error('voice_sms')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label for="receive_voice_sms" class="required form-label">{{__('locale.labels.receive')}} {{__('locale.labels.voice_sms')}}</label>
-                                                <input type="number" id="receive_voice_sms" class="form-control @error('receive_voice_sms') is-invalid @enderror"
-                                                       value="{{ old('receive_voice_sms',  $options['receive_voice_sms'] ?? null) }}"
-                                                       name="receive_voice_sms" required>
-                                                @error('receive_voice_sms')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-12">
-                                            <div class="mb-1">
                                                 <label for="mms_sms" class="required form-label">{{__('locale.labels.mms_sms')}}</label>
                                                 <input type="number" id="mms_sms" class="form-control @error('mms_sms') is-invalid @enderror"
                                                        value="{{ old('mms_sms',  $options['mms_sms'] ?? null) }}"
@@ -135,36 +106,6 @@
                                                 @enderror
                                             </div>
                                         </div>
-
-                                        <div class="col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label for="whatsapp_sms" class="required form-label">{{__('locale.labels.whatsapp_sms')}}</label>
-                                                <input type="number" id="whatsapp_sms" class="form-control @error('whatsapp_sms') is-invalid @enderror"
-                                                       value="{{ old('whatsapp_sms',  $options['whatsapp_sms'] ?? null) }}"
-                                                       name="whatsapp_sms" required>
-                                                @error('whatsapp_sms')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
-
-                                        <div class="col-md-6 col-12">
-                                            <div class="mb-1">
-                                                <label for="receive_whatsapp_sms" class="required form-label">{{__('locale.labels.receive')}} {{__('locale.labels.whatsapp_sms')}}</label>
-                                                <input type="number" id="receive_whatsapp_sms" class="form-control @error('receive_whatsapp_sms') is-invalid @enderror"
-                                                       value="{{ old('receive_whatsapp_sms',  $options['receive_whatsapp_sms'] ?? null) }}"
-                                                       name="receive_whatsapp_sms" required>
-                                                @error('receive_whatsapp_sms')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
-                                        </div>
-
 
                                         <div class="col-12 mt-2">
                                             <button type="submit" class="btn btn-primary mr-1 mb-1">

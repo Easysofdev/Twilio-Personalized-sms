@@ -110,16 +110,8 @@ class Reports extends Model
             return '<span class="badge badge-light-primary text-uppercase mr-1 mb-1">' . __('locale.labels.unicode') . '</span>';
         }
 
-        if ($sms_type == 'voice') {
-            return '<span class="badge badge-light-success text-uppercase mr-1 mb-1">' . __('locale.labels.voice') . '</span>';
-        }
-
         if ($sms_type == 'mms') {
             return '<span class="badge badge-light-info text-uppercase mr-1 mb-1">' . __('locale.labels.mms') . '</span>';
-        }
-
-        if ($sms_type == 'whatsapp') {
-            return '<span class="badge badge-light-warning text-uppercase mb-1">' . __('locale.labels.whatsapp') . '</span>';
         }
 
         return '<span class="badge badge-light-danger text-uppercase mb-1">' . __('locale.labels.invalid') . '</span>';

@@ -232,13 +232,6 @@
                 });
             });
 
-            $('#whatsapp_max').on('click', function () {
-                $('.whatsapp-max-input').prop('disabled', function (i, v) {
-                    $(this).removeAttr('value');
-                    return !v;
-                });
-            });
-
             $('#list_max').on('click', function () {
                 $('.list-max-input').prop('disabled', function (i, v) {
                     $(this).removeAttr('value');

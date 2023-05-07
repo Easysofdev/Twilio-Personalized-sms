@@ -44,7 +44,7 @@ return [
                 'invalid_image'            => 'Invalid image. Please update correct one.',
                 'registration_disabled'    => 'Registration is disabled.',
                 'user_verification'        => 'User verification is disabled.',
-                'invalid_sms_type'         => 'Please insert valid sms type called plain, unicode, voice, mms, and whatsapp.',
+                'invalid_sms_type'         => 'Please insert valid sms type called plain, unicode, voice, and mms.',
         ],
 
         //Localization for application labels
@@ -182,7 +182,6 @@ return [
                 'unit'                                  => 'Unit',
                 'using_limits'                          => 'Using :used of :remaining',
                 'two_way'                               => 'Two Way',
-                'whatsapp'                              => 'WhatsAPP',
                 'percentage'                            => 'Percentage',
                 'digit'                                 => 'Digit',
                 'success_keyword'                       => 'Success Keyword',
@@ -226,7 +225,6 @@ return [
                 'plain_sms'                             => 'Plain SMS',
                 'voice_sms'                             => 'Voice SMS',
                 'mms_sms'                               => 'MMS SMS',
-                'whatsapp_sms'                          => 'WhatsApp SMS',
                 'receive'                               => 'Receive',
                 'copy'                                  => 'Copy',
                 'move'                                  => 'Move',
@@ -392,7 +390,6 @@ return [
                 'sms_credit'                            => 'Sms Unit',
                 'single_blast'                          => 'Single blast',
                 'burst'                                 => 'Burst',
-                'whatsapp_credit'                       => 'WhatsApp Credit',
                 'cutting_system_available'              => 'Cutting system available',
                 'api_access'                            => 'API Access',
                 'text_messages'                         => 'Text Messages',
@@ -602,7 +599,6 @@ return [
                 "Messages"           => "Messages",
                 "Voice"              => "Voice",
                 "MMS"                => "MMS",
-                "WhatsApp"           => "WhatsApp",
                 "SMS Template"       => "SMS Template",
                 "Chat Box"           => "Chat Box",
                 "Knowledge Bases"    => "Knowledge Bases",
@@ -703,7 +699,6 @@ return [
                 'plan_successfully_deleted'                    => 'Plan successfully deleted',
                 'sms_sending_credits'                          => 'SMS sending credits',
                 'sms_sending_credits_required'                 => 'SMS sending credits value required',
-                'whatsapp_sending_credits'                     => 'Whatsapp sending credits',
                 'max_contact_list'                             => 'Max contact list',
                 'max_contact'                                  => 'Max contacts',
                 'max_contact_per_list'                         => 'Max contact per list',
@@ -1261,7 +1256,6 @@ return [
                 "sms_api"               => "SMS API",
                 "voice_api"             => "Voice API",
                 "mms_api"               => "MMS API",
-                "whatsapp_api"          => "WhatsApp API",
                 "view_specific_contact" => "View specific contact",
                 "store_contact"         => "Store Contact",
                 "regenerate_token"      => "Regenerate Token",
@@ -1319,8 +1313,6 @@ return [
 
                 'tyntec' => 'Create a new Tyntec account <a href="https://www.tyntec.com/create-account" target="_blank">here</a> , or sign into <a href="https://my.tyntec.com/auth/login" target="_blank"> an existing Tyntec account</a>  After login with Tyntec portal you have to go <code>API Settings</code> menu and copy the <code>API Key</code> Finally, update your API Key on ',
 
-                'whatsapp_chat_api' => 'Create a new Chat API account <a href="https://app.chat-api.com/registration" target="_blank">here</a> , or sign into <a href="https://app.chat-api.com/login" target="_blank"> an existing Chat API account</a>  After login with Chat API portal will find <code>API URL</code> and <code>Token</code> Just copy this information and update on :brandname. To receive messages please insert this url on your webhook url <code>:inbound_url</code>',
-
                 'karixio' => 'Create a new Karix account <a href="https://cloud.karix.io/user/register" target="_blank">here</a> , or sign into <a href="https://cloud.karix.io/user/login" target="_blank"> an existing Karix account</a>  After login with Karix portal you will find <code>ACCOUNT ID</code> and <code>ACCOUNT TOKEN</code> on dashboard. Copy this information and paste on ',
 
                 'signal_wire' => 'Create a new SignalWire account <a href="https://signalwire.com/signups/new?s=1" target="_blank">here</a> , or sign into <a href="https://signalwire.com/signin" target="_blank"> an existing SignalWire account</a>  After login with SignalWire portal you have to go <code>API</code> menu and copy the <code>PROJECT ID</code> <code>SPACE URL with https://</code> and <code>Token</code> Finally, update your details on :brandname. For <code>Two Way</code> setup please login with your SignalWire project and go <code>LaML</code> menu. Click the <code>Apps</code> Tab and Create new LaML App. After that insert your App Name and go <code>Message Settings</code> Option. Finally, insert this url  <code>:inbound_url </code> on <code>WHEN A MESSAGE COMES IN:</code> field and click on <code>save</code> button.',
@@ -1350,7 +1342,7 @@ return [
 
                 'plan_details' => 'A plan, or service plan, is the group of services and limits that you have agreed to provide to your customer. A plan allows you to centrally plan and standardize your service offerings. Set up your plan details below:',
 
-                'pricing_intro' => 'Please use only <code>numeric</code> number not <code>decimal</code> number. Example: Accepted: <code>1, 2, 3</code> Not Accepted: <code>0.025, 1.025, 1.00, 1.5</code> You can set different price for different sms types. <code>e.g.</code> Receiving 1 plain or normal text and replying to 1 plain or normal text will deduct <code>2 SMS</code> messages from customer sms credit balance <code>1 credit for receive sms and 1 credit for send sms</code>. Also Receiving 1 voice text and replying to 1 voice text will deduct <code>3 SMS</code> messages from customer sms credit balance <code>1 credit for receive sms and 2 credit for send sms. </code> You can also set <code>MMS</code> and <code>WhatsApp</code> sms price accordingly.',
+                'pricing_intro' => 'Please use only <code>numeric</code> number not <code>decimal</code> number. Example: Accepted: <code>1, 2, 3</code> Not Accepted: <code>0.025, 1.025, 1.00, 1.5</code> You can set different price for different sms types. <code>e.g.</code> Receiving 1 plain or normal text and replying to 1 plain or normal text will deduct <code>2 SMS</code> messages from customer sms credit balance <code>1 credit for receive sms and 1 credit for send sms</code>. Also Receiving 1 voice text and replying to 1 voice text will deduct <code>3 SMS</code> messages from customer sms credit balance <code>1 credit for receive sms and 2 credit for send sms. </code> You can also set <code>MMS</code> sms price accordingly.',
                 'add_unit'      => 'Please use only <code>numeric</code> number not <code>decimal</code> number. Example: Accepted: <code>1, 2, 3</code> Not Accepted: <code>0.025, 1.025, 1.00, 1.5</code>',
 
                 'keywords' => 'A <code>keyword</code> makes it easy for subscribers to <code>opt in</code> to receive important <code> messages and offers </code>. There are no forms to fill out, apps to download, or URLs to remember. All they need to do is text your keyword to your number, and they’re in. You can assign an <code>unique keyword</code> to a <code>unique user</code>

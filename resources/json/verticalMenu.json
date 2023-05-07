@@ -320,39 +320,6 @@
     },
     {
       "url": "",
-      "name": "Voice",
-      "i18n": "Voice",
-      "icon": "feather icon-phone-call",
-      "access": "voice_overview|voice_campaign_builder|voice_quick_send|voice_bulk_messages",
-      "submenu": [
-        {
-          "url": "voice/overview",
-          "name": "Overview",
-          "i18n": "Overview",
-          "access": "voice_overview"
-        },
-        {
-          "url": "voice/campaign-builder",
-          "name": "Campaign Builder",
-          "i18n": "Campaign Builder",
-          "access": "voice_campaign_builder"
-        },
-        {
-          "url": "voice/quick-send",
-          "name": "Send Quick",
-          "i18n": "Send Quick",
-          "access": "voice_quick_send"
-        },
-        {
-          "url": "voice/import",
-          "name": "Send Using File",
-          "i18n": "Send Using File",
-          "access": "voice_bulk_messages"
-        }
-      ]
-    },
-    {
-      "url": "",
       "name": "MMS",
       "i18n": "MMS",
       "icon": "feather icon-image",
@@ -381,39 +348,6 @@
           "name": "Send Using File",
           "i18n": "Send Using File",
           "access": "mms_bulk_messages"
-        }
-      ]
-    },
-    {
-      "url": "",
-      "name": "WhatsApp",
-      "i18n": "WhatsApp",
-      "icon": "feather icon-message-circle",
-      "access": "whatsapp_overview|whatsapp_campaign_builder|whatsapp_quick_send|whatsapp_bulk_messages",
-      "submenu": [
-        {
-          "url": "whatsapp/overview",
-          "name": "Overview",
-          "i18n": "Overview",
-          "access": "whatsapp_overview"
-        },
-        {
-          "url": "whatsapp/campaign-builder",
-          "name": "Campaign Builder",
-          "i18n": "Campaign Builder",
-          "access": "whatsapp_campaign_builder"
-        },
-        {
-          "url": "whatsapp/quick-send",
-          "name": "Send Quick",
-          "i18n": "Send Quick",
-          "access": "whatsapp_quick_send"
-        },
-        {
-          "url": "whatsapp/import",
-          "name": "Send Using File",
-          "i18n": "Send Using File",
-          "access": "whatsapp_bulk_messages"
         }
       ]
     },

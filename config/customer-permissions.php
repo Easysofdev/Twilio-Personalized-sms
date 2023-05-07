@@ -194,23 +194,6 @@ return [
                 'default'      => false,
         ],
 
-        //whatsapp module
-        'whatsapp_campaign_builder' => [
-                'display_name' => 'campaign_builder',
-                'category'     => 'WhatsApp',
-                'default'      => false,
-        ],
-        'whatsapp_quick_send'       => [
-                'display_name' => 'quick_send',
-                'category'     => 'WhatsApp',
-                'default'      => false,
-        ],
-        'whatsapp_bulk_messages'    => [
-                'display_name' => 'bulk_messages',
-                'category'     => 'WhatsApp',
-                'default'      => false,
-        ],
-
         //sms template
         'sms_template'              => [
                 'display_name' => 'sms_template',

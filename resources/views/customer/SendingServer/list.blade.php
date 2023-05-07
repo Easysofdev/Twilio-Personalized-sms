@@ -19,41 +19,40 @@
                 <div class="card">
                     <table class="table datatables-basic">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th>{{__('locale.labels.name')}}</th>
-                            <th>{{__('locale.labels.type')}}</th>
-                            <th>{{__('locale.labels.actions')}}</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th>{{ __('locale.labels.name') }}</th>
+                                <th>{{ __('locale.labels.type') }}</th>
+                                <th>{{ __('locale.labels.actions') }}</th>
+                            </tr>
                         </thead>
                         <tbody>
 
-                        @foreach ($sending_servers as $key => $server)
-                            @if($server["type"] === 'http')
-                                @php $color = "success" @endphp
-                            @elseif($server["type"] === 'smpp')
-                                @php $color = "primary" @endphp
-                            @elseif($server["type"] === 'whatsapp')
-                                @php $color = "info" @endphp
-                            @endif
+                            @foreach ($sending_servers as $key => $server)
+                                @if ($server['type'] === 'http')
+                                    @php $color = "success" @endphp
+                                @elseif($server['type'] === 'smpp')
+                                    @php $color = "primary" @endphp
 
-                            @if($server['custom'] == 1)
-                                @php $type = 'custom' @endphp
-                            @else
-                                @php $type = $server->settings @endphp
-                            @endif
+                                    @if ($server['custom'] == 1)
+                                        @php $type = 'custom' @endphp
+                                    @else
+                                        @php $type = $server->settings @endphp
+                                    @endif
 
-                            <tr>
-                                <td></td>
-                                <td>{{ $server['name'] }}</td>
-                                <td>
-                                    <span class="badge bg-{{$color}}">{{ strtoupper($server['type'])}}</span>
-                                </td>
-                                <td>
-                                    <a href="{{route('customer.sending-servers.create', ['type' => $type])}}" class="btn btn-primary btn-sm">{{__('locale.labels.choose')}}</a>
-                                </td>
-                            </tr>
-                        @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ $server['name'] }}</td>
+                                        <td>
+                                            <span
+                                                class="badge bg-{{ $color }}">{{ strtoupper($server['type']) }}</span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('customer.sending-servers.create', ['type' => $type]) }}"
+                                                class="btn btn-primary btn-sm">{{ __('locale.labels.choose') }}</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -79,27 +78,36 @@
 @section('page-script')
     {{-- Page js files --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             "use strict"
 
             $('.datatables-basic').DataTable({
 
                 "processing": true,
-                "columns": [
-                    {"data": "id", orderable: false, searchable: false},
-                    {"data": "name"},
-                    {"data": "type"},
-                    {"data": "action", orderable: false, searchable: false}
-                ],
-                columnDefs: [
-                    {
-                        // For Responsive
-                        className: 'control',
+                "columns": [{
+                        "data": "id",
                         orderable: false,
-                        responsivePriority: 2,
-                        targets: 0
+                        searchable: false
                     },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "type"
+                    },
+                    {
+                        "data": "action",
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
+                columnDefs: [{
+                    // For Responsive
+                    className: 'control',
+                    orderable: false,
+                    responsivePriority: 2,
+                    targets: 0
+                }, ],
                 dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
 
                 language: {
@@ -117,16 +125,18 @@
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
-                            header: function (row) {
+                            header: function(row) {
                                 let data = row.data();
                                 return 'Details of ' + data['name'];
                             }
                         }),
                         type: 'column',
-                        renderer: function (api, rowIdx, columns) {
-                            let data = $.map(columns, function (col) {
-                                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                                    ? '<tr data-dt-row="' +
+                        renderer: function(api, rowIdx, columns) {
+                            let data = $.map(columns, function(col) {
+                                return col.title !==
+                                    '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
                                     col.rowIdx +
                                     '" data-dt-column="' +
                                     col.columnIndex +
@@ -138,17 +148,23 @@
                                     '<td>' +
                                     col.data +
                                     '</td>' +
-                                    '</tr>'
-                                    : '';
+                                    '</tr>' :
+                                    '';
                             }).join('');
 
-                            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+                            return data ? $('<table class="table"/>').append('<tbody>' + data +
+                                '</tbody>') : false;
                         }
                     }
                 },
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
+                aLengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100]
+                ],
 
-                order: [[0, "desc"]],
+                order: [
+                    [0, "desc"]
+                ],
                 displayLength: 10,
             });
 

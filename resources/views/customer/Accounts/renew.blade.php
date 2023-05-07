@@ -18,7 +18,7 @@
 
     <!-- Modern Horizontal Wizard -->
     <section class="modern-horizontal-wizard">
-        <form action="{{route('customer.subscriptions.renew', $subscription->uid)}}" method="post">
+        <form action="{{ route('customer.subscriptions.renew', $subscription->uid) }}" method="post">
             @csrf
 
             @if ($errors->any())
@@ -37,13 +37,14 @@
 
                     <div class="step" data-target="#cart" role="tab" id="cart-trigger">
                         <button type="button" class="step-trigger">
-                        <span class="bs-stepper-box">
-                            <i data-feather="shopping-cart" class="font-medium-3"></i>
-                        </span>
+                            <span class="bs-stepper-box">
+                                <i data-feather="shopping-cart" class="font-medium-3"></i>
+                            </span>
                             <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">{{ __('locale.labels.cart') }}</span>
-                            <span class="bs-stepper-subtitle">{{ $subscription->plan->name }} {{ __('locale.menu.Plan') }}</span>
-                        </span>
+                                <span class="bs-stepper-title">{{ __('locale.labels.cart') }}</span>
+                                <span class="bs-stepper-subtitle">{{ $subscription->plan->name }}
+                                    {{ __('locale.menu.Plan') }}</span>
+                            </span>
                         </button>
                     </div>
                     <div class="line">
@@ -53,13 +54,13 @@
 
                     <div class="step" data-target="#address" role="tab" id="address-trigger">
                         <button type="button" class="step-trigger">
-                        <span class="bs-stepper-box">
-                            <i data-feather="map-pin" class="font-medium-3"></i>
-                        </span>
+                            <span class="bs-stepper-box">
+                                <i data-feather="map-pin" class="font-medium-3"></i>
+                            </span>
                             <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">{{ __('locale.labels.address') }}</span>
-                            <span class="bs-stepper-subtitle">{{ __('locale.labels.billing_address') }}</span>
-                        </span>
+                                <span class="bs-stepper-title">{{ __('locale.labels.address') }}</span>
+                                <span class="bs-stepper-subtitle">{{ __('locale.labels.billing_address') }}</span>
+                            </span>
                         </button>
                     </div>
                     <div class="line">
@@ -69,13 +70,13 @@
 
                     <div class="step" data-target="#payment" role="tab" id="payment-trigger">
                         <button type="button" class="step-trigger">
-                        <span class="bs-stepper-box">
-                            <i data-feather="credit-card" class="font-medium-3"></i>
-                        </span>
+                            <span class="bs-stepper-box">
+                                <i data-feather="credit-card" class="font-medium-3"></i>
+                            </span>
                             <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">{{ __('locale.labels.payment') }}</span>
-                            <span class="bs-stepper-subtitle">{{ __('locale.labels.pay_payment') }}</span>
-                        </span>
+                                <span class="bs-stepper-title">{{ __('locale.labels.payment') }}</span>
+                                <span class="bs-stepper-subtitle">{{ __('locale.labels.pay_payment') }}</span>
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -86,67 +87,69 @@
                     <div id="cart" class="content" role="tabpanel" aria-labelledby="cart-trigger">
                         <div class="content-header">
                             <h5 class="mb-0">{{ __('locale.menu.Subscriptions') }}</h5>
-                            <small class="text-muted">{!!  __('locale.subscription.log_subscribe', ['plan' => $subscription->plan->name]) !!}</small>
+                            <small class="text-muted">{!! __('locale.subscription.log_subscribe', ['plan' => $subscription->plan->name]) !!}</small>
                         </div>
                         <div class="row">
                             <div class="table-responsive">
                                 <table class="table">
                                     <tbody>
-                                    <tr>
-                                        <td> {{ __('locale.plans.price') }} </td>
-                                        <td> {{ \App\Library\Tool::format_price($subscription->plan->price, $subscription->plan->currency->format) }} </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.plans.price') }} </td>
+                                            <td> {{ \App\Library\Tool::format_price($subscription->plan->price, $subscription->plan->currency->format) }}
+                                            </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td> {{ __('locale.labels.renew') }} </td>
-                                        <td> {{ __('locale.labels.every') }} {{ $subscription->plan->displayFrequencyTime() }} </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.labels.renew') }} </td>
+                                            <td> {{ __('locale.labels.every') }}
+                                                {{ $subscription->plan->displayFrequencyTime() }} </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td> {{ __('locale.labels.sms_credit') }} </td>
-                                        <td> {{ $subscription->plan->displayTotalQuota() }} </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.labels.sms_credit') }} </td>
+                                            <td> {{ $subscription->plan->displayTotalQuota() }} </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td> {{ __('locale.plans.create_own_sending_server') }} </td>
-                                        <td>
-                                            @if($subscription->plan->getOption('create_sending_server') == 'yes')
-                                                {{__('locale.labels.yes')}}
-                                            @else
-                                                {{__('locale.labels.no')}}
-                                            @endif
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.plans.create_own_sending_server') }} </td>
+                                            <td>
+                                                @if ($subscription->plan->getOption('create_sending_server') == 'yes')
+                                                    {{ __('locale.labels.yes') }}
+                                                @else
+                                                    {{ __('locale.labels.no') }}
+                                                @endif
+                                            </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td> {{ __('locale.customer.sender_id_verification') }} </td>
-                                        <td>
-                                            @if($subscription->plan->getOption('sender_id_verification') == 'yes')
-                                                {{__('locale.labels.yes')}}
-                                            @else
-                                                {{__('locale.labels.no')}}
-                                            @endif
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.customer.sender_id_verification') }} </td>
+                                            <td>
+                                                @if ($subscription->plan->getOption('sender_id_verification') == 'yes')
+                                                    {{ __('locale.labels.yes') }}
+                                                @else
+                                                    {{ __('locale.labels.no') }}
+                                                @endif
+                                            </td>
+                                        </tr>
 
-                                    <tr>
-                                        <td> {{ __('locale.labels.cutting_system_available') }} </td>
-                                        <td>
-                                            {{__('locale.labels.yes')}}
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.labels.cutting_system_available') }} </td>
+                                            <td>
+                                                {{ __('locale.labels.yes') }}
+                                            </td>
+                                        </tr>
 
 
-                                    <tr>
-                                        <td> {{ __('locale.labels.api_access') }} </td>
-                                        <td>
-                                            @if($subscription->plan->getOption('api_access') == 'yes')
-                                                {{__('locale.labels.yes')}}
-                                            @else
-                                                {{__('locale.labels.no')}}
-                                            @endif
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ __('locale.labels.api_access') }} </td>
+                                            <td>
+                                                @if ($subscription->plan->getOption('api_access') == 'yes')
+                                                    {{ __('locale.labels.yes') }}
+                                                @else
+                                                    {{ __('locale.labels.no') }}
+                                                @endif
+                                            </td>
+                                        </tr>
 
                                     </tbody>
                                 </table>
@@ -156,10 +159,12 @@
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-outline-secondary btn-prev" disabled>
                                 <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                                <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
+                                <span
+                                    class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
                             </button>
                             <button class="btn btn-primary btn-next" type="button">
-                                <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
+                                <span
+                                    class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
                                 <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
                             </button>
                         </div>
@@ -174,57 +179,72 @@
 
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
-                                    <label for="first_name" class="required form-label">{{ __('locale.labels.first_name') }}</label>
-                                    <input type="text" id="first_name" class="form-control required" name="first_name" value="{{Auth::user()->first_name}}">
+                                    <label for="first_name"
+                                        class="required form-label">{{ __('locale.labels.first_name') }}</label>
+                                    <input type="text" id="first_name" class="form-control required" name="first_name"
+                                        value="{{ Auth::user()->first_name }}">
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
                                     <label for="last_name">{{ __('locale.labels.last_name') }}</label>
-                                    <input type="text" id="last_name" class="form-control" name="last_name" value="{{Auth::user()->last_name}}">
+                                    <input type="text" id="last_name" class="form-control" name="last_name"
+                                        value="{{ Auth::user()->last_name }}">
                                 </div>
                             </div>
 
 
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
-                                    <label for="email" class="required form-label">{{ __('locale.labels.email') }}</label>
-                                    <input type="email" id="email" class="form-control required" name="email" value="{{Auth::user()->email}}">
+                                    <label for="email"
+                                        class="required form-label">{{ __('locale.labels.email') }}</label>
+                                    <input type="email" id="email" class="form-control required" name="email"
+                                        value="{{ Auth::user()->email }}">
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
-                                    <label for="phone" class="required form-label">{{ __('locale.labels.phone') }}</label>
-                                    <input type="number" id="phone" class="form-control required" name="phone" value="{{ Auth::user()->customer->phone }}">
+                                    <label for="phone"
+                                        class="required form-label">{{ __('locale.labels.phone') }}</label>
+                                    <input type="number" id="phone" class="form-control required" name="phone"
+                                        value="{{ Auth::user()->customer->phone }}">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
-                                    <label for="address" class="required form-label">{{ __('locale.labels.address') }}</label>
-                                    <input type="text" id="address" class="form-control required" name="address" value="{{ Auth::user()->customer->financial_address }}">
+                                    <label for="address"
+                                        class="required form-label">{{ __('locale.labels.address') }}</label>
+                                    <input type="text" id="address" class="form-control required" name="address"
+                                        value="{{ Auth::user()->customer->financial_address }}">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
-                                    <label for="city" class="required form-label">{{ __('locale.labels.city') }}</label>
-                                    <input type="text" id="city" class="form-control required" name="city" value="{{ Auth::user()->customer->financial_city }}">
+                                    <label for="city"
+                                        class="required form-label">{{ __('locale.labels.city') }}</label>
+                                    <input type="text" id="city" class="form-control required" name="city"
+                                        value="{{ Auth::user()->customer->financial_city }}">
                                 </div>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
                                     <label for="postcode" class="form-label">{{ __('locale.labels.postcode') }}</label>
-                                    <input type="text" id="postcode" class="form-control" name="postcode" value="{{ Auth::user()->customer->financial_postcode }}">
+                                    <input type="text" id="postcode" class="form-control" name="postcode"
+                                        value="{{ Auth::user()->customer->financial_postcode }}">
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-sm-12">
                                 <div class="mb-1">
-                                    <label for="country" class="required form-label">{{__('locale.labels.country')}}</label>
+                                    <label for="country"
+                                        class="required form-label">{{ __('locale.labels.country') }}</label>
                                     <select class="form-select select2" id="country" name="country">
-                                        @foreach(\App\Helpers\Helper::countries() as $country)
-                                            <option value="{{$country['name']}}" {{ Auth::user()->customer->country == $country['name'] ? 'selected': null }}> {{ $country['name'] }}</option>
+                                        @foreach (\App\Helpers\Helper::countries() as $country)
+                                            <option value="{{ $country['name'] }}"
+                                                {{ Auth::user()->customer->country == $country['name'] ? 'selected' : null }}>
+                                                {{ $country['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -234,10 +254,12 @@
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-primary btn-prev" type="button">
                                 <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                                <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
+                                <span
+                                    class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
                             </button>
                             <button class="btn btn-primary btn-next" type="button">
-                                <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
+                                <span
+                                    class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.next') }}</span>
                                 <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
                             </button>
                         </div>
@@ -246,16 +268,17 @@
                     <div id="payment" class="content" role="tabpanel" aria-labelledby="payment-trigger">
                         <div class="content-header">
                             <h5 class="mb-0">{{ __('locale.labels.payment_options') }}</h5>
-                            <small>{{ __('locale.payment_gateways.click_on_correct_option') }}</small>
                         </div>
                         <div class="row mb-2 mt-2 ">
                             <ul class="other-payment-options list-unstyled">
 
-                                @foreach($payment_methods as $method)
+                                @foreach ($payment_methods as $method)
                                     <li class="py-50">
                                         <div class="form-check">
-                                            <input type="radio" id="{{$method->type}}" value="{{$method->type}}" name="payment_methods" class="form-check-input"/>
-                                            <label class="form-check-label" for="{{$method->type}}"> {{ $method->name }} </label>
+                                            <input type="radio" id="{{ $method->type }}" value="{{ $method->type }}"
+                                                name="payment_methods" class="form-check-input" checked />
+                                            <label class="form-check-label" for="{{ $method->type }}">
+                                                {{ $method->name }} </label>
                                         </div>
                                     </li>
                                 @endforeach
@@ -265,9 +288,11 @@
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-primary btn-prev" type="button">
                                 <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                                <span class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
+                                <span
+                                    class="align-middle d-sm-inline-block d-none">{{ __('locale.datatables.previous') }}</span>
                             </button>
-                            <button class="btn btn-success btn-submit" type="submit">{{ __('locale.labels.checkout') }}</button>
+                            <button class="btn btn-success btn-submit"
+                                type="submit">{{ __('locale.labels.checkout') }}</button>
                         </div>
                     </div>
 

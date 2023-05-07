@@ -145,7 +145,39 @@ class Customer extends Model
             // Find plan
             return $this->activeSubscription()->plan->getOptions();
         } else {
-            return [];
+            return [
+                'sms_max'                  => '100',
+                'list_max'                 => '100',
+                'subscriber_max'           => '100',
+                'subscriber_per_list_max'  => '100',
+                'segment_per_list_max'     => '3',
+                'billing_cycle'            => 'monthly',
+                'sending_limit'            => '1000_per_hour',
+                'sending_quota'            => '1000',
+                'sending_quota_time'       => '1',
+                'sending_quota_time_unit'  => 'hour',
+                'max_process'              => '1',
+                'unsubscribe_url_required' => 'no',
+                'create_sending_server'    => 'no',
+                'sending_servers_max'      => '5',
+                'list_import'              => 'yes',
+                'list_export'              => 'yes',
+                'api_access'               => 'no',
+                'create_sub_account'       => 'yes',
+                'delete_sms_history'       => 'yes',
+                'add_previous_balance'     => 'no',
+                'sender_id_verification'   => 'yes',
+                'send_spam_message'        => 'no',
+                'cutting_system'           => 'no',
+                'cutting_value'            => '0',
+                'cutting_unit'             => 'percentage',
+                'cutting_logic'            => 'random',
+                'plain_sms'                => '100',
+                'receive_plain_sms'        => '100',
+                'mms_sms'                  => '3',
+                'receive_mms_sms'          => '0',
+                'per_unit_price'           => '.3',
+            ];;
         }
     }
 

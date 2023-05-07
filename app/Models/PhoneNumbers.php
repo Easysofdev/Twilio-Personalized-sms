@@ -137,14 +137,9 @@ class PhoneNumbers extends Model
             if ($capability == 'sms') {
                 $return_data .= '<span class="badge bg-primary text-uppercase me-1"><i data-feather="message-square" class="me-25"></i><span>'.__('locale.labels.sms').'</span></span>';
             }
-            if ($capability == 'voice') {
-                $return_data .= '<span class="badge bg-success text-uppercase me-1"><i data-feather="phone-call" class="me-25"></i><span>'.__('locale.labels.voice').'</span></span>';
-            }
+
             if ($capability == 'mms') {
                 $return_data .= '<span class="badge bg-info text-uppercase me-1"><i data-feather="image" class="me-25"></i><span>'.__('locale.labels.mms').'</span></span>';
-            }
-            if ($capability == 'whatsapp') {
-                $return_data .= '<span class="badge bg-warning text-uppercase"><i data-feather="message-circle" class="me-25"></i><span>'.__('locale.labels.whatsapp').'</span></span>';
             }
         }
 

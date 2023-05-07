@@ -228,9 +228,6 @@ Route::get('invoices/{invoice}/print', 'InvoiceController@print')->name('invoice
 | Campaign module
 |--------------------------------------------------------------------------
 |
-| Campaign module is the most important module of ultimate sms. This module contains send sms, voice messages,
-| picture messages and whatsapp messages options.
-|
 */
 
 Route::prefix('messages')->name('messages.')->group(function () {

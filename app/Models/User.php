@@ -91,6 +91,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_customer' => 'boolean',
         'status'      => 'boolean',
         'two_factor'  => 'boolean',
+        'two_factor_expires_at' => 'datetime:Y-m-d H:i:s',
+        'last_access_at' => 'datetime:Y-m-d H:i:s'
     ];
 
     /**

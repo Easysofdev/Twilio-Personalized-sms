@@ -18,32 +18,26 @@
         <div class="mb-3 mt-2">
             @can('view sending_servers')
                 <div class="btn-group">
-                    <button
-                            class="btn btn-primary fw-bold dropdown-toggle"
-                            type="button"
-                            id="bulk_actions"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
+                    <button class="btn btn-primary fw-bold dropdown-toggle" type="button" id="bulk_actions"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ __('locale.labels.actions') }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bulk_actions">
-                        <a class="dropdown-item bulk-enable" href="#"><i data-feather="check"></i> {{ __('locale.datatables.bulk_enable') }}</a>
-                        <a class="dropdown-item bulk-disable" href="#"><i data-feather="stop-circle"></i> {{ __('locale.datatables.bulk_disable') }}</a>
-                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="trash"></i> {{ __('locale.datatables.bulk_delete') }}</a>
+                        <a class="dropdown-item bulk-enable" href="#"><i data-feather="check"></i>
+                            {{ __('locale.datatables.bulk_enable') }}</a>
+                        <a class="dropdown-item bulk-disable" href="#"><i data-feather="stop-circle"></i>
+                            {{ __('locale.datatables.bulk_disable') }}</a>
+                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="trash"></i>
+                            {{ __('locale.datatables.bulk_delete') }}</a>
                     </div>
-                </div>
-            @endcan
-
-            @can('create sending_servers')
-                <div class="btn-group">
-                    <a href="{{route('admin.sending-servers.select')}}" class="btn btn-success waves-light waves-effect fw-bold mx-1"> {{__('locale.buttons.new_server')}} <i data-feather="plus-circle"></i></a>
                 </div>
             @endcan
 
             @can('view sending_servers')
                 <div class="btn-group">
-                    <a href="{{route('admin.sending-servers.export')}}" class="btn btn-info waves-light waves-effect fw-bold"> {{__('locale.buttons.export')}} <i data-feather="file-text"></i></a>
+                    <a href="{{ route('admin.sending-servers.export') }}"
+                        class="btn btn-info waves-light waves-effect fw-bold"> {{ __('locale.buttons.export') }} <i
+                            data-feather="file-text"></i></a>
                 </div>
             @endcan
 
@@ -53,16 +47,16 @@
                 <div class="card">
                     <table class="table datatables-basic">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>{{ __('locale.labels.id') }}</th>
-                            <th>{{ __('locale.labels.name') }}</th>
-                            <th>{{__('locale.labels.type')}}</th>
-                            <th>{{__('locale.sending_servers.quota')}}</th>
-                            <th>{{__('locale.labels.status')}}</th>
-                            <th>{{__('locale.labels.actions')}}</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>{{ __('locale.labels.id') }}</th>
+                                <th>{{ __('locale.labels.name') }}</th>
+                                <th>{{ __('locale.labels.type') }}</th>
+                                <th>{{ __('locale.sending_servers.quota') }}</th>
+                                <th>{{ __('locale.labels.status') }}</th>
+                                <th>{{ __('locale.labels.actions') }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -93,14 +87,14 @@
 @section('page-script')
     {{-- Page js files --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             "use strict"
 
             //show response message
             function showResponseMessage(data) {
 
                 if (data.status === 'success') {
-                    toastr['success'](data.message, '{{__('locale.labels.success')}}!!', {
+                    toastr['success'](data.message, '{{ __('locale.labels.success') }}!!', {
                         closeButton: true,
                         positionClass: 'toast-top-right',
                         progressBar: true,
@@ -109,13 +103,14 @@
                     });
                     dataListView.draw();
                 } else {
-                    toastr['warning']("{{__('locale.exceptions.something_went_wrong')}}", '{{ __('locale.labels.warning') }}!', {
-                        closeButton: true,
-                        positionClass: 'toast-top-right',
-                        progressBar: true,
-                        newestOnTop: true,
-                        rtl: isRtl
-                    });
+                    toastr['warning']("{{ __('locale.exceptions.something_went_wrong') }}",
+                        '{{ __('locale.labels.warning') }}!', {
+                            closeButton: true,
+                            positionClass: 'toast-top-right',
+                            progressBar: true,
+                            newestOnTop: true,
+                            rtl: isRtl
+                        });
                 }
             }
 
@@ -131,22 +126,44 @@
                     "url": "{{ route('admin.sending-servers.search') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": {_token: "{{csrf_token()}}"}
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
                 },
-                "columns": [
-                    {"data": 'responsive_id', orderable: false, searchable: false},
-                    {"data": "uid"},
-                    {"data": "uid"},
-                    {"data": "name"},
-                    {"data": "type"},
-                    {"data": "quota_value", searchable: false},
-                    {"data": "status", searchable: false},
-                    {"data": "action", orderable: false, searchable: false}
+                "columns": [{
+                        "data": 'responsive_id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "uid"
+                    },
+                    {
+                        "data": "uid"
+                    },
+                    {
+                        "data": "name"
+                    },
+                    {
+                        "data": "type"
+                    },
+                    {
+                        "data": "quota_value",
+                        searchable: false
+                    },
+                    {
+                        "data": "status",
+                        searchable: false
+                    },
+                    {
+                        "data": "action",
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
 
                 searchDelay: 1500,
-                columnDefs: [
-                    {
+                columnDefs: [{
                         // For Responsive
                         className: 'control',
                         orderable: false,
@@ -158,7 +175,7 @@
                         targets: 1,
                         orderable: false,
                         responsivePriority: 3,
-                        render: function (data) {
+                        render: function(data) {
                             return (
                                 '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="" id="' +
                                 data +
@@ -168,8 +185,7 @@
                             );
                         },
                         checkboxes: {
-                            selectAllRender:
-                                '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                            selectAllRender: '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                             selectRow: true
                         }
                     },
@@ -182,14 +198,19 @@
                         targets: -1,
                         title: '{{ __('locale.labels.actions') }}',
                         orderable: false,
-                        render: function (data, type, full) {
+                        render: function(data, type, full) {
                             return (
-                                '<span class="action-delete text-danger cursor-pointer me-1" data-id=' + full['uid'] + '>' +
-                                feather.icons['trash'].toSvg({class: 'font-medium-4'}) +
+                                '<span class="action-delete text-danger cursor-pointer me-1" data-id=' +
+                                full['uid'] + '>' +
+                                feather.icons['trash'].toSvg({
+                                    class: 'font-medium-4'
+                                }) +
                                 '</span>' +
 
                                 '<a href="' + full['edit'] + '" class="text-primary">' +
-                                feather.icons['edit'].toSvg({class: 'font-medium-4'}) +
+                                feather.icons['edit'].toSvg({
+                                    class: 'font-medium-4'
+                                }) +
                                 '</a>'
                             );
                         }
@@ -212,16 +233,18 @@
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
-                            header: function (row) {
+                            header: function(row) {
                                 let data = row.data();
                                 return 'Details of ' + data['name'];
                             }
                         }),
                         type: 'column',
-                        renderer: function (api, rowIdx, columns) {
-                            let data = $.map(columns, function (col) {
-                                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                                    ? '<tr data-dt-row="' +
+                        renderer: function(api, rowIdx, columns) {
+                            let data = $.map(columns, function(col) {
+                                return col.title !==
+                                    '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
                                     col.rowIdx +
                                     '" data-dt-column="' +
                                     col.columnIndex +
@@ -233,38 +256,45 @@
                                     '<td>' +
                                     col.data +
                                     '</td>' +
-                                    '</tr>'
-                                    : '';
+                                    '</tr>' :
+                                    '';
                             }).join('');
 
-                            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+                            return data ? $('<table class="table"/>').append('<tbody>' + data +
+                                '</tbody>') : false;
                         }
                     }
                 },
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
+                aLengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100]
+                ],
                 select: {
                     style: "multi"
                 },
-                order: [[2, "desc"]],
+                order: [
+                    [2, "desc"]
+                ],
                 displayLength: 10,
             });
 
-            Table.delegate(".get_status", "click", function () {
+            Table.delegate(".get_status", "click", function() {
                 let sending_server_id = $(this).data('id');
                 $.ajax({
-                    url: "{{ url(config('app.admin_path').'/sending-servers')}}" + '/' + sending_server_id + '/active',
+                    url: "{{ url(config('app.admin_path') . '/sending-servers') }}" + '/' +
+                        sending_server_id + '/active',
                     type: "POST",
                     data: {
-                        _token: "{{csrf_token()}}"
+                        _token: "{{ csrf_token() }}"
                     },
-                    success: function (data) {
+                    success: function(data) {
                         showResponseMessage(data);
                     }
                 });
             });
 
             // On Delete
-            Table.delegate(".action-delete", "click", function (e) {
+            Table.delegate(".action-delete", "click", function(e) {
                 e.stopPropagation();
                 let id = $(this).data('id');
                 Swal.fire({
@@ -278,38 +308,41 @@
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url(config('app.admin_path').'/sending-servers')}}" + '/' + id,
+                            url: "{{ url(config('app.admin_path') . '/sending-servers') }}" +
+                                '/' + id,
                             type: "POST",
                             data: {
                                 _method: 'DELETE',
-                                _token: "{{csrf_token()}}"
+                                _token: "{{ csrf_token() }}"
                             },
-                            success: function (data) {
+                            success: function(data) {
                                 showResponseMessage(data);
                             },
-                            error: function (reject) {
+                            error: function(reject) {
                                 if (reject.status === 422) {
                                     let errors = reject.responseJSON.errors;
-                                    $.each(errors, function (key, value) {
-                                        toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
+                                    $.each(errors, function(key, value) {
+                                        toastr['warning'](value[0],
+                                            "{{ __('locale.labels.attention') }}", {
+                                                closeButton: true,
+                                                positionClass: 'toast-top-right',
+                                                progressBar: true,
+                                                newestOnTop: true,
+                                                rtl: isRtl
+                                            });
                                     });
                                 } else {
-                                    toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                        positionClass: 'toast-top-right',
-                                        containerId: 'toast-top-right',
-                                        progressBar: true,
-                                        closeButton: true,
-                                        newestOnTop: true
-                                    });
+                                    toastr['warning'](reject.responseJSON.message,
+                                        "{{ __('locale.labels.attention') }}", {
+                                            positionClass: 'toast-top-right',
+                                            containerId: 'toast-top-right',
+                                            progressBar: true,
+                                            closeButton: true,
+                                            newestOnTop: true
+                                        });
                                 }
                             }
                         })
@@ -319,27 +352,27 @@
 
 
             //Bulk Enable
-            $(".bulk-enable").on('click', function (e) {
+            $(".bulk-enable").on('click', function(e) {
                 e.preventDefault();
 
                 Swal.fire({
-                    title: "{{__('locale.labels.are_you_sure')}}",
-                    text: "{{__('locale.sending_servers.enable_sending_servers')}}",
+                    title: "{{ __('locale.labels.are_you_sure') }}",
+                    text: "{{ __('locale.sending_servers.enable_sending_servers') }}",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: "{{__('locale.labels.enable_selected')}}",
+                    confirmButtonText: "{{ __('locale.labels.enable_selected') }}",
                     customClass: {
                         confirmButton: 'btn btn-primary',
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
 
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         let sending_server_ids = [];
                         let rows_selected = dataListView.column(1).checkboxes.selected();
 
-                        $.each(rows_selected, function (index, rowId) {
+                        $.each(rows_selected, function(index, rowId) {
                             sending_server_ids.push(rowId)
                         });
 
@@ -349,71 +382,74 @@
                                 url: "{{ route('admin.sending-servers.batch_action') }}",
                                 type: "POST",
                                 data: {
-                                    _token: "{{csrf_token()}}",
+                                    _token: "{{ csrf_token() }}",
                                     action: 'enable',
                                     ids: sending_server_ids
                                 },
-                                success: function (data) {
+                                success: function(data) {
                                     showResponseMessage(data);
                                 },
-                                error: function (reject) {
+                                error: function(reject) {
                                     if (reject.status === 422) {
                                         let errors = reject.responseJSON.errors;
-                                        $.each(errors, function (key, value) {
-                                            toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                                        $.each(errors, function(key, value) {
+                                            toastr['warning'](value[0],
+                                                "{{ __('locale.labels.attention') }}", {
+                                                    closeButton: true,
+                                                    positionClass: 'toast-top-right',
+                                                    progressBar: true,
+                                                    newestOnTop: true,
+                                                    rtl: isRtl
+                                                });
+                                        });
+                                    } else {
+                                        toastr['warning'](reject.responseJSON.message,
+                                            "{{ __('locale.labels.attention') }}", {
                                                 closeButton: true,
                                                 positionClass: 'toast-top-right',
                                                 progressBar: true,
                                                 newestOnTop: true,
                                                 rtl: isRtl
                                             });
-                                        });
-                                    } else {
-                                        toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
                                     }
                                 }
                             })
                         } else {
-                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}", "{{ __('locale.labels.attention') }}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
+                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}",
+                                "{{ __('locale.labels.attention') }}", {
+                                    closeButton: true,
+                                    positionClass: 'toast-top-right',
+                                    progressBar: true,
+                                    newestOnTop: true,
+                                    rtl: isRtl
+                                });
                         }
                     }
                 })
             });
 
             //Bulk disable
-            $(".bulk-disable").on('click', function (e) {
+            $(".bulk-disable").on('click', function(e) {
 
                 e.preventDefault();
 
                 Swal.fire({
-                    title: "{{__('locale.labels.are_you_sure')}}",
-                    text: "{{__('locale.sending_servers.disable_sending_servers')}}",
+                    title: "{{ __('locale.labels.are_you_sure') }}",
+                    text: "{{ __('locale.sending_servers.disable_sending_servers') }}",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: "{{__('locale.labels.disable_selected')}}",
+                    confirmButtonText: "{{ __('locale.labels.disable_selected') }}",
                     customClass: {
                         confirmButton: 'btn btn-primary',
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         let sending_server_ids = [];
                         let rows_selected = dataListView.column(1).checkboxes.selected();
 
-                        $.each(rows_selected, function (index, rowId) {
+                        $.each(rows_selected, function(index, rowId) {
                             sending_server_ids.push(rowId)
                         });
 
@@ -423,44 +459,47 @@
                                 url: "{{ route('admin.sending-servers.batch_action') }}",
                                 type: "POST",
                                 data: {
-                                    _token: "{{csrf_token()}}",
+                                    _token: "{{ csrf_token() }}",
                                     action: 'disable',
                                     ids: sending_server_ids
                                 },
-                                success: function (data) {
+                                success: function(data) {
                                     showResponseMessage(data);
                                 },
-                                error: function (reject) {
+                                error: function(reject) {
                                     if (reject.status === 422) {
                                         let errors = reject.responseJSON.errors;
-                                        $.each(errors, function (key, value) {
-                                            toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                                        $.each(errors, function(key, value) {
+                                            toastr['warning'](value[0],
+                                                "{{ __('locale.labels.attention') }}", {
+                                                    closeButton: true,
+                                                    positionClass: 'toast-top-right',
+                                                    progressBar: true,
+                                                    newestOnTop: true,
+                                                    rtl: isRtl
+                                                });
+                                        });
+                                    } else {
+                                        toastr['warning'](reject.responseJSON.message,
+                                            "{{ __('locale.labels.attention') }}", {
                                                 closeButton: true,
                                                 positionClass: 'toast-top-right',
                                                 progressBar: true,
                                                 newestOnTop: true,
                                                 rtl: isRtl
                                             });
-                                        });
-                                    } else {
-                                        toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
                                     }
                                 }
                             })
                         } else {
-                            toastr['warning']("{{__('locale.labels.at_least_one_data')}}", "{{__('locale.labels.attention')}}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
+                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}",
+                                "{{ __('locale.labels.attention') }}", {
+                                    closeButton: true,
+                                    positionClass: 'toast-top-right',
+                                    progressBar: true,
+                                    newestOnTop: true,
+                                    rtl: isRtl
+                                });
                         }
 
                     }
@@ -469,28 +508,28 @@
 
 
             //Bulk Delete
-            $(".bulk-delete").on('click', function (e) {
+            $(".bulk-delete").on('click', function(e) {
 
                 e.preventDefault();
 
                 Swal.fire({
 
-                    title: "{{__('locale.labels.are_you_sure')}}",
-                    text: "{{__('locale.labels.able_to_revert')}}",
+                    title: "{{ __('locale.labels.are_you_sure') }}",
+                    text: "{{ __('locale.labels.able_to_revert') }}",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: "{{__('locale.labels.delete_selected')}}",
+                    confirmButtonText: "{{ __('locale.labels.delete_selected') }}",
                     customClass: {
                         confirmButton: 'btn btn-primary',
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         let sending_server_ids = [];
                         let rows_selected = dataListView.column(1).checkboxes.selected();
 
-                        $.each(rows_selected, function (index, rowId) {
+                        $.each(rows_selected, function(index, rowId) {
                             sending_server_ids.push(rowId)
                         });
 
@@ -500,44 +539,47 @@
                                 url: "{{ route('admin.sending-servers.batch_action') }}",
                                 type: "POST",
                                 data: {
-                                    _token: "{{csrf_token()}}",
+                                    _token: "{{ csrf_token() }}",
                                     action: 'destroy',
                                     ids: sending_server_ids
                                 },
-                                success: function (data) {
+                                success: function(data) {
                                     showResponseMessage(data);
                                 },
-                                error: function (reject) {
+                                error: function(reject) {
                                     if (reject.status === 422) {
                                         let errors = reject.responseJSON.errors;
-                                        $.each(errors, function (key, value) {
-                                            toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                                        $.each(errors, function(key, value) {
+                                            toastr['warning'](value[0],
+                                                "{{ __('locale.labels.attention') }}", {
+                                                    closeButton: true,
+                                                    positionClass: 'toast-top-right',
+                                                    progressBar: true,
+                                                    newestOnTop: true,
+                                                    rtl: isRtl
+                                                });
+                                        });
+                                    } else {
+                                        toastr['warning'](reject.responseJSON.message,
+                                            "{{ __('locale.labels.attention') }}", {
                                                 closeButton: true,
                                                 positionClass: 'toast-top-right',
                                                 progressBar: true,
                                                 newestOnTop: true,
                                                 rtl: isRtl
                                             });
-                                        });
-                                    } else {
-                                        toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
                                     }
                                 }
                             })
                         } else {
-                            toastr['warning']("{{__('locale.labels.at_least_one_data')}}", "{{__('locale.labels.attention')}}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
+                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}",
+                                "{{ __('locale.labels.attention') }}", {
+                                    closeButton: true,
+                                    positionClass: 'toast-top-right',
+                                    progressBar: true,
+                                    newestOnTop: true,
+                                    rtl: isRtl
+                                });
                         }
 
                     }

@@ -37,56 +37,54 @@ class SendingServer extends Model
      * @note important! consider updating the $fillable variable, it will affect some other methods
      */
     protected $fillable = [
-            'name',
-            'user_id',
-            'settings',
-            'api_link',
-            'port',
-            'username',
-            'password',
-            'route',
-            'sms_type',
-            'account_sid',
-            'auth_id',
-            'auth_token',
-            'access_key',
-            'access_token',
-            'secret_access',
-            'api_key',
-            'api_secret',
-            'user_token',
-            'project_id',
-            'api_token',
-            'auth_key',
-            'device_id',
-            'region',
-            'application_id',
-            'c1',
-            'c2',
-            'c3',
-            'c4',
-            'c5',
-            'c6',
-            'c7',
-            'type',
-            'sms_per_request',
-            'quota_value',
-            'quota_base',
-            'quota_unit',
-            'custom_order',
-            'schedule',
-            'custom',
-            'status',
-            'two_way',
-            'plain',
-            'mms',
-            'voice',
-            'whatsapp',
-            'source_addr_ton',
-            'source_addr_npi',
-            'dest_addr_ton',
-            'dest_addr_npi',
-            'success_keyword',
+        'name',
+        'user_id',
+        'settings',
+        'api_link',
+        'port',
+        'username',
+        'password',
+        'route',
+        'sms_type',
+        'account_sid',
+        'auth_id',
+        'auth_token',
+        'access_key',
+        'access_token',
+        'secret_access',
+        'api_key',
+        'api_secret',
+        'user_token',
+        'project_id',
+        'api_token',
+        'auth_key',
+        'device_id',
+        'region',
+        'application_id',
+        'c1',
+        'c2',
+        'c3',
+        'c4',
+        'c5',
+        'c6',
+        'c7',
+        'type',
+        'sms_per_request',
+        'quota_value',
+        'quota_base',
+        'quota_unit',
+        'custom_order',
+        'schedule',
+        'custom',
+        'status',
+        'two_way',
+        'plain',
+        'mms',
+        'source_addr_ton',
+        'source_addr_npi',
+        'dest_addr_ton',
+        'dest_addr_npi',
+        'success_keyword',
     ];
 
     /**
@@ -95,17 +93,15 @@ class SendingServer extends Model
      * @var string[]
      */
     protected $casts = [
-            'schedule'        => 'boolean',
-            'custom'          => 'boolean',
-            'status'          => 'boolean',
-            'two_way'         => 'boolean',
-            'plain'           => 'boolean',
-            'mms'             => 'boolean',
-            'voice'           => 'boolean',
-            'whatsapp'        => 'boolean',
-            'quota_value'     => 'integer',
-            'quota_base'      => 'integer',
-            'sms_per_request' => 'integer',
+        'schedule'        => 'boolean',
+        'custom'          => 'boolean',
+        'status'          => 'boolean',
+        'two_way'         => 'boolean',
+        'plain'           => 'boolean',
+        'mms'             => 'boolean',
+        'quota_value'     => 'integer',
+        'quota_base'      => 'integer',
+        'sms_per_request' => 'integer',
     ];
 
 
@@ -168,7 +164,6 @@ class SendingServer extends Model
                 $uid = uniqid();
             }
             $item->uid = $uid;
-
         });
     }
 
@@ -206,26 +201,26 @@ class SendingServer extends Model
     public static function sendingLimitValues(): array
     {
         return [
-                'unlimited'      => [
-                        'quota_value' => -1,
-                        'quota_base'  => -1,
-                        'quota_unit'  => 'day',
-                ],
-                '100_per_minute' => [
-                        'quota_value' => 100,
-                        'quota_base'  => 1,
-                        'quota_unit'  => 'minute',
-                ],
-                '1000_per_hour'  => [
-                        'quota_value' => 1000,
-                        'quota_base'  => 1,
-                        'quota_unit'  => 'hour',
-                ],
-                '10000_per_day'  => [
-                        'quota_value' => 10000,
-                        'quota_base'  => 1,
-                        'quota_unit'  => 'day',
-                ],
+            'unlimited'      => [
+                'quota_value' => -1,
+                'quota_base'  => -1,
+                'quota_unit'  => 'day',
+            ],
+            '100_per_minute' => [
+                'quota_value' => 100,
+                'quota_base'  => 1,
+                'quota_unit'  => 'minute',
+            ],
+            '1000_per_hour'  => [
+                'quota_value' => 1000,
+                'quota_base'  => 1,
+                'quota_unit'  => 'hour',
+            ],
+            '10000_per_day'  => [
+                'quota_value' => 10000,
+                'quota_base'  => 1,
+                'quota_unit'  => 'day',
+            ],
         ];
     }
 
@@ -265,7 +260,7 @@ class SendingServer extends Model
             return __('locale.plans.unlimited');
         }
 
-        return $this->quota_value.'/'.$this->quota_base.' '.__('locale.labels.'.Tool::getPluralParse($this->quota_unit, $this->quota_base));
+        return $this->quota_value . '/' . $this->quota_base . ' ' . __('locale.labels.' . Tool::getPluralParse($this->quota_unit, $this->quota_base));
     }
 
     /**
@@ -279,7 +274,7 @@ class SendingServer extends Model
             return __('locale.plans.unlimited');
         }
 
-        return '<code>'.$this->quota_value.'</code>/<code>'.$this->quota_base.' '.__('locale.labels.'.Tool::getPluralParse($this->quota_unit, $this->quota_base)).'</code>';
+        return '<code>' . $this->quota_value . '</code>/<code>' . $this->quota_base . ' ' . __('locale.labels.' . Tool::getPluralParse($this->quota_unit, $this->quota_base)) . '</code>';
     }
 
 
@@ -291,7 +286,7 @@ class SendingServer extends Model
      */
     public function getQuotaTracker()
     {
-        if ( ! $this->quotaTracker) {
+        if (!$this->quotaTracker) {
             $this->initQuotaTracker();
         }
 
@@ -375,7 +370,7 @@ class SendingServer extends Model
      */
     public function overQuota()
     {
-        return ! $this->getQuotaTracker()->check();
+        return !$this->getQuotaTracker()->check();
     }
 
     /**
@@ -395,5 +390,4 @@ class SendingServer extends Model
     {
         return $this->name;
     }
-
 }

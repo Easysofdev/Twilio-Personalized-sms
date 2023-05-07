@@ -132,16 +132,8 @@ class ImportCampaign implements ShouldQueue
                         $cost = $coverage[$country_code]['plain_sms'];
                     }
 
-                    if ($sms_type == 'voice') {
-                        $cost = $coverage[$country_code]['voice_sms'];
-                    }
-
                     if ($sms_type == 'mms') {
                         $cost = $coverage[$country_code]['mms_sms'];
-                    }
-
-                    if ($sms_type == 'whatsapp') {
-                        $cost = $coverage[$country_code]['whatsapp_sms'];
                     }
 
                     $sms_counter  = new SMSCounter();
@@ -223,16 +215,8 @@ class ImportCampaign implements ShouldQueue
                         $cost = $coverage[$country_code]['plain_sms'];
                     }
 
-                    if ($sms_type == 'voice') {
-                        $cost = $coverage[$country_code]['voice_sms'];
-                    }
-
                     if ($sms_type == 'mms') {
                         $cost = $coverage[$country_code]['mms_sms'];
-                    }
-
-                    if ($sms_type == 'whatsapp') {
-                        $cost = $coverage[$country_code]['whatsapp_sms'];
                     }
 
                     $sms_counter  = new SMSCounter();
@@ -314,19 +298,9 @@ class ImportCampaign implements ShouldQueue
                             $status = $campaign->sendPlainSMS($data);
                         }
 
-                        if ($campaign->sms_type == 'voice') {
-                            $data['language'] = $campaign->language;
-                            $data['gender']   = $campaign->gender;
-                            $status           = $campaign->sendVoiceSMS($data);
-                        }
-
                         if ($campaign->sms_type == 'mms') {
                             $data['media_url'] = $campaign->media_url;
                             $status            = $campaign->sendMMS($data);
-                        }
-
-                        if ($campaign->sms_type == 'whatsapp') {
-                            $status = $campaign->sendWhatsApp($data);
                         }
 
                         if (substr_count($status, 'Delivered') == 1) {

@@ -24,31 +24,29 @@
         <div class="mb-3 mt-2">
             @can('view sms_history')
                 <div class="btn-group">
-                    <button
-                            class="btn btn-primary fw-bold dropdown-toggle"
-                            type="button"
-                            id="bulk_actions"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
+                    <button class="btn btn-primary fw-bold dropdown-toggle" type="button" id="bulk_actions"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ __('locale.labels.actions') }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bulk_actions">
-                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="trash"></i> {{ __('locale.datatables.bulk_delete') }}</a>
+                        <a class="dropdown-item bulk-delete" href="#"><i data-feather="trash"></i>
+                            {{ __('locale.datatables.bulk_delete') }}</a>
                     </div>
                 </div>
             @endcan
 
             @can('view sms_history')
                 <div class="btn-group">
-                    <a href="#" class="btn btn-info waves-light waves-effect fw-bold mx-1" data-bs-toggle="modal" data-bs-target="#exportData"> {{__('locale.buttons.export')}} <i data-feather="file-text"></i></a>
+                    <a href="#" class="btn btn-info waves-light waves-effect fw-bold mx-1" data-bs-toggle="modal"
+                        data-bs-target="#exportData"> {{ __('locale.buttons.export') }} <i data-feather="file-text"></i></a>
                 </div>
 
-                <div class="modal fade" id="exportData" tabindex="-1" role="dialog" aria-labelledby="addSendingSever" aria-hidden="true">
+                <div class="modal fade" id="exportData" tabindex="-1" role="dialog" aria-labelledby="addSendingSever"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel33">{{__('locale.buttons.export')}}</h4>
+                                <h4 class="modal-title" id="myModalLabel33">{{ __('locale.buttons.export') }}</h4>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
@@ -60,15 +58,19 @@
 
                                         <div class="col-md-6">
                                             <div class="mb-1">
-                                                <label for="start-date-picker" class="form-label">{{ __('locale.labels.start_time') }}:</label>
-                                                <input type="text" id="start-date-picker" name="start_date" class="form-control date_picker" placeholder="YYYY-MM-DD"/>
+                                                <label for="start-date-picker"
+                                                    class="form-label">{{ __('locale.labels.start_time') }}:</label>
+                                                <input type="text" id="start-date-picker" name="start_date"
+                                                    class="form-control date_picker" placeholder="YYYY-MM-DD" />
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="mb-1">
                                                 <label for="start-time-picker" class="form-label"></label>
-                                                <input type="text" id="start-time-picker" class="form-control time_picker text-left" name="start_time" placeholder="HH:MM"/>
+                                                <input type="text" id="start-time-picker"
+                                                    class="form-control time_picker text-left" name="start_time"
+                                                    placeholder="HH:MM" />
                                             </div>
                                         </div>
 
@@ -78,15 +80,19 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="mb-1">
-                                                <label for="end-date-picker" class="form-label">{{ __('locale.labels.end_time') }}:</label>
-                                                <input type="text" id="end-date-picker" name="end_date" class="form-control date_picker" placeholder="YYYY-MM-DD"/>
+                                                <label for="end-date-picker"
+                                                    class="form-label">{{ __('locale.labels.end_time') }}:</label>
+                                                <input type="text" id="end-date-picker" name="end_date"
+                                                    class="form-control date_picker" placeholder="YYYY-MM-DD" />
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="mb-1">
                                                 <label for="end-time-picker" class="form-label"></label>
-                                                <input type="text" id="end-time-picker" class="form-control time_picker text-left" name="end_time" placeholder="HH:MM"/>
+                                                <input type="text" id="end-time-picker"
+                                                    class="form-control time_picker text-left" name="end_time"
+                                                    placeholder="HH:MM" />
                                             </div>
                                         </div>
 
@@ -107,38 +113,36 @@
                                         <label class="form-label">{{ __('locale.labels.type') }}: </label>
                                         <select class="form-select" name="type">
                                             <option value="plain">{{ __('locale.labels.plain') }}</option>
-                                            <option value="voice">{{ __('locale.labels.voice') }}</option>
                                             <option value="mms">{{ __('locale.labels.mms') }}</option>
-                                            <option value="whatsapp">{{ __('locale.labels.whatsapp') }}</option>
                                         </select>
                                     </div>
 
 
                                     <div class="mb-1">
-                                        <label class="form-label">{{__('locale.labels.status')}}: </label>
+                                        <label class="form-label">{{ __('locale.labels.status') }}: </label>
                                         <input type="text" name="status" class="form-control">
                                     </div>
 
 
                                     <div class="mb-1">
-                                        <label class="form-label">{{__('locale.labels.to')}}: </label>
+                                        <label class="form-label">{{ __('locale.labels.to') }}: </label>
                                         <input type="text" name="to" class="form-control">
                                     </div>
 
                                     <div class="mb-1">
-                                        <label class="form-label">{{__('locale.labels.from')}}: </label>
+                                        <label class="form-label">{{ __('locale.labels.from') }}: </label>
                                         <input type="text" name="from" class="form-control">
                                     </div>
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary"><i data-feather="file-text"></i> {{ __('locale.labels.generate') }}</button>
+                                    <button type="submit" class="btn btn-primary"><i data-feather="file-text"></i>
+                                        {{ __('locale.labels.generate') }}</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-
             @endcan
         </div>
 
@@ -147,20 +151,20 @@
                 <div class="card">
                     <table class="table datatables-basic">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>{{__('locale.labels.date')}}</th>
-                            <th>{{__('locale.menu.Customer')}} </th>
-                            <th>{{__('locale.labels.direction')}} </th>
-                            <th>{{__('locale.labels.type')}} </th>
-                            <th>{{__('locale.labels.from')}}</th>
-                            <th>{{__('locale.labels.to')}}</th>
-                            <th>{{__('locale.labels.cost')}}</th>
-                            <th>{{__('locale.labels.status')}}</th>
-                            <th>{{__('locale.labels.actions')}}</th>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>{{ __('locale.labels.date') }}</th>
+                                <th>{{ __('locale.menu.Customer') }} </th>
+                                <th>{{ __('locale.labels.direction') }} </th>
+                                <th>{{ __('locale.labels.type') }} </th>
+                                <th>{{ __('locale.labels.from') }}</th>
+                                <th>{{ __('locale.labels.to') }}</th>
+                                <th>{{ __('locale.labels.cost') }}</th>
+                                <th>{{ __('locale.labels.status') }}</th>
+                                <th>{{ __('locale.labels.actions') }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -193,7 +197,7 @@
 @section('page-script')
     {{-- Page js files --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             "use strict"
 
             let datePicker = $('.date_picker'),
@@ -218,7 +222,7 @@
             function showResponseMessage(data) {
 
                 if (data.status === 'success') {
-                    toastr['success'](data.message, '{{__('locale.labels.success')}}!!', {
+                    toastr['success'](data.message, '{{ __('locale.labels.success') }}!!', {
                         closeButton: true,
                         positionClass: 'toast-top-right',
                         progressBar: true,
@@ -227,13 +231,14 @@
                     });
                     dataListView.draw();
                 } else {
-                    toastr['warning']("{{__('locale.exceptions.something_went_wrong')}}", '{{ __('locale.labels.warning') }}!', {
-                        closeButton: true,
-                        positionClass: 'toast-top-right',
-                        progressBar: true,
-                        newestOnTop: true,
-                        rtl: isRtl
-                    });
+                    toastr['warning']("{{ __('locale.exceptions.something_went_wrong') }}",
+                        '{{ __('locale.labels.warning') }}!', {
+                            closeButton: true,
+                            positionClass: 'toast-top-right',
+                            progressBar: true,
+                            newestOnTop: true,
+                            rtl: isRtl
+                        });
                 }
             }
 
@@ -249,26 +254,54 @@
                     "url": "{{ route('admin.reports.search.all') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": {_token: "{{csrf_token()}}"}
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
                 },
-                "columns": [
-                    {"data": 'responsive_id', orderable: false, searchable: false},
-                    {"data": "uid"},
-                    {"data": "uid"},
-                    {"data": "created_at"},
-                    {"data": "user_id"},
-                    {"data": "send_by"},
-                    {"data": "sms_type"},
-                    {"data": "from"},
-                    {"data": "to"},
-                    {"data": "cost"},
-                    {"data": "status"},
-                    {"data": "action", orderable: false, searchable: false}
+                "columns": [{
+                        "data": 'responsive_id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "uid"
+                    },
+                    {
+                        "data": "uid"
+                    },
+                    {
+                        "data": "created_at"
+                    },
+                    {
+                        "data": "user_id"
+                    },
+                    {
+                        "data": "send_by"
+                    },
+                    {
+                        "data": "sms_type"
+                    },
+                    {
+                        "data": "from"
+                    },
+                    {
+                        "data": "to"
+                    },
+                    {
+                        "data": "cost"
+                    },
+                    {
+                        "data": "status"
+                    },
+                    {
+                        "data": "action",
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
 
                 searchDelay: 1500,
-                columnDefs: [
-                    {
+                columnDefs: [{
                         // For Responsive
                         className: 'control',
                         orderable: false,
@@ -280,7 +313,7 @@
                         targets: 1,
                         orderable: false,
                         responsivePriority: 3,
-                        render: function (data) {
+                        render: function(data) {
                             return (
                                 '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="" id="' +
                                 data +
@@ -290,8 +323,7 @@
                             );
                         },
                         checkboxes: {
-                            selectAllRender:
-                                '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                            selectAllRender: '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                             selectRow: true
                         }
                     },
@@ -303,12 +335,13 @@
                         // Avatar image/badge, Name and post
                         targets: 4,
                         responsivePriority: 1,
-                        render: function (data, type, full) {
+                        render: function(data, type, full) {
                             let $user_img = full['avatar'],
                                 $name = full['user_id'],
                                 $email = full['email'];
 
-                            let $output = '<img src="' + $user_img + '" alt="Avatar" width="32" height="32">';
+                            let $output = '<img src="' + $user_img +
+                                '" alt="Avatar" width="32" height="32">';
 
                             let colorClass = $user_img === '' ? ' bg-light-' + $state + ' ' : '';
                             // Creates full output for row
@@ -334,13 +367,19 @@
                         targets: -1,
                         title: '{{ __('locale.labels.actions') }}',
                         orderable: false,
-                        render: function (data, type, full) {
+                        render: function(data, type, full) {
                             return (
-                                '<span class="action-delete text-danger pe-1 cursor-pointer" data-id=' + full['uid'] + '>' +
-                                feather.icons['trash'].toSvg({class: 'font-medium-4'}) +
+                                '<span class="action-delete text-danger pe-1 cursor-pointer" data-id=' +
+                                full['uid'] + '>' +
+                                feather.icons['trash'].toSvg({
+                                    class: 'font-medium-4'
+                                }) +
                                 '</span>' +
-                                '<span class="action-view text-primary pe-1 cursor-pointer" data-id=' + full['uid'] + '>' +
-                                feather.icons['eye'].toSvg({class: 'font-medium-4'}) +
+                                '<span class="action-view text-primary pe-1 cursor-pointer" data-id=' +
+                                full['uid'] + '>' +
+                                feather.icons['eye'].toSvg({
+                                    class: 'font-medium-4'
+                                }) +
                                 '</span>'
                             );
                         }
@@ -363,16 +402,18 @@
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
-                            header: function (row) {
+                            header: function(row) {
                                 let data = row.data();
                                 return 'Details of ' + data['uid'];
                             }
                         }),
                         type: 'column',
-                        renderer: function (api, rowIdx, columns) {
-                            let data = $.map(columns, function (col) {
-                                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                                    ? '<tr data-dt-row="' +
+                        renderer: function(api, rowIdx, columns) {
+                            let data = $.map(columns, function(col) {
+                                return col.title !==
+                                    '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
                                     col.rowIdx +
                                     '" data-dt-column="' +
                                     col.columnIndex +
@@ -384,33 +425,39 @@
                                     '<td>' +
                                     col.data +
                                     '</td>' +
-                                    '</tr>'
-                                    : '';
+                                    '</tr>' :
+                                    '';
                             }).join('');
 
-                            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+                            return data ? $('<table class="table"/>').append('<tbody>' + data +
+                                '</tbody>') : false;
                         }
                     }
                 },
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
+                aLengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100]
+                ],
                 select: {
                     style: "multi"
                 },
-                order: [[2, "desc"]],
+                order: [
+                    [2, "desc"]
+                ],
                 displayLength: 10,
             });
 
             // On view
-            Table.delegate(".action-view", "click", function (e) {
+            Table.delegate(".action-view", "click", function(e) {
                 e.stopPropagation();
                 let id = $(this).data('id');
                 $.ajax({
-                    url: "{{ url(config('app.admin_path').'/reports')}}" + '/' + id + '/view',
+                    url: "{{ url(config('app.admin_path') . '/reports') }}" + '/' + id + '/view',
                     type: "POST",
                     data: {
-                        _token: "{{csrf_token()}}"
+                        _token: "{{ csrf_token() }}"
                     },
-                    success: function (data) {
+                    success: function(data) {
                         Swal.fire({
                             html: `<div class="table-responsive">
 <table class="table table-striped">
@@ -447,26 +494,28 @@
 `
                         })
                     },
-                    error: function (reject) {
+                    error: function(reject) {
                         if (reject.status === 422) {
                             let errors = reject.responseJSON.errors;
-                            $.each(errors, function (key, value) {
-                                toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                            $.each(errors, function(key, value) {
+                                toastr['warning'](value[0],
+                                    "{{ __('locale.labels.attention') }}", {
+                                        closeButton: true,
+                                        positionClass: 'toast-top-right',
+                                        progressBar: true,
+                                        newestOnTop: true,
+                                        rtl: isRtl
+                                    });
+                            });
+                        } else {
+                            toastr['warning'](reject.responseJSON.message,
+                                "{{ __('locale.labels.attention') }}", {
                                     closeButton: true,
                                     positionClass: 'toast-top-right',
                                     progressBar: true,
                                     newestOnTop: true,
                                     rtl: isRtl
                                 });
-                            });
-                        } else {
-                            toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
                         }
                     }
                 })
@@ -474,7 +523,7 @@
             });
 
             // On Delete
-            Table.delegate(".action-delete", "click", function (e) {
+            Table.delegate(".action-delete", "click", function(e) {
                 e.stopPropagation();
                 let id = $(this).data('id');
                 Swal.fire({
@@ -488,37 +537,40 @@
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         $.ajax({
-                            url: "{{ url(config('app.admin_path').'/reports')}}" + '/' + id + '/destroy',
+                            url: "{{ url(config('app.admin_path') . '/reports') }}" + '/' +
+                                id + '/destroy',
                             type: "POST",
                             data: {
-                                _token: "{{csrf_token()}}"
+                                _token: "{{ csrf_token() }}"
                             },
-                            success: function (data) {
+                            success: function(data) {
                                 showResponseMessage(data);
                             },
-                            error: function (reject) {
+                            error: function(reject) {
                                 if (reject.status === 422) {
                                     let errors = reject.responseJSON.errors;
-                                    $.each(errors, function (key, value) {
-                                        toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                                    $.each(errors, function(key, value) {
+                                        toastr['warning'](value[0],
+                                            "{{ __('locale.labels.attention') }}", {
+                                                closeButton: true,
+                                                positionClass: 'toast-top-right',
+                                                progressBar: true,
+                                                newestOnTop: true,
+                                                rtl: isRtl
+                                            });
+                                    });
+                                } else {
+                                    toastr['warning'](reject.responseJSON.message,
+                                        "{{ __('locale.labels.attention') }}", {
                                             closeButton: true,
                                             positionClass: 'toast-top-right',
                                             progressBar: true,
                                             newestOnTop: true,
                                             rtl: isRtl
                                         });
-                                    });
-                                } else {
-                                    toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                        closeButton: true,
-                                        positionClass: 'toast-top-right',
-                                        progressBar: true,
-                                        newestOnTop: true,
-                                        rtl: isRtl
-                                    });
                                 }
                             }
                         })
@@ -527,27 +579,27 @@
             });
 
             //Bulk Delete
-            $(".bulk-delete").on('click', function (e) {
+            $(".bulk-delete").on('click', function(e) {
 
                 e.preventDefault();
 
                 Swal.fire({
-                    title: "{{__('locale.labels.are_you_sure')}}",
-                    text: "{{__('locale.campaigns.delete_sms')}}",
+                    title: "{{ __('locale.labels.are_you_sure') }}",
+                    text: "{{ __('locale.campaigns.delete_sms') }}",
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: "{{__('locale.labels.delete_selected')}}",
+                    confirmButtonText: "{{ __('locale.labels.delete_selected') }}",
                     customClass: {
                         confirmButton: 'btn btn-primary',
                         cancelButton: 'btn btn-outline-danger ms-1'
                     },
                     buttonsStyling: false,
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.value) {
                         let sms_ids = [];
                         let rows_selected = dataListView.column(1).checkboxes.selected();
 
-                        $.each(rows_selected, function (index, rowId) {
+                        $.each(rows_selected, function(index, rowId) {
                             sms_ids.push(rowId)
                         });
 
@@ -557,44 +609,47 @@
                                 url: "{{ route('admin.reports.batch_action') }}",
                                 type: "POST",
                                 data: {
-                                    _token: "{{csrf_token()}}",
+                                    _token: "{{ csrf_token() }}",
                                     action: 'destroy',
                                     ids: sms_ids
                                 },
-                                success: function (data) {
+                                success: function(data) {
                                     showResponseMessage(data);
                                 },
-                                error: function (reject) {
+                                error: function(reject) {
                                     if (reject.status === 422) {
                                         let errors = reject.responseJSON.errors;
-                                        $.each(errors, function (key, value) {
-                                            toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
+                                        $.each(errors, function(key, value) {
+                                            toastr['warning'](value[0],
+                                                "{{ __('locale.labels.attention') }}", {
+                                                    closeButton: true,
+                                                    positionClass: 'toast-top-right',
+                                                    progressBar: true,
+                                                    newestOnTop: true,
+                                                    rtl: isRtl
+                                                });
+                                        });
+                                    } else {
+                                        toastr['warning'](reject.responseJSON.message,
+                                            "{{ __('locale.labels.attention') }}", {
                                                 closeButton: true,
                                                 positionClass: 'toast-top-right',
                                                 progressBar: true,
                                                 newestOnTop: true,
                                                 rtl: isRtl
                                             });
-                                        });
-                                    } else {
-                                        toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
                                     }
                                 }
                             })
                         } else {
-                            toastr['warning']("{{__('locale.labels.at_least_one_data')}}", "{{__('locale.labels.attention')}}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
+                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}",
+                                "{{ __('locale.labels.attention') }}", {
+                                    closeButton: true,
+                                    positionClass: 'toast-top-right',
+                                    progressBar: true,
+                                    newestOnTop: true,
+                                    rtl: isRtl
+                                });
                         }
 
                     }
@@ -602,6 +657,5 @@
             });
 
         });
-
     </script>
 @endsection

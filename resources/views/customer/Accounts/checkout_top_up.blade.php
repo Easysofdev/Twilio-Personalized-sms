@@ -187,7 +187,6 @@
                     <div id="payment" class="content" role="tabpanel" aria-labelledby="payment-trigger">
                         <div class="content-header">
                             <h5 class="mb-0">{{ __('locale.labels.payment_options') }}</h5>
-                            <small>{{ __('locale.payment_gateways.click_on_correct_option') }}</small>
                         </div>
                         <div class="row mb-2 mt-2 ">
                             <ul class="other-payment-options list-unstyled">
@@ -195,7 +194,7 @@
                                 @foreach($payment_methods as $method)
                                     <li class="py-50">
                                         <div class="form-check">
-                                            <input type="radio" id="{{$method->type}}" value="{{$method->type}}" name="payment_methods" class="form-check-input"/>
+                                            <input type="radio" id="{{$method->type}}" value="{{$method->type}}" name="payment_methods" class="form-check-input" checked/>
                                             <label class="form-check-label" for="{{$method->type}}"> {{ $method->name }} </label>
                                         </div>
                                     </li>

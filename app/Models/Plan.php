@@ -283,21 +283,6 @@ class Plan extends Model
     }
 
     /**
-     * Display total quota
-     *
-     * @return Application|array|string|Translator|null
-     */
-
-    public function displayWhatsAppQuota()
-    {
-        if ($this->getOption('sms_max') == -1) {
-            return __('locale.labels.unlimited');
-        } else {
-            return Tool::format_number($this->getOption('whatsapp_max'));
-        }
-    }
-
-    /**
      * Display max lists.
      *
      * @return array|Application|Translator|string|null
@@ -416,7 +401,6 @@ class Plan extends Model
     {
         return [
                 'sms_max'                  => '100',
-                'whatsapp_max'             => '100',
                 'list_max'                 => '-1',
                 'subscriber_max'           => '-1',
                 'subscriber_per_list_max'  => '-1',
@@ -448,8 +432,6 @@ class Plan extends Model
                 'receive_voice_sms'        => '0',
                 'mms_sms'                  => '3',
                 'receive_mms_sms'          => '0',
-                'whatsapp_sms'             => '1',
-                'receive_whatsapp_sms'     => '0',
                 'per_unit_price'           => '.3',
         ];
     }

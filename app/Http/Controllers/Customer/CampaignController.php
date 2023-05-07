@@ -11,8 +11,6 @@ use App\Http\Requests\Campaigns\MMSQuickSendRequest;
 use App\Http\Requests\Campaigns\QuickSendRequest;
 use App\Http\Requests\Campaigns\VoiceCampaignBuilderRequest;
 use App\Http\Requests\Campaigns\VoiceQuickSendRequest;
-use App\Http\Requests\Campaigns\WhatsAppCampaignBuilderRequest;
-use App\Http\Requests\Campaigns\WhatsAppQuickSendRequest;
 use App\Library\Tool;
 use App\Models\Campaigns;
 use App\Models\ContactGroups;

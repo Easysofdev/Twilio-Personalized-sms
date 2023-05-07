@@ -193,11 +193,6 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $price      = $sms_count * $unit_price;
             }
 
-            if ($sms_type == 'voice') {
-                $unit_price = $priceOption['voice_sms'];
-                $price      = $sms_count * $unit_price;
-            }
-
             if ($sms_type == 'mms') {
 
                 if ($message_data->messages == 0) {
@@ -205,11 +200,6 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 }
 
                 $unit_price = $priceOption['mms_sms'];
-                $price      = $sms_count * $unit_price;
-            }
-
-            if ($sms_type == 'whatsapp') {
-                $unit_price = $priceOption['whatsapp_sms'];
                 $price      = $sms_count * $unit_price;
             }
 
@@ -253,13 +243,6 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $data = $campaign->sendPlainSMS($preparedData);
             }
 
-            if ($sms_type == 'voice') {
-                $preparedData['language'] = $input['language'];
-                $preparedData['gender']   = $input['gender'];
-
-                $data = $campaign->sendVoiceSMS($preparedData);
-            }
-
             if ($sms_type == 'mms') {
                 if (isset($input['api_key'])) {
                     $preparedData['media_url'] = $input['media_url'];
@@ -269,14 +252,6 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
 
                 $data = $campaign->sendMMS($preparedData);
-            }
-
-            if ($sms_type == 'whatsapp') {
-                if (isset($input['mms_file'])) {
-                    $preparedData['media_url'] = Tool::uploadImage($input['mms_file']);
-                }
-
-                $data = $campaign->sendWhatsApp($preparedData);
             }
 
             if (is_object($data)) {
@@ -649,18 +624,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $price      = $total * $unit_price;
             }
 
-            if ($sms_type == 'voice') {
-                $unit_price = $priceOption['voice_sms'];
-                $price      = $total * $unit_price;
-            }
-
             if ($sms_type == 'mms') {
                 $unit_price = $priceOption['mms_sms'];
-                $price      = $total * $unit_price;
-            }
-
-            if ($sms_type == 'whatsapp') {
-                $unit_price = $priceOption['whatsapp_sms'];
                 $price      = $total * $unit_price;
             }
 
@@ -754,16 +719,7 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 'NotDeliveredCount'    => 0,
         ]);
 
-        if ($sms_type == 'voice') {
-            $new_campaign->language = $input['language'];
-            $new_campaign->gender   = $input['gender'];
-        }
-
         if ($sms_type == 'mms') {
-            $new_campaign->media_url = Tool::uploadImage($input['mms_file']);
-        }
-
-        if ($sms_type == 'whatsapp' && isset($input['mms_file'])) {
             $new_campaign->media_url = Tool::uploadImage($input['mms_file']);
         }
 
@@ -1034,18 +990,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $price      = $total * $unit_price;
             }
 
-            if ($sms_type == 'voice') {
-                $unit_price = $user->customer->getOption('voice_sms');
-                $price      = $total * $unit_price;
-            }
-
             if ($sms_type == 'mms') {
                 $unit_price = $user->customer->getOption('mms_sms');
-                $price      = $total * $unit_price;
-            }
-
-            if ($sms_type == 'whatsapp') {
-                $unit_price = $user->customer->getOption('whatsapp_sms');
                 $price      = $total * $unit_price;
             }
 
@@ -1404,18 +1350,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $price      = $total * $unit_price;
             }
 
-            if ($form_data['sms_type'] == 'voice') {
-                $unit_price = $priceOption['voice_sms'];
-                $price      = $total * $unit_price;
-            }
-
             if ($form_data['sms_type'] == 'mms') {
                 $unit_price = $priceOption['mms_sms'];
-                $price      = $total * $unit_price;
-            }
-
-            if ($form_data['sms_type'] == 'whatsapp') {
-                $unit_price = $priceOption['whatsapp_sms'];
                 $price      = $total * $unit_price;
             }
 

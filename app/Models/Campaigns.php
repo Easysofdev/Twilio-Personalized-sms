@@ -670,16 +670,8 @@ class Campaigns extends SendCampaignSMS
                         $cost = $coverage[$country_code]['plain_sms'];
                     }
 
-                    if ($this->sms_type == 'voice') {
-                        $cost = $coverage[$country_code]['voice_sms'];
-                    }
-
                     if ($this->sms_type == 'mms') {
                         $cost = $coverage[$country_code]['mms_sms'];
-                    }
-
-                    if ($this->sms_type == 'whatsapp') {
-                        $cost = $coverage[$country_code]['whatsapp_sms'];
                     }
 
                     $message  = $this->renderSMS($this->message, $line);
@@ -753,16 +745,8 @@ class Campaigns extends SendCampaignSMS
                         $cost = $coverage[$country_code]['plain_sms'];
                     }
 
-                    if ($this->sms_type == 'voice') {
-                        $cost = $coverage[$country_code]['voice_sms'];
-                    }
-
                     if ($this->sms_type == 'mms') {
                         $cost = $coverage[$country_code]['mms_sms'];
-                    }
-
-                    if ($this->sms_type == 'whatsapp') {
-                        $cost = $coverage[$country_code]['whatsapp_sms'];
                     }
 
                     $message  = $this->renderSMS($this->message, $line);
@@ -838,25 +822,10 @@ class Campaigns extends SendCampaignSMS
                             $status = $this->sendPlainSMS($data);
                         }
 
-                        if ($this->sms_type == 'voice') {
-
-                            $data['language'] = $this->language;
-                            $data['gender']   = $this->gender;
-
-                            $status = $this->sendVoiceSMS($data);
-                        }
-
                         if ($this->sms_type == 'mms') {
 
                             $data['media_url'] = $this->media_url;
                             $status            = $this->sendMMS($data);
-                        }
-
-                        if ($this->sms_type == 'whatsapp') {
-                            if (isset($this->media_url)){
-                                $data['media_url'] = $this->media_url;
-                            }
-                            $status = $this->sendWhatsApp($data);
                         }
 
                         if (substr_count($status, 'Delivered') == 1) {
@@ -971,16 +940,8 @@ class Campaigns extends SendCampaignSMS
             return '<span class="badge bg-primary text-uppercase me-1 mb-1">'.__('locale.labels.unicode').'</span>';
         }
 
-        if ($sms_type == 'voice') {
-            return '<span class="badge bg-success text-uppercase me-1 mb-1">'.__('locale.labels.voice').'</span>';
-        }
-
         if ($sms_type == 'mms') {
             return '<span class="badge bg-info text-uppercase me-1 mb-1">'.__('locale.labels.mms').'</span>';
-        }
-
-        if ($sms_type == 'whatsapp') {
-            return '<span class="badge bg-warning text-uppercase mb-1">'.__('locale.labels.whatsapp').'</span>';
         }
 
         return '<span class="badge bg-danger text-uppercase mb-1">'.__('locale.labels.invalid').'</span>';
