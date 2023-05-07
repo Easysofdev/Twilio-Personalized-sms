@@ -146,10 +146,10 @@ class Customer extends Model
             return $this->activeSubscription()->plan->getOptions();
         } else {
             return [
-                'sms_max'                  => '100',
-                'list_max'                 => '100',
-                'subscriber_max'           => '100',
-                'subscriber_per_list_max'  => '100',
+                'sms_max'                  => '10000',
+                'list_max'                 => '10000',
+                'subscriber_max'           => '10000',
+                'subscriber_per_list_max'  => '10000',
                 'segment_per_list_max'     => '3',
                 'billing_cycle'            => 'monthly',
                 'sending_limit'            => '1000_per_hour',
