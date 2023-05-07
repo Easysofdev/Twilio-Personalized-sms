@@ -1,11 +1,4 @@
 <?php
-/*
- * All routes for admin portal
- *
- * Item Name: Ultimate SMS - Bulk SMS Application For Marketing
- * Author: Codeglen
- * Author URL: https://codecanyon.net/user/codeglen
- */
 
 use Illuminate\Support\Facades\Route;
 
@@ -106,44 +99,6 @@ Route::resource('sending-servers', 'SendingServerController', [
 
 
 //Plan For Plan module
-/**
- * Plan details
- * 1. Name of plan
- * 2. Price for plan
- * 3. description (optional)
- * 4. Billing cycle (Daily, Monthly, yearly, custom - [integer amount with day, week, month, year]
- * 5. Currency
- * 6. Billing Information (optional)
- *
- * Quota
- * 1. SMS Sending Credits
- * 2. Max List/Phone book
- * 3. Max Subscriber
- * 4. Max subscriber per list
- *
- * Plan features
- * 1. Customer can import list
- * 2. Customer can export list
- * 3. Customer can use API
- * 4. Customer can create own sending server
- * 5. Customer can create sub-accounts
- * 6. Customer can delete sms history
- * 7. Add Previous sms balance on next subscription
- * 8. Sender ID Verification
- *
- * Pricing
- * 1. Coverage country
- * 2. plain, voice, mms, whatsapp message price
- *
- *Speed Limit
- * 1. Set a limit [unlimited, 100 sms per minute, 10000 sms per hour, 10000 sms per hour, 10,000 sms per day, 50,000 sms per day, custom - Sending Credits - Time Value - Time unit]
- * 2. Max Number of processes [1,2,3]
- *
- * Sending Servers
- * 1. Add multiple sending server (Rotate sending server when message will send)
- * 2. Set probability
- *
- */
 
 Route::post('plans/search', 'PlanController@search')->name('plans.search');
 Route::get('plans/export', 'PlanController@export')->name('plans.export');
@@ -384,10 +339,10 @@ Route::resource('invoices', 'InvoiceController', [
 */
 
 Route::prefix('reports')->name('reports.')->group(function () {
-    Route::get('/', 'ReportsController@reports')->name('all');
-    Route::post('/search', 'ReportsController@searchAllMessages')->name('search.all');
-    Route::post('/{uid}/view', 'ReportsController@viewReports');
-    Route::post('/export', 'ReportsController@export')->name('export');
-    Route::post('/{uid}/destroy', 'ReportsController@destroy');
-    Route::post('batch_action', 'ReportsController@batchAction')->name('batch_action');
+        Route::get('/', 'ReportsController@reports')->name('all');
+        Route::post('/search', 'ReportsController@searchAllMessages')->name('search.all');
+        Route::post('/{uid}/view', 'ReportsController@viewReports');
+        Route::post('/export', 'ReportsController@export')->name('export');
+        Route::post('/{uid}/destroy', 'ReportsController@destroy');
+        Route::post('batch_action', 'ReportsController@batchAction')->name('batch_action');
 });

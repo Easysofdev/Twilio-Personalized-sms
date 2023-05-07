@@ -107,7 +107,6 @@
                     @enderror
                 </div>
 
-
                 <div class="col-12">
                     <div class="mb-1">
                         <label for="date_format" class="form-label required">{{__('locale.labels.date_format')}}</label>

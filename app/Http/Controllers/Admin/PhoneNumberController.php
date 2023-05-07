@@ -52,9 +52,9 @@ class PhoneNumberController extends AdminBaseController
         $this->authorize('view phone_numbers');
 
         $breadcrumbs = [
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Sending')],
-                ['name' => __('locale.menu.Phone Numbers')],
+            ['link' => url(config('app.admin_path') . "/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url(config('app.admin_path') . "/dashboard"), 'name' => __('locale.menu.Sending')],
+            ['name' => __('locale.menu.Phone Numbers')],
         ];
 
         return view('admin.PhoneNumbers.index', compact('breadcrumbs'));
@@ -73,15 +73,15 @@ class PhoneNumberController extends AdminBaseController
         $this->authorize('view phone_numbers');
 
         $columns = [
-                0 => 'responsive_id',
-                1 => 'uid',
-                2 => 'uid',
-                3 => 'number',
-                4 => 'user_id',
-                5 => 'price',
-                6 => 'status',
-                7 => 'capabilities',
-                8 => 'action',
+            0 => 'responsive_id',
+            1 => 'uid',
+            2 => 'uid',
+            3 => 'number',
+            4 => 'user_id',
+            5 => 'price',
+            6 => 'status',
+            7 => 'capabilities',
+            8 => 'action',
         ];
 
         $totalData = PhoneNumbers::count();
@@ -95,33 +95,32 @@ class PhoneNumberController extends AdminBaseController
 
         if (empty($request->input('search.value'))) {
             $numbers = PhoneNumbers::offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
         } else {
             $search = $request->input('search.value');
 
             $numbers = PhoneNumbers::whereLike(['uid', 'number', 'price', 'status', 'user.first_name', 'user.last_name'], $search)
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order, $dir)
-                    ->get();
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order, $dir)
+                ->get();
 
             $totalFiltered = PhoneNumbers::whereLike(['uid', 'number', 'price', 'status', 'user.first_name', 'user.last_name'], $search)->count();
-
         }
 
         $data = [];
-        if ( ! empty($numbers)) {
+        if (!empty($numbers)) {
             foreach ($numbers as $number) {
                 $show = route('admin.phone-numbers.show', $number->uid);
 
                 if ($number->status == 'available') {
-                    $status = '<span class="badge badge-light-primary text-uppercase">'.__('locale.labels.available').'</span>';
+                    $status = '<span class="badge badge-light-primary text-uppercase">' . __('locale.labels.available') . '</span>';
                 } elseif ($number->status == 'assigned') {
-                    $status = '<span class="badge badge-light-success text-uppercase">'.__('locale.labels.assigned').'</span>';
+                    $status = '<span class="badge badge-light-success text-uppercase">' . __('locale.labels.assigned') . '</span>';
                 } else {
-                    $status = '<span class="badge badge-light-danger text-uppercase">'.__('locale.labels.expired').'</span>';
+                    $status = '<span class="badge badge-light-danger text-uppercase">' . __('locale.labels.expired') . '</span>';
                 }
 
                 if ($number->user->is_admin) {
@@ -141,8 +140,8 @@ class PhoneNumberController extends AdminBaseController
                 $nestedData['number']        = $number->number;
                 $nestedData['user_id']       = $assign_to;
                 $nestedData['price']         = "<div>
-                                                        <p class='text-bold-600'>".Tool::format_price($number->price, $number->currency->format)." </p>
-                                                        <p class='text-muted'>".$number->displayFrequencyTime()."</p>
+                                                        <p class='text-bold-600'>" . Tool::format_price($number->price, $number->currency->format) . " </p>
+                                                        <p class='text-muted'>" . $number->displayFrequencyTime() . "</p>
                                                    </div>";
                 $nestedData['status']        = $status;
                 $nestedData['capabilities']  = $number->getCapabilities();
@@ -150,20 +149,17 @@ class PhoneNumberController extends AdminBaseController
                 $nestedData['delete']        = $number->uid;
 
                 $data[] = $nestedData;
-
             }
         }
 
         $json_data = [
-                "draw"            => intval($request->input('draw')),
-                "recordsTotal"    => intval($totalData),
-                "recordsFiltered" => intval($totalFiltered),
-                "data"            => $data,
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data,
         ];
 
-        echo json_encode($json_data);
-        exit();
-
+        return response()->json($json_data);
     }
 
 
@@ -177,9 +173,9 @@ class PhoneNumberController extends AdminBaseController
         $this->authorize('create phone_numbers');
 
         $breadcrumbs = [
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url(config('app.admin_path')."/phone-numbers"), 'name' => __('locale.menu.Phone Numbers')],
-                ['name' => __('locale.phone_numbers.add_new_number')],
+            ['link' => url(config('app.admin_path') . "/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url(config('app.admin_path') . "/phone-numbers"), 'name' => __('locale.menu.Phone Numbers')],
+            ['name' => __('locale.phone_numbers.add_new_number')],
         ];
 
         $customers  = User::where('status', true)->get();
@@ -203,9 +199,9 @@ class PhoneNumberController extends AdminBaseController
         $this->authorize('edit phone_numbers');
 
         $breadcrumbs = [
-                ['link' => url(config('app.admin_path')."/dashboard"), 'name' => __('locale.menu.Dashboard')],
-                ['link' => url(config('app.admin_path')."/phone-numbers"), 'name' => __('locale.menu.Phone Numbers')],
-                ['name' => __('locale.phone_numbers.update_number')],
+            ['link' => url(config('app.admin_path') . "/dashboard"), 'name' => __('locale.menu.Dashboard')],
+            ['link' => url(config('app.admin_path') . "/phone-numbers"), 'name' => __('locale.menu.Phone Numbers')],
+            ['name' => __('locale.phone_numbers.update_number')],
         ];
 
 
@@ -219,10 +215,9 @@ class PhoneNumberController extends AdminBaseController
         }
 
         return redirect()->route('admin.phone-numbers.index')->with([
-                'status'  => 'error',
-                'message' => __('locale.phone_numbers.phone_number_capabilities_not_found'),
+            'status'  => 'error',
+            'message' => __('locale.phone_numbers.phone_number_capabilities_not_found'),
         ]);
-
     }
 
 
@@ -239,10 +234,9 @@ class PhoneNumberController extends AdminBaseController
         $this->numbers->store($request->input(), $numbers::billingCycleValues());
 
         return redirect()->route('admin.phone-numbers.index')->with([
-                'status'  => 'success',
-                'message' => __('locale.phone_numbers.number_successfully_added'),
+            'status'  => 'success',
+            'message' => __('locale.phone_numbers.number_successfully_added'),
         ]);
-
     }
 
 
@@ -258,8 +252,8 @@ class PhoneNumberController extends AdminBaseController
         $this->numbers->update($phone_number, $request->except('_method', '_token'), $phone_number::billingCycleValues());
 
         return redirect()->route('admin.phone-numbers.index')->with([
-                'status'  => 'success',
-                'message' => __('locale.phone_numbers.number_successfully_updated'),
+            'status'  => 'success',
+            'message' => __('locale.phone_numbers.number_successfully_updated'),
         ]);
     }
 
@@ -278,10 +272,9 @@ class PhoneNumberController extends AdminBaseController
         $this->numbers->destroy($phone_number);
 
         return response()->json([
-                'status'  => 'success',
-                'message' => __('locale.phone_numbers.number_successfully_deleted'),
+            'status'  => 'success',
+            'message' => __('locale.phone_numbers.number_successfully_deleted'),
         ]);
-
     }
 
     /**
@@ -306,8 +299,8 @@ class PhoneNumberController extends AdminBaseController
                 $this->numbers->batchDestroy($ids);
 
                 return response()->json([
-                        'status'  => 'success',
-                        'message' => __('locale.phone_numbers.phone_numbers_deleted'),
+                    'status'  => 'success',
+                    'message' => __('locale.phone_numbers.phone_numbers_deleted'),
                 ]);
 
             case 'available':
@@ -316,17 +309,15 @@ class PhoneNumberController extends AdminBaseController
                 $this->numbers->batchAvailable($ids);
 
                 return response()->json([
-                        'status'  => 'success',
-                        'message' => __('locale.phone_numbers.phone_numbers_available'),
+                    'status'  => 'success',
+                    'message' => __('locale.phone_numbers.phone_numbers_available'),
                 ]);
-
         }
 
         return response()->json([
-                'status'  => 'error',
-                'message' => __('locale.exceptions.invalid_action'),
+            'status'  => 'error',
+            'message' => __('locale.exceptions.invalid_action'),
         ]);
-
     }
 
 
@@ -354,9 +345,8 @@ class PhoneNumberController extends AdminBaseController
 
         $this->authorize('view phone_numbers');
 
-        $file_name = (new FastExcel($this->phoneNumbersGenerator()))->export(storage_path('Phone_Numbers_'.time().'.xlsx'));
+        $file_name = (new FastExcel($this->phoneNumbersGenerator()))->export(storage_path('Phone_Numbers_' . time() . '.xlsx'));
 
         return response()->download($file_name);
     }
-
 }
