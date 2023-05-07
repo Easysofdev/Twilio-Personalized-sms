@@ -143,17 +143,6 @@
                     @enderror
                 </div>
 
-                <div class="col-12">
-                    <div class="mb-1">
-                        <label for="custom_script">{{ __('locale.settings.custom_script') }}</label>
-                        <textarea id="custom_script" name="custom_script" class="form-control">{!! config('app.custom_script') !!}</textarea>
-                        @error('custom_script')
-                        <p><small class="text-danger">{{ $message }}</small></p>
-                        @enderror
-                    </div>
-                </div>
-
-
                 <div class="col-12 mt-2">
                     <button type="submit" class="btn btn-primary mb-1">
                         <i data-feather="save"></i> {{__('locale.buttons.save')}}
