@@ -164,7 +164,7 @@ class EloquentAccountRepository extends EloquentBaseRepository implements Accoun
             $permissions = collect(json_decode($user->customer->permissions, true));
         }
 
-        if ($permissions->isEmpty()) {
+        if (empty($permissions)) {
             return false;
         }
 
