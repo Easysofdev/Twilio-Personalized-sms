@@ -64,7 +64,10 @@ class NumberController extends CustomerBaseController
 
         $this->authorize('view_numbers');
 
-        $client = new Client("AC67929e55c61760d1bdbeada0e76d773a", "5f8223804ebfddedcd097ae96b21e9cd");
+        $sid = config('services.twilio.sid');
+        $token = config('services.twilio.auth_token');
+
+        $client = new Client($sid, $token);
 
         $params = [
             'excludeAllAddressRequired' => true,
@@ -106,7 +109,7 @@ class NumberController extends CustomerBaseController
                 $nestedData['capabilities'] = $number_capabilities;
 
                 $nestedData['buy_label']     = __('locale.labels.buy');
-                $nestedData['buy']           = route('customer.numbers.pay', $number->friendlyName);
+                $nestedData['buy']           = route('customer.numbers.search', $number->friendlyName);
 
                 $data[]                      = $nestedData;
             }
@@ -154,7 +157,10 @@ class NumberController extends CustomerBaseController
 
         $this->authorize('buy_numbers');
 
-        $client = new Client("AC67929e55c61760d1bdbeada0e76d773a", "5f8223804ebfddedcd097ae96b21e9cd");
+        $sid = config('services.twilio.sid');
+        $token = config('services.twilio.auth_token');
+
+        $client = new Client($sid, $token);
 
         $params = [
             'excludeAllAddressRequired' => true,
@@ -182,7 +188,7 @@ class NumberController extends CustomerBaseController
                 $nestedData['responsive_id'] = '';
                 $nestedData['buy']           = __('locale.labels.buy');
                 $nestedData['number']        = $number->friendlyName;
-                
+
                 $nestedData['checkout']      = route('customer.numbers.pay', $number->phoneNumber);
 
                 $number_capabilities  = '';
