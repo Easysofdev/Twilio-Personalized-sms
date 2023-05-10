@@ -108,16 +108,16 @@ Route::post('account/top-up/authorize-net', 'PaymentController@authorizeNetTopUp
 */
 
 Route::post('numbers/search', 'NumberController@search')->name('numbers.search');
-Route::get('numbers/buy', 'NumberController@buy')->name('numbers.buy');
-Route::post('numbers/available', 'NumberController@availableNumbers')->name('numbers.available_numbers');
-Route::post('numbers/release/{id}', 'NumberController@release')->name('numbers.release');
-Route::post('numbers/batch_action', 'NumberController@batchAction')->name('numbers.batch_action');
+// Route::get('numbers/buy', 'NumberController@buy')->name('numbers.buy');
+// Route::post('numbers/available', 'NumberController@availableNumbers')->name('numbers.available_numbers');
+// Route::post('numbers/release/{id}', 'NumberController@release')->name('numbers.release');
+// Route::post('numbers/batch_action', 'NumberController@batchAction')->name('numbers.batch_action');
 Route::resource('numbers', 'NumberController', [
         'only' => ['index'],
 ]);
 
-Route::get('numbers/{number}/pay', 'NumberController@pay')->name('numbers.pay');
-Route::post('numbers/{number}/pay', 'NumberController@payment');
+// Route::get('numbers/{number}/pay', 'NumberController@pay')->name('numbers.pay');
+// Route::post('numbers/{number}/pay', 'NumberController@payment');
 Route::any('numbers/{number}/success', 'PaymentController@successfulNumberPayment')->name('numbers.payment_success');
 Route::any('numbers/{number}/cancel', 'PaymentController@cancelledNumberPayment')->name('numbers.payment_cancel');
 Route::post('numbers/{number}/braintree', 'PaymentController@braintreeNumber')->name('numbers.braintree');

@@ -20,15 +20,12 @@
                 <div class="card">
                     <table class="table datatables-basic">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>{{ __('locale.labels.id') }}</th>
-                            <th>{{__('locale.labels.number')}} </th>
-                            <th>{{__('locale.plans.price')}}</th>
-                            <th>{{__('locale.labels.capabilities')}}</th>
-                            <th>{{__('locale.labels.actions')}}</th>
-                        </tr>
+                            <tr>
+                                <th>{{ __('locale.labels.id') }}</th>
+                                <th>{{ __('locale.labels.number') }} </th>
+                                <th>{{ __('locale.labels.capabilities') }}</th>
+                                <th>{{ __('locale.labels.actions') }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -60,7 +57,7 @@
 @section('page-script')
     {{-- Page js files --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             "use strict"
 
             // init list view datatable
@@ -72,46 +69,53 @@
                     "url": "{{ route('customer.numbers.available_numbers') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": {_token: "{{csrf_token()}}"}
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    }
                 },
-                "columns": [
-                    {"data": 'responsive_id', orderable: false, searchable: false},
-                    {"data": "uid"},
-                    {"data": "uid"},
-                    {"data": "number"},
-                    {"data": "price"},
-                    {"data": "capabilities", orderable: false, searchable: false},
-                    {"data": "action", orderable: false, searchable: false}
+                "columns": [{
+                        "data": 'responsive_id',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "number"
+                    },
+                    {
+                        "data": "capabilities",
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "action",
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
 
                 searchDelay: 1500,
-                columnDefs: [
-                    {
+                columnDefs: [{
                         // For Responsive
                         className: 'control',
                         orderable: false,
                         responsivePriority: 2,
                         targets: 0
                     },
-                    {
-                        targets: 1,
-                        visible: false
-                    },
-                    {
-                        targets: 2,
-                        visible: false
-                    },
+                    
                     {
                         // Actions
                         targets: -1,
                         title: '{{ __('locale.labels.actions') }}',
                         orderable: false,
-                        render: function (data, type, full) {
+                        render: function(data, type, full) {
 
                             return (
-                                '<a href="'+full['checkout']+'" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title=' + full['buy'] + '>' +
-                                feather.icons['shopping-cart'].toSvg({class: 'font-medium-4'}) +
-                                '</a>'
+                                '<button class="btn-secondary" data-bs-toggle="tooltip" data-placement="top" title=' +
+                                full['buy'] + '>' +
+                                feather.icons['dollar-sign'].toSvg({
+                                    class: 'font-medium-4'
+                                }) +
+                                'Buy Number</button>'
                             );
                         }
                     }
@@ -133,16 +137,18 @@
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
-                            header: function (row) {
+                            header: function(row) {
                                 let data = row.data();
                                 return 'Details of ' + data['number'];
                             }
                         }),
                         type: 'column',
-                        renderer: function (api, rowIdx, columns) {
-                            let data = $.map(columns, function (col) {
-                                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                                    ? '<tr data-dt-row="' +
+                        renderer: function(api, rowIdx, columns) {
+                            let data = $.map(columns, function(col) {
+                                return col.title !==
+                                    '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
                                     col.rowIdx +
                                     '" data-dt-column="' +
                                     col.columnIndex +
@@ -154,16 +160,22 @@
                                     '<td>' +
                                     col.data +
                                     '</td>' +
-                                    '</tr>'
-                                    : '';
+                                    '</tr>' :
+                                    '';
                             }).join('');
 
-                            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+                            return data ? $('<table class="table"/>').append('<tbody>' + data +
+                                '</tbody>') : false;
                         }
                     }
                 },
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
-                order: [[2, "desc"]],
+                aLengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100]
+                ],
+                order: [
+                    [2, "desc"]
+                ],
                 displayLength: 10,
             });
 

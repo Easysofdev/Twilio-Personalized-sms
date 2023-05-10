@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Twilio\Rest\Client;
 
 class NumberController extends CustomerBaseController
 {
@@ -63,72 +64,51 @@ class NumberController extends CustomerBaseController
 
         $this->authorize('view_numbers');
 
-        $columns = [
-            0 => 'responsive_id',
-            1 => 'uid',
-            2 => 'uid',
-            3 => 'number',
-            4 => 'price',
-            5 => 'status',
-            6 => 'capabilities',
-            7 => 'actions',
+        $client = new Client("AC67929e55c61760d1bdbeada0e76d773a", "5f8223804ebfddedcd097ae96b21e9cd");
+
+        $params = [
+            'excludeAllAddressRequired' => true,
+            'excludeLocalAddressRequired' => true,
+            'excludeForeignAddressRequired' => true,
+            'smsEnabled' => true,
         ];
 
-        $totalData = PhoneNumbers::where('user_id', Auth::user()->id)->count();
+        $search = $request->input('search.value');
+        if (!empty($search)) {
+            $params['contains'] = $search;
+        }
 
+        $numbers = $client->availablePhoneNumbers('US')
+            ->local
+            ->read($params);
+
+        $totalData = count($numbers);
         $totalFiltered = $totalData;
 
         $limit = $request->input('length');
         $start = $request->input('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir   = $request->input('order.0.dir');
 
-        if (empty($request->input('search.value'))) {
-            $numbers = PhoneNumbers::where('user_id', Auth::user()->id)->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-        } else {
-            $search = $request->input('search.value');
-
-            $numbers = PhoneNumbers::where('user_id', Auth::user()->id)->whereLike(['uid', 'number', 'price', 'status'], $search)
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-
-            $totalFiltered = PhoneNumbers::where('user_id', Auth::user()->id)->whereLike(['uid', 'number', 'price', 'status'], $search)->count();
-        }
+        $numbers = array_slice($numbers, $start, $limit);
 
         $data = [];
         if (!empty($numbers)) {
             foreach ($numbers as $number) {
 
-                $is_assigned = false;
-                if ($number->status == 'assigned') {
-                    $is_assigned = true;
-                    $status      = '<span class="badge bg-success text-uppercase">' . __('locale.labels.assigned') . '</span>';
-                } else {
-                    $status = '<span class="badge bg-danger text-uppercase">' . __('locale.labels.expired') . '</span>';
+                $nestedData['responsive_id'] = '';
+                $nestedData['number']        = $number->friendlyName;
+                $nestedData['status']        = '<span class="badge bg-success text-uppercase">' . __('locale.labels.available') . '</span>';
+
+                $number_capabilities  = '';
+                if ($number->capabilities->getMms()) {
+                    $number_capabilities .= '<span class="badge bg-primary text-uppercase me-1"><i data-feather="message-square" class="me-25"></i><span>' . __('locale.labels.sms') . '</span></span>';
                 }
 
+                $nestedData['capabilities'] = $number_capabilities;
 
-                $nestedData['responsive_id'] = '';
-                $nestedData['uid']           = $number->uid;
-                $nestedData['number']        = $number->number;
-                $nestedData['price']         = "<div>
-                                                        <p class='text-bold-600'>" . Tool::format_price($number->price, $number->currency->format) . " </p>
-                                                        <p class='text-muted'>" . $number->displayFrequencyTime() . "</p>
-                                                   </div>";
-                $nestedData['status']        = $status;
-                $nestedData['is_assigned']   = $is_assigned;
+                $nestedData['buy_label']     = __('locale.labels.buy');
+                $nestedData['buy']           = route('customer.numbers.pay', $number->friendlyName);
 
-                $nestedData['capabilities'] = $number->getCapabilities();
-
-                $nestedData['renew_label'] = __('locale.labels.renew');
-                $nestedData['renew']       = route('customer.numbers.pay', $number->uid);
-                $nestedData['release']     = __('locale.labels.release');
-                $data[]                    = $nestedData;
+                $data[]                      = $nestedData;
             }
         }
 
@@ -142,6 +122,7 @@ class NumberController extends CustomerBaseController
         echo json_encode($json_data);
         exit();
     }
+
 
     /**
      * show available numbers
@@ -173,56 +154,43 @@ class NumberController extends CustomerBaseController
 
         $this->authorize('buy_numbers');
 
-        $columns = [
-            0 => 'responsive_id',
-            1 => 'uid',
-            2 => 'uid',
-            3 => 'number',
-            4 => 'price',
-            5 => 'capabilities',
-            6 => 'actions',
+        $client = new Client("AC67929e55c61760d1bdbeada0e76d773a", "5f8223804ebfddedcd097ae96b21e9cd");
+
+        $params = [
+            'excludeAllAddressRequired' => true,
+            'excludeLocalAddressRequired' => true,
+            'excludeForeignAddressRequired' => true,
+            'smsEnabled' => true,
         ];
 
-        $totalData = PhoneNumbers::where('status', 'available')->count();
-
-        $totalFiltered = $totalData;
-
-        $limit = $request->input('length');
-        $start = $request->input('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir   = $request->input('order.0.dir');
-
-        if (empty($request->input('search.value'))) {
-            $numbers = PhoneNumbers::where('status', 'available')->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-        } else {
-            $search = $request->input('search.value');
-
-            $numbers = PhoneNumbers::where('status', 'available')->whereLike(['uid', 'number', 'price'], $search)
-                ->offset($start)
-                ->limit($limit)
-                ->orderBy($order, $dir)
-                ->get();
-
-            $totalFiltered = PhoneNumbers::where('status', 'available')->whereLike(['uid', 'number', 'price'], $search)->count();
+        $search = $request->input('search.value');
+        if (!empty($search)) {
+            $params['contains'] = $search;
         }
+
+        $numbers = $client->availablePhoneNumbers('US')
+            ->local
+            ->read($params);
+
+        $totalData = count($numbers);
+        $totalFiltered = $totalData;
 
         $data = [];
         if (!empty($numbers)) {
             foreach ($numbers as $number) {
 
                 $nestedData['responsive_id'] = '';
-                $nestedData['uid']           = $number->uid;
                 $nestedData['buy']           = __('locale.labels.buy');
-                $nestedData['number']        = $number->number;
-                $nestedData['price']         = "<div>
-                                                        <p class='text-bold-600'>" . Tool::format_price($number->price, $number->currency->format) . " </p>
-                                                        <p class='text-muted'>" . $number->displayFrequencyTime() . "</p>
-                                                   </div>";
-                $nestedData['checkout']      = route('customer.numbers.pay', $number->uid);
-                $nestedData['capabilities']  = $number->getCapabilities();
+                $nestedData['number']        = $number->friendlyName;
+                
+                $nestedData['checkout']      = route('customer.numbers.pay', $number->phoneNumber);
+
+                $number_capabilities  = '';
+                if ($number->capabilities->getMms()) {
+                    $number_capabilities .= '<span class="badge bg-primary text-uppercase me-1"><i data-feather="message-square" class="me-25"></i><span>' . __('locale.labels.sms') . '</span></span>';
+                }
+
+                $nestedData['capabilities'] = $number_capabilities;
                 $data[]                      = $nestedData;
             }
         }

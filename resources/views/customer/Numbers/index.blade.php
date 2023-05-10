@@ -18,24 +18,14 @@
         <div class="mb-3 mt-2">
             @can('view_keywords')
                 <div class="btn-group">
-                    <button
-                            class="btn btn-primary fw-bold dropdown-toggle"
-                            type="button"
-                            id="bulk_actions"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                    >
+                    <button class="btn btn-primary fw-bold dropdown-toggle" type="button" id="bulk_actions"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ __('locale.labels.actions') }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bulk_actions">
-                        <a class="dropdown-item bulk-release" href="#"><i data-feather="minus-square"></i> {{ __('locale.labels.release') }}</a>
+                        <a class="dropdown-item bulk-release" href="#"><i data-feather="minus-square"></i>
+                            {{ __('locale.labels.release') }}</a>
                     </div>
-                </div>
-            @endcan
-
-            @can('buy_numbers')
-                <div class="btn-group">
-                    <a href="{{route('customer.numbers.buy')}}" class="btn btn-success waves-light waves-effect fw-bold mx-1"> {{__('locale.phone_numbers.buy_number')}} <i data-feather="shopping-cart"></i></a>
                 </div>
             @endcan
         </div>
@@ -45,16 +35,13 @@
                 <div class="card">
                     <table class="table datatables-basic">
                         <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th>{{ __('locale.labels.id') }}</th>
-                            <th>{{__('locale.labels.number')}} </th>
-                            <th>{{__('locale.plans.price')}}</th>
-                            <th>{{__('locale.labels.status')}}</th>
-                            <th>{{__('locale.labels.capabilities')}}</th>
-                            <th>{{__('locale.labels.actions')}}</th>
-                        </tr>
+                            <tr>
+                                <th>{{ __('locale.labels.id') }}</th>
+                                <th>{{ __('locale.labels.number') }} </th>
+                                <th>{{ __('locale.labels.status') }}</th>
+                                <th>{{ __('locale.labels.capabilities') }}</th>
+                                <th>{{ __('locale.labels.actions') }}</th>
+                            </tr>
                         </thead>
                     </table>
                 </div>
@@ -86,14 +73,14 @@
 @section('page-script')
     {{-- Page js files --}}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             "use strict"
 
             //show response message
             function showResponseMessage(data) {
 
                 if (data.status === 'success') {
-                    toastr['success'](data.message, '{{__('locale.labels.success')}}!!', {
+                    toastr['success'](data.message, '{{ __('locale.labels.success') }}!!', {
                         closeButton: true,
                         positionClass: 'toast-top-right',
                         progressBar: true,
@@ -102,13 +89,14 @@
                     });
                     dataListView.draw();
                 } else {
-                    toastr['warning']("{{__('locale.exceptions.something_went_wrong')}}", '{{ __('locale.labels.warning') }}!', {
-                        closeButton: true,
-                        positionClass: 'toast-top-right',
-                        progressBar: true,
-                        newestOnTop: true,
-                        rtl: isRtl
-                    });
+                    toastr['warning']("{{ __('locale.exceptions.something_went_wrong') }}",
+                        '{{ __('locale.labels.warning') }}!', {
+                            closeButton: true,
+                            positionClass: 'toast-top-right',
+                            progressBar: true,
+                            newestOnTop: true,
+                            rtl: isRtl
+                        });
                 }
             }
 
@@ -124,81 +112,58 @@
                     "url": "{{ route('customer.numbers.search') }}",
                     "dataType": "json",
                     "type": "POST",
-                    "data": {_token: "{{csrf_token()}}"}
+                    "data": {
+                        _token: "{{ csrf_token() }}"
+                    },
                 },
-                "columns": [
-                    {"data": 'responsive_id', orderable: false, searchable: false},
-                    {"data": "uid"},
-                    {"data": "uid"},
-                    {"data": "number"},
-                    {"data": "price"},
-                    {"data": "status"},
-                    {"data": "capabilities", orderable: false, searchable: false},
-                    {"data": "action", orderable: false, searchable: false}
+                "columns": [{
+                        "data": 'responsive_id',
+                        orderable: false,
+                        searchable: false
+                    }, {
+                        "data": "number",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        "data": "status"
+                    },
+                    {
+                        "data": "capabilities",
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        "data": "action",
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
 
                 searchDelay: 1500,
-                columnDefs: [
-                    {
-                        // For Responsive
-                        className: 'control',
-                        orderable: false,
-                        responsivePriority: 2,
-                        targets: 0
-                    },
-                    {
-                        // For Checkboxes
-                        targets: 1,
-                        orderable: false,
-                        responsivePriority: 3,
-                        render: function (data) {
-                            return (
-                                '<div class="form-check"> <input class="form-check-input dt-checkboxes" type="checkbox" value="" id="' +
-                                data +
-                                '" /><label class="form-check-label" for="' +
-                                data +
-                                '"></label></div>'
-                            );
-                        },
-                        checkboxes: {
-                            selectAllRender:
-                                '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                            selectRow: true
-                        }
-                    },
-                    {
-                        targets: 2,
-                        visible: false
-                    },
-                    {
-                        // Actions
-                        targets: -1,
-                        title: '{{ __('locale.labels.actions') }}',
-                        orderable: false,
-                        render: function (data, type, full) {
-                            let $actions = '';
+                columnDefs: [{
+                    // For Responsive
+                    className: 'control',
+                    orderable: false,
+                    responsivePriority: 2,
+                    targets: 0
+                }, {
+                    // Actions
+                    targets: -1,
+                    title: '{{ __('locale.labels.actions') }}',
+                    orderable: false,
+                    render: function(data, type, full) {
 
-                            if (full['is_assigned']) {
-                                $actions += '<span class="action-release text-danger cursor-pointer" data-bs-toggle="tooltip" data-placement="top" title=' + full['release'] + ' data-id=' + full['uid'] + '>' +
-                                    feather.icons['minus-square'].toSvg({class: 'font-medium-4'}) +
-                                    '</span>'
-                            } else {
-                                $actions +=
-                                    '<span class="action-release text-danger cursor-pointer me-1" data-bs-toggle="tooltip" data-placement="top" title=' + full['release'] + ' data-id=' + full['uid'] + '>' +
-                                    feather.icons['minus-square'].toSvg({class: 'font-medium-4'}) +
-                                    '</span>' +
-                                    '<a href="' + full['renew'] + '" class="text-primary" data-bs-toggle="tooltip" data-placement="top" title=' + full['renew_label'] + '>' +
-                                    feather.icons['refresh-cw'].toSvg({class: 'font-medium-4'}) +
-                                    '</a>'
-                                ;
-                            }
-
-                            return (
-                                $actions
-                            );
-                        }
+                        return (
+                            '<div class="btn-group">' +
+                            '<button class="btn btn-success waves-light waves-effect fw-bold" data-bs-toggle="tooltip" data-placement="top" title=' +
+                            full['shopping-cart'] + '>' + 'Buy Number ' + feather.icons['shopping-cart']
+                            .toSvg({
+                                class: 'font-medium-4'
+                            }) + ' </button></div>'
+                        );
                     }
-                ],
+                }],
                 dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
 
                 language: {
@@ -216,16 +181,18 @@
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
-                            header: function (row) {
+                            header: function(row) {
                                 let data = row.data();
                                 return 'Details of ' + data['number'];
                             }
                         }),
                         type: 'column',
-                        renderer: function (api, rowIdx, columns) {
-                            let data = $.map(columns, function (col) {
-                                return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                                    ? '<tr data-dt-row="' +
+                        renderer: function(api, rowIdx, columns) {
+                            let data = $.map(columns, function(col) {
+                                return col.title !==
+                                    '' // ? Do not show row in modal popup if title is blank (for check box)
+                                    ?
+                                    '<tr data-dt-row="' +
                                     col.rowIdx +
                                     '" data-dt-column="' +
                                     col.columnIndex +
@@ -237,151 +204,24 @@
                                     '<td>' +
                                     col.data +
                                     '</td>' +
-                                    '</tr>'
-                                    : '';
+                                    '</tr>' :
+                                    '';
                             }).join('');
 
-                            return data ? $('<table class="table"/>').append('<tbody>' + data + '</tbody>') : false;
+                            return data ? $('<table class="table"/>').append('<tbody>' + data +
+                                '</tbody>') : false;
                         }
                     }
                 },
-                aLengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
-                select: {
-                    style: "multi"
-                },
-                order: [[2, "desc"]],
+                aLengthMenu: [
+                    [10, 20, 50, 100],
+                    [10, 20, 50, 100]
+                ],
+                order: [
+                    [2, "desc"]
+                ],
                 displayLength: 10,
             });
-
-
-            // On Delete
-            Table.delegate(".action-release", "click", function (e) {
-                e.stopPropagation();
-                let id = $(this).data('id');
-                Swal.fire({
-                    title: "{{ __('locale.labels.are_you_sure') }}",
-                    text: "{{ __('locale.labels.able_to_revert') }}",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: "{{ __('locale.labels.release') }}",
-                    customClass: {
-                        confirmButton: 'btn btn-primary',
-                        cancelButton: 'btn btn-outline-danger ms-1'
-                    },
-                    buttonsStyling: false,
-                }).then(function (result) {
-                    if (result.value) {
-                        $.ajax({
-                            url: "{{ url('/numbers/release')}}" + '/' + id,
-                            type: "POST",
-                            data: {
-                                _token: "{{csrf_token()}}"
-                            },
-                            success: function (data) {
-                                showResponseMessage(data);
-                            },
-                            error: function (reject) {
-                                if (reject.status === 422) {
-                                    let errors = reject.responseJSON.errors;
-                                    $.each(errors, function (key, value) {
-                                        toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
-                                    });
-                                } else {
-                                    toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                        closeButton: true,
-                                        positionClass: 'toast-top-right',
-                                        progressBar: true,
-                                        newestOnTop: true,
-                                        rtl: isRtl
-                                    });
-                                }
-                            }
-                        })
-                    }
-                })
-            });
-
-            //Bulk Release
-            $(".bulk-release").on('click', function (e) {
-
-                e.preventDefault();
-
-                Swal.fire({
-                    title: "{{__('locale.labels.are_you_sure')}}",
-                    text: "{{__('locale.phone_numbers.release_numbers')}}",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: "{{__('locale.labels.release_selected')}}",
-                    customClass: {
-                        confirmButton: 'btn btn-primary',
-                        cancelButton: 'btn btn-outline-danger ms-1'
-                    },
-                    buttonsStyling: false,
-                }).then(function (result) {
-                    if (result.value) {
-                        let number_ids = [];
-                        let rows_selected = dataListView.column(1).checkboxes.selected();
-
-                        $.each(rows_selected, function (index, rowId) {
-                            number_ids.push(rowId)
-                        });
-
-                        if (number_ids.length > 0) {
-
-                            $.ajax({
-                                url: "{{ route('customer.numbers.batch_action') }}",
-                                type: "POST",
-                                data: {
-                                    _token: "{{csrf_token()}}",
-                                    ids: number_ids
-                                },
-                                success: function (data) {
-                                    showResponseMessage(data);
-                                },
-                                error: function (reject) {
-                                    if (reject.status === 422) {
-                                        let errors = reject.responseJSON.errors;
-                                        $.each(errors, function (key, value) {
-                                            toastr['warning'](value[0], "{{__('locale.labels.attention')}}", {
-                                                closeButton: true,
-                                                positionClass: 'toast-top-right',
-                                                progressBar: true,
-                                                newestOnTop: true,
-                                                rtl: isRtl
-                                            });
-                                        });
-                                    } else {
-                                        toastr['warning'](reject.responseJSON.message, "{{__('locale.labels.attention')}}", {
-                                            closeButton: true,
-                                            positionClass: 'toast-top-right',
-                                            progressBar: true,
-                                            newestOnTop: true,
-                                            rtl: isRtl
-                                        });
-                                    }
-                                }
-                            })
-                        } else {
-                            toastr['warning']("{{ __('locale.labels.at_least_one_data') }}", "{{ __('locale.labels.attention') }}", {
-                                closeButton: true,
-                                positionClass: 'toast-top-right',
-                                progressBar: true,
-                                newestOnTop: true,
-                                rtl: isRtl
-                            });
-                        }
-
-                    }
-                })
-            });
-
-
         });
     </script>
 @endsection
