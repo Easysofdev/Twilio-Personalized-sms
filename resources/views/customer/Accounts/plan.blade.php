@@ -10,12 +10,12 @@
 @section('content')
     <section id="pricing-plan">
         <!-- title text and switch button -->
-        <div class="text-center">
+        {{-- <div class="text-center">
             <h1 class="mt-5">{{ __('locale.plans.pricing') }} {{ __('locale.menu.Plans') }}</h1>
             <p class="mb-2 pb-75">
                 {{ __('locale.description.plan_price') }}
             </p>
-        </div>
+        </div> --}}
         <!--/ title text and switch button -->
 
     </section>

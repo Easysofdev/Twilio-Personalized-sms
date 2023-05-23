@@ -302,6 +302,18 @@ class AppConfig extends Model
                                 'setting' => 'custom_script',
                                 'value'   => '',
                         ],
+                        [
+                                'setting' => 'per_unit_price',
+                                'value'   => '0.01',
+                        ],
+                        [
+                                'setting' => 'currency_format',
+                                'value' => '${PRICE}'
+                        ],
+                        [
+                                'setting' => 'currency_code',
+                                'value' => 'USD'
+                        ]
 
                 ];
         }
@@ -394,5 +406,31 @@ class AppConfig extends Model
                         'block_message_notification_email',
                         'block_message_notification_sms',
                 ];
+        }
+
+        /**
+         * Get option value
+         */
+        public static function getOption($key)
+        {
+                $option = AppConfig::where('setting', $key)->first();
+
+                if ($option) {
+                        return $option->value;
+                }
+
+                return null;
+        }
+
+        /**
+         * Get all settings as an object with dynamic properties.
+         *
+         * @return \stdClass
+         */
+        public static function getAllSettings(): \stdClass
+        {
+                $settings = self::pluck('value', 'setting')->toArray();
+
+                return (object) $settings;
         }
 }

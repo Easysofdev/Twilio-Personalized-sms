@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->boolean('status')->default(true);
             $table->text('image')->nullable();
-            $table->string('sms_unit')->nullable();
+            $table->string('sms_unit')->default('0');
             $table->boolean('is_admin')->default(false);
             $table->boolean('is_customer')->default(false);
             $table->string('active_portal')->nullable();

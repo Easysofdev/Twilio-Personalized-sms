@@ -38,8 +38,7 @@
                     <div class="card-content">
                         <div class="card-body">
 
-                            <form class="form form-vertical" action="{{ route('customer.messages.campaign_builder') }}"
-                                method="post">
+                            <form class="form form-vertical" action="{{ route('customer.sms.quick_send') }}" method="post">
                                 @csrf
                                 <div class="row">
 
@@ -171,6 +170,30 @@
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="col-12">
+                                        <p class="text-uppercase">{{ __('locale.labels.originator') }}</p>
+                                    </div>
+
+                                    @can('view_numbers')
+                                        <div class="col-12">
+                                            <div class="mb-1">
+                                                <label for="phone_number"
+                                                    class="form-label">{{ __('locale.menu.Phone Numbers') }}</label>
+
+                                                <div class="w-full">
+                                                    <select class="form-select select2" disabled id="phone_number"
+                                                        name="phone_number">
+                                                        @foreach ($phone_numbers as $number)
+                                                            <option value="{{ $number->number }}">
+                                                                {{ $number->number }} </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endcan
+
 
 
                                     <div class="col-12">
@@ -412,16 +435,6 @@
                 noCalendar: true,
                 dateFormat: "H:i",
                 defaultDate: "{{ date('H:i') }}",
-            });
-
-            $(".sender_id").on("click", function() {
-                $("#sender_id").prop("disabled", !this.checked);
-                $("#phone_number").prop("disabled", this.checked);
-            });
-
-            $(".phone_number").on("click", function() {
-                $("#phone_number").prop("disabled", !this.checked);
-                $("#sender_id").prop("disabled", this.checked);
             });
 
 

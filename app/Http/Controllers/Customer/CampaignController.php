@@ -93,16 +93,6 @@ class CampaignController extends CustomerBaseController
      */
     public function postQuickSend(Campaigns $campaign, QuickSendRequest $request): RedirectResponse
     {
-        if (Auth::user()->customer->activeSubscription()) {
-            $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
-            if (!$plan) {
-                return redirect()->route('customer.messages.send_message')->with([
-                    'status'  => 'error',
-                    'message' => 'Purchased plan is not active. Please contact support team.',
-                ]);
-            }
-        }
-
         $data = $this->campaigns->quickSend($campaign, $request->except('_token'));
 
         return redirect()->route('customer.reports.sent')->with([
@@ -200,7 +190,7 @@ class CampaignController extends CustomerBaseController
         if (Auth::user()->customer->activeSubscription()) {
             $plan = Plan::where('status', true)->find(Auth::user()->customer->activeSubscription()->plan_id);
             if (!$plan) {
-                return redirect()->route('customer.messages.send_message')->with([
+                return redirect()->route('customer.sms.quick_send')->with([
                     'status'  => 'error',
                     'message' => 'Purchased plan is not active. Please contact support team.',
                 ]);

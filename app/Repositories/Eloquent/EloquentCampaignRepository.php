@@ -69,18 +69,11 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         }
         $sms_type = $input['sms_type'];
 
-        $blacklist = Blacklists::where('user_id', $user->id)->where('number', $input['recipient'])->first();
+        $blacklist = Blacklists::where('user_id', $user->id)->where('number', $input['phone_number'])->first();
         if ($blacklist) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Number contain in blacklist',
-            ]);
-        }
-
-        if ($user->sms_unit == 0) {
-            return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_limit_exceed'),
+                'status'  => 'error',
+                'message' => 'Number contain in blacklist',
             ]);
         }
 
@@ -98,95 +91,43 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $capabilities_type = $sms_type;
             }
 
-            // Check the customer has permissions using sending servers and has his own sending servers
-            $sending_server = SendingServer::find($input['sending_server']);
-
-            if ( ! $sending_server) {
-                return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.campaigns.sending_server_not_available'),
-                ]);
-            }
-
-            if ($sending_server->{$db_sms_type} != 1) {
-                return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.campaigns.sending_server_not_available'),
-                ]);
-            }
-
             $sender_id = null;
-            if ($user->customer->getOption('sender_id_verification') == 'yes') {
-                if (isset($input['originator'])) {
-                    if ($input['originator'] == 'sender_id' && isset($input['sender_id'])) {
-                        $sender_id = $input['sender_id'];
-                    } elseif ($input['originator'] == 'phone_number' && isset($input['phone_number'])) {
-                        $sender_id = $input['phone_number'];
-                    }
-                } elseif (isset($input['sender_id'])) {
-                    $sender_id = $input['sender_id'];
-                }
+            $sender_id = $input['phone_number'];
 
-                $check_sender_id = Senderid::where('user_id', $user->id)->where('sender_id', $sender_id)->where('status', 'active')->first();
-                if ( ! $check_sender_id) {
-                    $number = PhoneNumbers::where('user_id', $user->id)->where('number', $sender_id)->where('status', 'assigned')->first();
+            $number = PhoneNumbers::where('user_id', $user->id)->where('number', $sender_id)->where('status', 'assigned')->first();
 
-                    if ( ! $number) {
-                        return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $sender_id]),
-                        ]);
-                    }
-
-                    $capabilities = str_contains($number->capabilities, $capabilities_type);
-
-                    if ( ! $capabilities) {
-                        return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $sender_id, 'type' => $db_sms_type]),
-                        ]);
-                    }
-
-                }
-            } elseif (isset($input['sender_id'])) {
-                $sender_id = $input['sender_id'];
+            if (!$number) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $sender_id]),
+                ]);
             }
+
+            $capabilities = str_contains($number->capabilities, $capabilities_type);
+
+            if (!$capabilities) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $sender_id, 'type' => $db_sms_type]),
+                ]);
+            }
+
 
             $message = null;
             if (isset($input['message'])) {
                 $message = $input['message'];
             }
 
-            if (isset($input['api_key']) || isset($input['exist_c_code'])) {
-                $country = Country::where('country_code', $input['country_code'])->first();
-            } else {
-                $country = Country::find($input['country_code']);
-            }
-            if ( ! $country) {
-                return response()->json([
-                        'status'  => 'error',
-                        'message' => "Permission to send an SMS has not been enabled for the region indicated by the 'To' number: ".$input['recipient'],
-                ]);
-            }
-
-            $country_code = $country->country_code;
-
-            $coverage = PlansCoverageCountries::where('country_id', $country->id)->where('plan_id', $user->customer->activeSubscription()->plan_id)->first();
-
-            if ( ! $coverage) {
-                return response()->json([
-                        'status'  => 'error',
-                        'message' => "Permission to send an SMS has not been enabled for the region indicated by the 'To' number: ".$input['recipient'],
-                ]);
-            }
-
-            $priceOption = json_decode($coverage->options, true);
-
             $price = 0;
 
             $sms_counter  = new SMSCounter();
             $message_data = $sms_counter->count($message);
             $sms_count    = $message_data->messages;
+
+            $priceOption = [
+                'plain_sms' => 10,
+                'mms_sms' => 20,
+            ];
 
             if ($sms_type == 'plain' || $sms_type == 'unicode') {
                 $unit_price = $priceOption['plain_sms'];
@@ -209,33 +150,27 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
                 if ($price > $user->sms_unit) {
                     return response()->json([
-                            'status'  => 'error',
-                            'message' => __('locale.campaigns.not_enough_balance', [
-                                    'current_balance' => $user->sms_unit,
-                                    'campaign_price'  => $price,
-                            ]),
+                        'status'  => 'error',
+                        'message' => __('locale.campaigns.not_enough_balance', [
+                            'current_balance' => $user->sms_unit,
+                            'campaign_price'  => $price,
+                        ]),
                     ]);
                 }
             }
 
             //prepared message data
-
-            $phone = ltrim($input['recipient'], $country_code);
+            $sending_server = SendingServer::first();
 
             $preparedData = [
-                    'user_id'        => $user->id,
-                    'phone'          => $country_code.$phone,
-                    'sender_id'      => $sender_id,
-                    'message'        => $message,
-                    'cost'           => $price,
-                    'sending_server' => $sending_server,
-                    'status'         => null,
-                    'sms_type'       => $sms_type,
+                'user_id'        => $user->id,
+                'sender_id'      => $sender_id,
+                'message'        => $message,
+                'cost'           => $price,
+                'sending_server' => $sending_server,
+                'status'         => null,
+                'sms_type'       => $sms_type,
             ];
-
-            if (isset($input['api_key'])) {
-                $preparedData['api_key'] = $input['api_key'];
-            }
 
             $data = null;
 
@@ -250,12 +185,11 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     $preparedData['media_url'] = Tool::uploadImage($input['mms_file']);
                 }
 
-
                 $data = $campaign->sendMMS($preparedData);
             }
 
             if (is_object($data)) {
-                if ( ! empty($data->status)) {
+                if (!empty($data->status)) {
                     if (substr_count($data->status, 'Delivered') == 1) {
                         if ($user->sms_unit != '-1') {
                             $remaining_balance = $user->sms_unit - $price;
@@ -263,34 +197,31 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                         }
 
                         return response()->json([
-                                'status'  => 'success',
-                                'data'    => $data,
-                                'message' => __('locale.campaigns.message_successfully_delivered'),
+                            'status'  => 'success',
+                            'data'    => $data,
+                            'message' => __('locale.campaigns.message_successfully_delivered'),
                         ]);
                     } else {
                         return response()->json([
-                                'status'  => 'info',
-                                'message' => $data->status,
-                                'data'    => $data,
+                            'status'  => 'info',
+                            'message' => $data->status,
+                            'data'    => $data,
                         ]);
                     }
                 }
             }
 
             return response()->json([
-                    'status'  => 'info',
-                    'message' => __('locale.exceptions.something_went_wrong'),
-                    'data'    => $data,
+                'status'  => 'info',
+                'message' => __('locale.exceptions.something_went_wrong'),
+                'data'    => $data,
             ]);
-
-
         }
 
         return response()->json([
-                'status'  => 'error',
-                'message' => __('locale.subscription.no_active_subscription'),
+            'status'  => 'error',
+            'message' => __('locale.subscription.no_active_subscription'),
         ]);
-
     }
 
 
@@ -305,8 +236,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         if (Auth::user()->sms_unit != '-1' && Auth::user()->sms_unit == 0) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_limit_exceed'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_limit_exceed'),
             ]);
         }
 
@@ -314,17 +245,17 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         //create campaign
         $new_campaign = Campaigns::create([
-                'user_id'       => Auth::user()->id,
-                'campaign_name' => $input['name'],
-                'message'       => $input['message'],
-                'sms_type'      => $sms_type,
-                'status'        => Campaigns::STATUS_NEW,
+            'user_id'       => Auth::user()->id,
+            'campaign_name' => $input['name'],
+            'message'       => $input['message'],
+            'sms_type'      => $sms_type,
+            'status'        => Campaigns::STATUS_NEW,
         ]);
 
-        if ( ! $new_campaign) {
+        if (!$new_campaign) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.exceptions.something_went_wrong'),
+                'status'  => 'error',
+                'message' => __('locale.exceptions.something_went_wrong'),
             ]);
         }
 
@@ -347,8 +278,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             $new_campaign->delete();
 
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_server_not_available'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_server_not_available'),
             ]);
         }
 
@@ -358,13 +289,13 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             if (isset($input['originator'])) {
                 if ($input['originator'] == 'sender_id') {
 
-                    if ( ! isset($input['sender_id'])) {
+                    if (!isset($input['sender_id'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
@@ -373,14 +304,14 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     if (is_array($sender_id) && count($sender_id) > 0) {
                         $invalid   = [];
                         $senderids = Senderid::where('user_id', Auth::user()->id)
-                                ->where('status', 'active')
-                                ->select('sender_id')
-                                ->cursor()
-                                ->pluck('sender_id')
-                                ->all();
+                            ->where('status', 'active')
+                            ->select('sender_id')
+                            ->cursor()
+                            ->pluck('sender_id')
+                            ->all();
 
                         foreach ($sender_id as $sender) {
-                            if ( ! in_array($sender, $senderids)) {
+                            if (!in_array($sender, $senderids)) {
                                 $invalid[] = $sender;
                             }
                         }
@@ -390,8 +321,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                             $new_campaign->delete();
 
                             return response()->json([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
                             ]);
                         }
                     } else {
@@ -399,19 +330,19 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 } else {
 
-                    if ( ! isset($input['phone_number'])) {
+                    if (!isset($input['phone_number'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.phone_numbers_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.phone_numbers_required'),
                         ]);
                     }
 
@@ -420,23 +351,23 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     if (is_array($sender_id) && count($sender_id) > 0) {
                         $type_supported = [];
                         PhoneNumbers::where('user_id', Auth::user()->id)
-                                ->where('status', 'assigned')
-                                ->cursor()
-                                ->reject(function ($number) use ($sender_id, &$type_supported, &$invalid, $capabilities_type) {
-                                    if (in_array($number->number, $sender_id) && ! str_contains($number->capabilities, $capabilities_type)) {
-                                        return $type_supported[] = $number->number;
-                                    }
+                            ->where('status', 'assigned')
+                            ->cursor()
+                            ->reject(function ($number) use ($sender_id, &$type_supported, &$invalid, $capabilities_type) {
+                                if (in_array($number->number, $sender_id) && !str_contains($number->capabilities, $capabilities_type)) {
+                                    return $type_supported[] = $number->number;
+                                }
 
-                                    return $sender_id;
-                                })->all();
+                                return $sender_id;
+                            })->all();
 
                         if (count($type_supported)) {
 
                             $new_campaign->delete();
 
                             return response()->json([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $type_supported[0], 'type' => $db_sms_type]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $type_supported[0], 'type' => $db_sms_type]),
                             ]);
                         }
                     } else {
@@ -444,8 +375,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 }
@@ -454,46 +385,46 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.sender_id.sender_id_required'),
+                    'status'  => 'error',
+                    'message' => __('locale.sender_id.sender_id_required'),
                 ]);
             }
         } else {
             if (isset($input['originator'])) {
                 if ($input['originator'] == 'sender_id') {
-                    if ( ! isset($input['sender_id'])) {
+                    if (!isset($input['sender_id'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
                     $sender_id = $input['sender_id'];
                 } else {
 
-                    if ( ! isset($input['phone_number'])) {
+                    if (!isset($input['phone_number'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.phone_numbers_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.phone_numbers_required'),
                         ]);
                     }
 
                     $sender_id = $input['phone_number'];
                 }
 
-                if ( ! is_array($sender_id) || count($sender_id) <= 0) {
+                if (!is_array($sender_id) || count($sender_id) <= 0) {
 
                     $new_campaign->delete();
 
                     return response()->json([
-                            'status'  => 'error',
-                            'message' => __('locale.sender_id.sender_id_required'),
+                        'status'  => 'error',
+                        'message' => __('locale.sender_id.sender_id_required'),
                     ]);
                 }
             }
@@ -507,8 +438,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             foreach ($sender_id as $id) {
 
                 $data = [
-                        'campaign_id' => $new_campaign->id,
-                        'sender_id'   => $id,
+                    'campaign_id' => $new_campaign->id,
+                    'sender_id'   => $id,
                 ];
 
                 if (isset($input['originator'])) {
@@ -527,8 +458,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             foreach ($contact_groups as $group) {
                 $total += $group->subscribersCount($group->cache);
                 CampaignsList::create([
-                        'campaign_id'     => $new_campaign->id,
-                        'contact_list_id' => $group->id,
+                    'campaign_id'     => $new_campaign->id,
+                    'contact_list_id' => $group->id,
                 ]);
             }
         }
@@ -575,12 +506,12 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
             foreach ($recipients->chunk(500) as $chunk) {
                 foreach ($chunk as $number) {
-                    $number    = $country_code.$number;
+                    $number    = $country_code . $number;
                     $numbers[] = [
-                            'campaign_id' => $new_campaign->id,
-                            'recipient'   => preg_replace("/\r/", "", $number),
-                            'created_at'  => Carbon::now(),
-                            'updated_at'  => Carbon::now(),
+                        'campaign_id' => $new_campaign->id,
+                        'recipient'   => preg_replace("/\r/", "", $number),
+                        'created_at'  => Carbon::now(),
+                        'updated_at'  => Carbon::now(),
                     ];
                 }
             }
@@ -592,18 +523,18 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             $new_campaign->delete();
 
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.contact_not_found'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.contact_not_found'),
             ]);
         }
 
         if (Auth::user()->sms_unit != '-1') {
             $coverage = PlansCoverageCountries::where('plan_id', $input['plan_id'])->first();
 
-            if ( ! $coverage) {
+            if (!$coverage) {
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => "Please add coverage on your plan.",
+                    'status'  => 'error',
+                    'message' => "Please add coverage on your plan.",
                 ]);
             }
 
@@ -638,19 +569,19 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.campaigns.not_enough_balance', [
-                                'current_balance' => $balance,
-                                'campaign_price'  => $price,
-                        ]),
+                    'status'  => 'error',
+                    'message' => __('locale.campaigns.not_enough_balance', [
+                        'current_balance' => $balance,
+                        'campaign_price'  => $price,
+                    ]),
                 ]);
             }
         }
 
         CampaignsSendingServer::create([
-                'campaign_id'       => $new_campaign->id,
-                'sending_server_id' => $sending_servers->id,
-                'fitness'           => 100,
+            'campaign_id'       => $new_campaign->id,
+            'sending_server_id' => $sending_servers->id,
+            'fitness'           => 100,
         ]);
 
 
@@ -662,10 +593,10 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             if (isset($input['create_template']) && $input['create_template'] == "true") {
                 // create sms template
                 Templates::create([
-                        'user_id' => Auth::user()->id,
-                        'name'    => $input['name'],
-                        'message' => $input['message'],
-                        'status'  => true,
+                    'user_id' => Auth::user()->id,
+                    'name'    => $input['name'],
+                    'message' => $input['message'],
+                    'status'  => true,
                 ]);
             }
         }
@@ -673,7 +604,7 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         // if schedule is available then check date, time and timezone
         if (isset($input['schedule']) && $input['schedule'] == "true") {
 
-            $schedule_date = $input['schedule_date'].' '.$input['schedule_time'];
+            $schedule_date = $input['schedule_date'] . ' ' . $input['schedule_time'];
             $schedule_time = Tool::systemTimeFromString($schedule_date, $input['timezone']);
 
             $new_campaign->timezone      = $input['timezone'];
@@ -687,7 +618,7 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             } else {
                 // working with recurring schedule
                 //if schedule time frequency is not one time then check frequency details
-                $recurring_date = $input['recurring_date'].' '.$input['recurring_time'];
+                $recurring_date = $input['recurring_date'] . ' ' . $input['recurring_time'];
                 $recurring_end  = Tool::systemTimeFromString($recurring_date, $input['timezone']);
 
                 $new_campaign->schedule_type = Campaigns::TYPE_RECURRING;
@@ -713,10 +644,10 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         //update cache
         $new_campaign->cache = json_encode([
-                'ContactCount'         => $total,
-                'DeliveredCount'       => 0,
-                'FailedDeliveredCount' => 0,
-                'NotDeliveredCount'    => 0,
+            'ContactCount'         => $total,
+            'DeliveredCount'       => 0,
+            'FailedDeliveredCount' => 0,
+            'NotDeliveredCount'    => 0,
         ]);
 
         if ($sms_type == 'mms') {
@@ -739,15 +670,15 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 }
 
                 return response()->json([
-                        'status'  => 'success',
-                        'message' => __('locale.campaigns.campaign_send_successfully'),
+                    'status'  => 'success',
+                    'message' => __('locale.campaigns.campaign_send_successfully'),
                 ]);
             } catch (Throwable $exception) {
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => $exception->getMessage(),
+                    'status'  => 'error',
+                    'message' => $exception->getMessage(),
                 ]);
             }
         }
@@ -755,8 +686,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         $new_campaign->delete();
 
         return response()->json([
-                'status'  => 'success',
-                'message' => __('locale.exceptions.something_went_wrong'),
+            'status'  => 'success',
+            'message' => __('locale.exceptions.something_went_wrong'),
         ]);
     }
 
@@ -771,17 +702,17 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
     {
         $user = User::where('status', true)->where('api_token', $input['api_key'])->first();
 
-        if ( ! $user) {
+        if (!$user) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.auth.user_not_exist'),
+                'status'  => 'error',
+                'message' => __('locale.auth.user_not_exist'),
             ]);
         }
 
         if ($user->sms_unit != '-1' && $user->sms_unit == 0) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_limit_exceed'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_limit_exceed'),
             ]);
         }
 
@@ -789,17 +720,17 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         //create campaign
         $new_campaign = Campaigns::create([
-                'user_id'       => $user->id,
-                'campaign_name' => $input['name'],
-                'message'       => $input['message'],
-                'sms_type'      => $sms_type,
-                'status'        => Campaigns::STATUS_NEW,
+            'user_id'       => $user->id,
+            'campaign_name' => $input['name'],
+            'message'       => $input['message'],
+            'sms_type'      => $sms_type,
+            'status'        => Campaigns::STATUS_NEW,
         ]);
 
-        if ( ! $new_campaign) {
+        if (!$new_campaign) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.exceptions.something_went_wrong'),
+                'status'  => 'error',
+                'message' => __('locale.exceptions.something_went_wrong'),
             ]);
         }
 
@@ -816,8 +747,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             $new_campaign->delete();
 
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_server_not_available'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_server_not_available'),
             ]);
         }
 
@@ -827,13 +758,13 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             if (isset($input['originator'])) {
                 if ($input['originator'] == 'sender_id') {
 
-                    if ( ! isset($input['sender_id'])) {
+                    if (!isset($input['sender_id'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
@@ -842,14 +773,14 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     if (is_array($sender_id) && count($sender_id) > 0) {
                         $invalid   = [];
                         $senderids = Senderid::where('user_id', $user->id)
-                                ->where('status', 'active')
-                                ->select('sender_id')
-                                ->cursor()
-                                ->pluck('sender_id')
-                                ->all();
+                            ->where('status', 'active')
+                            ->select('sender_id')
+                            ->cursor()
+                            ->pluck('sender_id')
+                            ->all();
 
                         foreach ($sender_id as $sender) {
-                            if ( ! in_array($sender, $senderids)) {
+                            if (!in_array($sender, $senderids)) {
                                 $invalid[] = $sender;
                             }
                         }
@@ -859,8 +790,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                             $new_campaign->delete();
 
                             return response()->json([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
                             ]);
                         }
                     } else {
@@ -868,16 +799,16 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 } else {
                     $new_campaign->delete();
 
                     return response()->json([
-                            'status'  => 'error',
-                            'message' => __('locale.sender_id.sender_id_required'),
+                        'status'  => 'error',
+                        'message' => __('locale.sender_id.sender_id_required'),
                     ]);
                 }
             } else {
@@ -885,20 +816,20 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.sender_id.sender_id_required'),
+                    'status'  => 'error',
+                    'message' => __('locale.sender_id.sender_id_required'),
                 ]);
             }
         } else {
             if (isset($input['originator'])) {
                 if ($input['originator'] == 'sender_id') {
-                    if ( ! isset($input['sender_id'])) {
+                    if (!isset($input['sender_id'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
@@ -907,18 +838,18 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     $new_campaign->delete();
 
                     return response()->json([
-                            'status'  => 'error',
-                            'message' => __('locale.sender_id.sender_id_required'),
+                        'status'  => 'error',
+                        'message' => __('locale.sender_id.sender_id_required'),
                     ]);
                 }
 
-                if ( ! is_array($sender_id) || count($sender_id) <= 0) {
+                if (!is_array($sender_id) || count($sender_id) <= 0) {
 
                     $new_campaign->delete();
 
                     return response()->json([
-                            'status'  => 'error',
-                            'message' => __('locale.sender_id.sender_id_required'),
+                        'status'  => 'error',
+                        'message' => __('locale.sender_id.sender_id_required'),
                     ]);
                 }
             }
@@ -934,8 +865,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             foreach ($sender_id as $id) {
 
                 $data = [
-                        'campaign_id' => $new_campaign->id,
-                        'sender_id'   => $id,
+                    'campaign_id' => $new_campaign->id,
+                    'sender_id'   => $id,
                 ];
 
                 if (isset($input['originator'])) {
@@ -954,8 +885,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             $new_campaign->delete();
 
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.contact_not_found'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.contact_not_found'),
             ]);
         }
         $numbers = [];
@@ -963,10 +894,10 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         foreach ($recipients as $number) {
             $numbers[] = [
-                    'campaign_id' => $new_campaign->id,
-                    'recipient'   => preg_replace("/\r/", "", $number),
-                    'created_at'  => Carbon::now(),
-                    'updated_at'  => Carbon::now(),
+                'campaign_id' => $new_campaign->id,
+                'recipient'   => preg_replace("/\r/", "", $number),
+                'created_at'  => Carbon::now(),
+                'updated_at'  => Carbon::now(),
             ];
         }
 
@@ -1004,26 +935,26 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.campaigns.not_enough_balance', [
-                                'current_balance' => $balance,
-                                'campaign_price'  => $price,
-                        ]),
+                    'status'  => 'error',
+                    'message' => __('locale.campaigns.not_enough_balance', [
+                        'current_balance' => $balance,
+                        'campaign_price'  => $price,
+                    ]),
                 ]);
             }
         }
 
         CampaignsSendingServer::create([
-                'campaign_id'       => $new_campaign->id,
-                'sending_server_id' => $sending_servers->id,
-                'fitness'           => 100,
+            'campaign_id'       => $new_campaign->id,
+            'sending_server_id' => $sending_servers->id,
+            'fitness'           => 100,
         ]);
 
 
         // if schedule is available then check date, time and timezone
         if (isset($input['schedule']) && $input['schedule'] == true) {
 
-            $schedule_date = $input['schedule_date'].' '.$input['schedule_time'];
+            $schedule_date = $input['schedule_date'] . ' ' . $input['schedule_time'];
 
             $schedule_time = Tool::systemTimeFromString($schedule_date, $input['timezone']);
 
@@ -1032,17 +963,16 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             $new_campaign->schedule_time = $schedule_time;
 
             $new_campaign->schedule_type = Campaigns::TYPE_ONETIME;
-
         } else {
             $new_campaign->status = Campaigns::STATUS_QUEUED;
         }
 
         //update cache
         $new_campaign->cache = json_encode([
-                'ContactCount'         => $total,
-                'DeliveredCount'       => 0,
-                'FailedDeliveredCount' => 0,
-                'NotDeliveredCount'    => 0,
+            'ContactCount'         => $total,
+            'DeliveredCount'       => 0,
+            'FailedDeliveredCount' => 0,
+            'NotDeliveredCount'    => 0,
         ]);
 
         if ($sms_type == 'voice') {
@@ -1068,15 +998,15 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 }
 
                 return response()->json([
-                        'status'  => 'success',
-                        'message' => __('locale.campaigns.campaign_send_successfully'),
+                    'status'  => 'success',
+                    'message' => __('locale.campaigns.campaign_send_successfully'),
                 ]);
             } catch (Throwable $exception) {
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => $exception->getMessage(),
+                    'status'  => 'error',
+                    'message' => $exception->getMessage(),
                 ]);
             }
         }
@@ -1084,8 +1014,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         $new_campaign->delete();
 
         return response()->json([
-                'status'  => 'success',
-                'message' => __('locale.exceptions.something_went_wrong'),
+            'status'  => 'success',
+            'message' => __('locale.exceptions.something_went_wrong'),
         ]);
     }
 
@@ -1102,8 +1032,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         if (Auth::user()->sms_unit != '-1' && Auth::user()->sms_unit == 0) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_limit_exceed'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_limit_exceed'),
             ]);
         }
 
@@ -1114,10 +1044,10 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         $form_data = json_decode($input['form_data'], true);
 
-        if (is_array($db_fields) && ! in_array('phone', $db_fields)) {
+        if (is_array($db_fields) && !in_array('phone', $db_fields)) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.filezone.phone_number_column_require'),
+                'status'  => 'error',
+                'message' => __('locale.filezone.phone_number_column_require'),
             ]);
         }
 
@@ -1128,24 +1058,24 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         if ($total == 0) {
 
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.contact_not_found'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.contact_not_found'),
             ]);
         }
 
         //create campaign
         $new_campaign = Campaigns::create([
-                'user_id'       => Auth::user()->id,
-                'campaign_name' => $form_data['name'],
-                'sms_type'      => $form_data['sms_type'],
-                'upload_type'   => 'file',
-                'status'        => Campaigns::STATUS_NEW,
+            'user_id'       => Auth::user()->id,
+            'campaign_name' => $form_data['name'],
+            'sms_type'      => $form_data['sms_type'],
+            'upload_type'   => 'file',
+            'status'        => Campaigns::STATUS_NEW,
         ]);
 
-        if ( ! $new_campaign) {
+        if (!$new_campaign) {
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.exceptions.something_went_wrong'),
+                'status'  => 'error',
+                'message' => __('locale.exceptions.something_went_wrong'),
             ]);
         }
 
@@ -1169,8 +1099,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             $new_campaign->delete();
 
             return response()->json([
-                    'status'  => 'error',
-                    'message' => __('locale.campaigns.sending_server_not_available'),
+                'status'  => 'error',
+                'message' => __('locale.campaigns.sending_server_not_available'),
             ]);
         }
 
@@ -1180,13 +1110,13 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
             if (isset($form_data['originator'])) {
                 if ($form_data['originator'] == 'sender_id') {
 
-                    if ( ! isset($form_data['sender_id'])) {
+                    if (!isset($form_data['sender_id'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
@@ -1195,14 +1125,14 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     if (is_array($sender_id) && count($sender_id) > 0) {
                         $invalid   = [];
                         $senderids = Senderid::where('user_id', Auth::user()->id)
-                                ->where('status', 'active')
-                                ->select('sender_id')
-                                ->cursor()
-                                ->pluck('sender_id')
-                                ->all();
+                            ->where('status', 'active')
+                            ->select('sender_id')
+                            ->cursor()
+                            ->pluck('sender_id')
+                            ->all();
 
                         foreach ($sender_id as $sender) {
-                            if ( ! in_array($sender, $senderids)) {
+                            if (!in_array($sender, $senderids)) {
                                 $invalid[] = $sender;
                             }
                         }
@@ -1212,8 +1142,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                             $new_campaign->delete();
 
                             return response()->json([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_invalid', ['sender_id' => $invalid[0]]),
                             ]);
                         }
                     } else {
@@ -1221,19 +1151,19 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 } else {
 
-                    if ( ! isset($form_data['phone_number'])) {
+                    if (!isset($form_data['phone_number'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.phone_numbers_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.phone_numbers_required'),
                         ]);
                     }
 
@@ -1242,23 +1172,23 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     if (is_array($sender_id) && count($sender_id) > 0) {
                         $type_supported = [];
                         PhoneNumbers::where('user_id', Auth::user()->id)
-                                ->where('status', 'assigned')
-                                ->cursor()
-                                ->reject(function ($number) use ($sender_id, &$type_supported, &$invalid, $capabilities_type) {
-                                    if (in_array($number->number, $sender_id) && ! str_contains($number->capabilities, $capabilities_type)) {
-                                        return $type_supported[] = $number->number;
-                                    }
+                            ->where('status', 'assigned')
+                            ->cursor()
+                            ->reject(function ($number) use ($sender_id, &$type_supported, &$invalid, $capabilities_type) {
+                                if (in_array($number->number, $sender_id) && !str_contains($number->capabilities, $capabilities_type)) {
+                                    return $type_supported[] = $number->number;
+                                }
 
-                                    return $sender_id;
-                                })->all();
+                                return $sender_id;
+                            })->all();
 
                         if (count($type_supported)) {
 
                             $new_campaign->delete();
 
                             return response()->json([
-                                    'status'  => 'error',
-                                    'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $type_supported[0], 'type' => $db_sms_type]),
+                                'status'  => 'error',
+                                'message' => __('locale.sender_id.sender_id_sms_capabilities', ['sender_id' => $type_supported[0], 'type' => $db_sms_type]),
                             ]);
                         }
                     } else {
@@ -1266,8 +1196,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
                 }
@@ -1276,46 +1206,46 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.sender_id.sender_id_required'),
+                    'status'  => 'error',
+                    'message' => __('locale.sender_id.sender_id_required'),
                 ]);
             }
         } else {
             if (isset($form_data['originator'])) {
                 if ($form_data['originator'] == 'sender_id') {
-                    if ( ! isset($form_data['sender_id'])) {
+                    if (!isset($form_data['sender_id'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.sender_id_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.sender_id_required'),
                         ]);
                     }
 
                     $sender_id = $form_data['sender_id'];
                 } else {
 
-                    if ( ! isset($form_data['phone_number'])) {
+                    if (!isset($form_data['phone_number'])) {
 
                         $new_campaign->delete();
 
                         return response()->json([
-                                'status'  => 'error',
-                                'message' => __('locale.sender_id.phone_numbers_required'),
+                            'status'  => 'error',
+                            'message' => __('locale.sender_id.phone_numbers_required'),
                         ]);
                     }
 
                     $sender_id = $form_data['phone_number'];
                 }
 
-                if ( ! is_array($sender_id) || count($sender_id) <= 0) {
+                if (!is_array($sender_id) || count($sender_id) <= 0) {
 
                     $new_campaign->delete();
 
                     return response()->json([
-                            'status'  => 'error',
-                            'message' => __('locale.sender_id.sender_id_required'),
+                        'status'  => 'error',
+                        'message' => __('locale.sender_id.sender_id_required'),
                     ]);
                 }
             }
@@ -1326,8 +1256,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         foreach ($sender_id as $id) {
             CampaignsSenderid::create([
-                    'campaign_id' => $new_campaign->id,
-                    'sender_id'   => $id,
+                'campaign_id' => $new_campaign->id,
+                'sender_id'   => $id,
             ]);
         }
 
@@ -1335,10 +1265,10 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         if (Auth::user()->sms_unit != '-1') {
             $coverage = PlansCoverageCountries::where('plan_id', $form_data['plan_id'])->first();
 
-            if ( ! $coverage) {
+            if (!$coverage) {
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => "Please add coverage on your plan.",
+                    'status'  => 'error',
+                    'message' => "Please add coverage on your plan.",
                 ]);
             }
 
@@ -1362,26 +1292,26 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => __('locale.campaigns.not_enough_balance', [
-                                'current_balance' => $balance,
-                                'campaign_price'  => $price,
-                        ]),
+                    'status'  => 'error',
+                    'message' => __('locale.campaigns.not_enough_balance', [
+                        'current_balance' => $balance,
+                        'campaign_price'  => $price,
+                    ]),
                 ]);
             }
         }
 
         CampaignsSendingServer::create([
-                'campaign_id'       => $new_campaign->id,
-                'sending_server_id' => $sending_servers->id,
-                'fitness'           => 100,
+            'campaign_id'       => $new_campaign->id,
+            'sending_server_id' => $sending_servers->id,
+            'fitness'           => 100,
         ]);
 
 
         // if schedule is available then check date, time and timezone
         if (isset($form_data['schedule']) && $form_data['schedule'] == "true") {
 
-            $schedule_date = $form_data['schedule_date'].' '.$form_data['schedule_time'];
+            $schedule_date = $form_data['schedule_date'] . ' ' . $form_data['schedule_time'];
             $schedule_time = Tool::systemTimeFromString($schedule_date, $form_data['timezone']);
 
             $new_campaign->timezone      = $form_data['timezone'];
@@ -1395,10 +1325,10 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
 
         //update cache
         $new_campaign->cache = json_encode([
-                'ContactCount'         => $total,
-                'DeliveredCount'       => 0,
-                'FailedDeliveredCount' => 0,
-                'NotDeliveredCount'    => 0,
+            'ContactCount'         => $total,
+            'DeliveredCount'       => 0,
+            'FailedDeliveredCount' => 0,
+            'NotDeliveredCount'    => 0,
         ]);
 
         if ($form_data['sms_type'] == 'voice') {
@@ -1421,75 +1351,71 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
                     dispatch(new ScheduleBatchJob(Auth::user()->id, $new_campaign->id, $collection, $db_fields))->delay(now()->addMinutes($delay_minutes));
 
                     return response()->json([
-                            'status'  => 'success',
-                            'message' => __('locale.campaigns.campaign_successfully_imported_in_background'),
+                        'status'  => 'success',
+                        'message' => __('locale.campaigns.campaign_successfully_imported_in_background'),
                     ]);
-
                 }
 
                 $batch_list = [];
                 Tool::resetMaxExecutionTime();
                 $collection->chunk(5000)
-                        ->each(function ($lines) use ($new_campaign, &$batch_list, $db_fields) {
-                            $batch_list[] = new ImportCampaign(Auth::user()->id, $new_campaign->id, $lines, $db_fields);
-                        });
+                    ->each(function ($lines) use ($new_campaign, &$batch_list, $db_fields) {
+                        $batch_list[] = new ImportCampaign(Auth::user()->id, $new_campaign->id, $lines, $db_fields);
+                    });
 
-                $import_name = 'ImportCampaigns_'.date('Ymdhms');
+                $import_name = 'ImportCampaigns_' . date('Ymdhms');
 
                 $import_job = ImportJobHistory::create([
-                        'name'      => $import_name,
-                        'import_id' => $new_campaign->uid,
-                        'type'      => 'import_campaign',
-                        'status'    => 'processing',
-                        'options'   => json_encode(['status' => 'processing', 'message' => 'Import campaign are running']),
-                        'batch_id'  => null,
+                    'name'      => $import_name,
+                    'import_id' => $new_campaign->uid,
+                    'type'      => 'import_campaign',
+                    'status'    => 'processing',
+                    'options'   => json_encode(['status' => 'processing', 'message' => 'Import campaign are running']),
+                    'batch_id'  => null,
                 ]);
 
                 $batch = Bus::batch($batch_list)
-                        ->then(function (Batch $batch) use ($new_campaign, $import_name, $import_job) {
-                            $new_campaign->processing();
-                            $new_campaign->update(['batch_id' => $batch->id]);
-                            $import_job->update(['batch_id' => $batch->id]);
-                        })
-                        ->catch(function (Batch $batch, Throwable $e) {
-                            $import_history = ImportJobHistory::where('batch_id', $batch->id)->first();
-                            if ($import_history) {
-                                $import_history->status  = 'failed';
-                                $import_history->options = json_encode(['status' => 'failed', 'message' => $e->getMessage()]);
-                                $import_history->save();
-                            }
+                    ->then(function (Batch $batch) use ($new_campaign, $import_name, $import_job) {
+                        $new_campaign->processing();
+                        $new_campaign->update(['batch_id' => $batch->id]);
+                        $import_job->update(['batch_id' => $batch->id]);
+                    })
+                    ->catch(function (Batch $batch, Throwable $e) {
+                        $import_history = ImportJobHistory::where('batch_id', $batch->id)->first();
+                        if ($import_history) {
+                            $import_history->status  = 'failed';
+                            $import_history->options = json_encode(['status' => 'failed', 'message' => $e->getMessage()]);
+                            $import_history->save();
+                        }
+                    })
+                    ->finally(function (Batch $batch) use ($new_campaign, $data) {
+                        $import_history = ImportJobHistory::where('batch_id', $batch->id)->first();
+                        if ($import_history) {
+                            $import_history->status  = 'finished';
+                            $import_history->options = json_encode(['status' => 'finished', 'message' => 'Import campaign was successfully imported.']);
+                            $import_history->save();
+                            $new_campaign->delivered();
+                        }
 
-                        })
-                        ->finally(function (Batch $batch) use ($new_campaign, $data) {
-                            $import_history = ImportJobHistory::where('batch_id', $batch->id)->first();
-                            if ($import_history) {
-                                $import_history->status  = 'finished';
-                                $import_history->options = json_encode(['status' => 'finished', 'message' => 'Import campaign was successfully imported.']);
-                                $import_history->save();
-                                $new_campaign->delivered();
-                            }
-
-                            $data->delete();
-                            //send event notification remaining
-                        })
-                        ->name($import_name)
-                        ->allowFailures(false)
-                        ->dispatch();
+                        $data->delete();
+                        //send event notification remaining
+                    })
+                    ->name($import_name)
+                    ->allowFailures(false)
+                    ->dispatch();
 
                 $new_campaign->update(['batch_id' => $batch->id]);
 
                 return response()->json([
-                        'status'  => 'success',
-                        'message' => __('locale.campaigns.campaign_successfully_imported_in_background'),
+                    'status'  => 'success',
+                    'message' => __('locale.campaigns.campaign_successfully_imported_in_background'),
                 ]);
-
-
             } catch (Throwable $exception) {
                 $new_campaign->delete();
 
                 return response()->json([
-                        'status'  => 'error',
-                        'message' => $exception->getMessage(),
+                    'status'  => 'error',
+                    'message' => $exception->getMessage(),
                 ]);
             }
         }
@@ -1497,8 +1423,8 @@ class EloquentCampaignRepository extends EloquentBaseRepository implements Campa
         $new_campaign->delete();
 
         return response()->json([
-                'status'  => 'error',
-                'message' => __('locale.exceptions.something_went_wrong'),
+            'status'  => 'error',
+            'message' => __('locale.exceptions.something_went_wrong'),
         ]);
     }
 

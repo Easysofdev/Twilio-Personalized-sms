@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use App\Exceptions\GeneralException;
+use App\Models\AppConfig;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Repositories\Contracts\AccountRepository;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,8 @@ class EloquentAccountRepository extends EloquentBaseRepository implements Accoun
      * @var UserRepository
      */
     protected $users;
+
+
 
     /**
      * EloquentUserRepository constructor.
@@ -276,10 +279,11 @@ class EloquentAccountRepository extends EloquentBaseRepository implements Accoun
 
         if ($paymentMethod) {
             $credentials = json_decode($paymentMethod->options);
+            $appConfigs = AppConfig::getAllSettings();
 
             $item_name     = 'Top up sms unit';
-            $price         = $input['sms_unit'] * auth()->user()->customer->subscription->plan->getOption('per_unit_price');
-            $currency_code = auth()->user()->customer->subscription->plan->currency->code;
+            $price         = $input['sms_unit'] * $appConfigs->per_unit_price;
+            $currency_code = $appConfigs->currency_code;
 
 
             switch ($paymentMethod->type) {

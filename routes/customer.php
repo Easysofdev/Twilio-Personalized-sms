@@ -95,8 +95,6 @@ Route::resource('senderid', 'SenderIDController', [
 Route::any('account/top-up/success', 'PaymentController@successfulTopUpPayment')->name('top_up.payment_success');
 Route::any('account/top-up/cancel', 'PaymentController@cancelledTopUpPayment')->name('top_up.payment_cancel');
 Route::any('account/top-up/fail', 'PaymentController@failedTopUpPayment')->name('top_up.payment_fail');
-Route::post('account/top-up/braintree', 'PaymentController@braintreeTopUp')->name('top_up.braintree');
-Route::post('account/top-up/authorize-net', 'PaymentController@authorizeNetTopUp')->name('top_up.authorize_net');
 
 /*
 |--------------------------------------------------------------------------
@@ -230,8 +228,8 @@ Route::get('invoices/{invoice}/print', 'InvoiceController@print')->name('invoice
 |
 */
 
-Route::prefix('messages')->name('messages.')->group(function () {
-        Route::get('/send', 'CampaignController@quickSend')->name('send_message');
+Route::prefix('messages')->name('sms.')->group(function () {
+        Route::get('/send', 'CampaignController@quickSend')->name('quick_send');
         Route::post('/send', 'CampaignController@postQuickSend');
         Route::get('/campaign-builder', 'CampaignController@campaignBuilder')->name('campaign_builder');
         Route::get('/create-campaign', 'CampaignController@createCampaign')->name('get_create_campaign');

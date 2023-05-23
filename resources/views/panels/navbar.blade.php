@@ -3,9 +3,7 @@
         data-nav="brand-center">
         <div class="navbar-header d-xl-block d-none">
             <ul class="nav navbar-nav">
-                @if (Auth::user()->active_portal == 'customer' &&
-                        Auth::user()->is_customer == 1 &&
-                        Auth::user()->customer->activeSubscription())
+                @if (Auth::user()->active_portal == 'customer' && Auth::user()->is_customer == 1)
                     <li class="nav-item"><a class="navbar-brand" href="{{ route('user.home') }}">
                             <span class="brand-logo"><img src="{{ asset(config('app.logo')) }}" alt="app logo" /></span>
                         </a>
@@ -96,7 +94,8 @@
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span
                                                     class="fw-bolder">{{ __('locale.labels.you_have_new_user') }}</p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
                                         </div>
                                     @break
 
@@ -111,7 +110,8 @@
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span
                                                     class="fw-bolder">{{ __('locale.labels.you_have_new_subscription') }}</p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
                                         </div>
                                     @break
 
@@ -126,7 +126,8 @@
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span
                                                     class="fw-bolder">{{ __('locale.labels.new_sender_id_notification') }}</p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
                                         </div>
                                     @break
 
@@ -140,7 +141,8 @@
 
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span class="fw-bolder">New Number sales</span></p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
                                         </div>
                                     @break
 
@@ -154,7 +156,8 @@
 
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span class="fw-bolder">New Keyword sales</span></p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
                                         </div>
                                     @break
 
@@ -168,7 +171,8 @@
 
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span class="fw-bolder">New Inbox Message</span></p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 30) }}</small>
                                         </div>
                                     @break
 
@@ -182,7 +186,8 @@
 
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span class="fw-bolder">Subscription Expired!</span></p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 60) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 60) }}</small>
                                         </div>
                                     @break
 
@@ -196,7 +201,8 @@
 
                                         <div class="list-item-body flex-grow-1">
                                             <p class="media-heading"><span class="fw-bolder">SMS Unit Running Low!</span></p>
-                                            <small class="notification-text"> {{ \Illuminate\Support\Str::limit($value->message, 60) }}</small>
+                                            <small class="notification-text">
+                                                {{ \Illuminate\Support\Str::limit($value->message, 60) }}</small>
                                         </div>
                                     @break
                                 @endswitch
@@ -217,9 +223,7 @@
         </li>
 
 
-        @if (Auth::user()->active_portal == 'customer' &&
-                Auth::user()->is_customer == 1 &&
-                Auth::user()->customer->activeSubscription())
+        @if (Auth::user()->active_portal == 'customer' && Auth::user()->is_customer == 1)
             <li class="nav-item balance-top-up">
                 <div class="show-balance">
                     <span class="show-balance-text">{{ __('locale.labels.balance') }}</span>

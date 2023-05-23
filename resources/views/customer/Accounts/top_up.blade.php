@@ -1,6 +1,9 @@
 @extends('layouts/contentLayoutMaster')
 
 @section('title', __('locale.labels.top_up'))
+@php
+    $appConfig = new App\Models\AppConfig();
+@endphp
 
 @section('content')
     <!-- Basic Vertical form layout section start -->
@@ -10,7 +13,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title"> {{__('locale.customer.add_unit_to_your_account')}} </h4>
+                        <h4 class="card-title"> {{ __('locale.customer.add_unit_to_your_account') }} </h4>
                     </div>
                     <div class="card-content">
                         <div class="card-body">
@@ -25,13 +28,20 @@
 
                                             <div class="col-12">
                                                 <div class="mb-1">
-                                                    <label for="add_unit" class="form-label required">{{__('locale.labels.per_unit_price')}} = {{ Auth::user()->customer->subscription->plan->getOption('per_unit_price') }} {{ str_replace('{PRICE}', '', Auth::user()->customer->subscription->plan->currency->format) }}</label>
+                                                    <label for="add_unit"
+                                                        class="form-label required">{{ __('locale.labels.per_unit_price') }}
+                                                        = {{ $appConfig->getOption('per_unit_price') }}
+                                                        {{ str_replace('{PRICE}', '', $appConfig->currency_format) }}
+                                                    </label>
                                                     <div class="input-group input-group-merge mb-2">
-                                                        <input type="text" id="add_unit" class="form-control @error('add_unit') is-invalid @enderror" name="add_unit" required>
-                                                        <span class="input-group-text update-price">0 {{ str_replace('{PRICE}', '', Auth::user()->customer->subscription->plan->currency->format) }}</span>
+                                                        <input type="text" id="add_unit"
+                                                            class="form-control @error('add_unit') is-invalid @enderror"
+                                                            name="add_unit" required>
+                                                        <span class="input-group-text update-price">0
+                                                            {{ str_replace('{PRICE}', '', $appConfig->currency_format) }}</span>
 
                                                         @error('add_unit')
-                                                        <p><small class="text-danger">{{ $message }}</small></p>
+                                                            <p><small class="text-danger">{{ $message }}</small></p>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -40,7 +50,7 @@
 
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-primary mb-1">
-                                                <i data-feather="shopping-cart"></i> {{__('locale.labels.checkout')}}
+                                                <i data-feather="shopping-cart"></i> {{ __('locale.labels.checkout') }}
                                             </button>
                                         </div>
 
@@ -79,11 +89,11 @@
 
         function get_price() {
             let total_unit = $get_price[0].value;
-            let total_price = total_unit * "{{ Auth::user()->customer->subscription->plan->getOption('per_unit_price') }}";
-            $('.update-price').text(Math.ceil(total_price) + " {{ str_replace('{PRICE}', '', Auth::user()->customer->subscription->plan->currency->format)}}")
+            let total_price = total_unit * "{{ $appConfig->per_unit_price }}";
+            $('.update-price').text(Math.ceil(total_price) +
+                " {{ str_replace('{PRICE}', '', $appConfig->currency_format) }}")
         }
 
         $get_price.keyup(get_price);
-
     </script>
 @endsection

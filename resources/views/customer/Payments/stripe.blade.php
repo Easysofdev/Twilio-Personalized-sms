@@ -15,9 +15,10 @@
         let sessionId = "{{ $session_id }}";
 
         if (sessionId) {
-            stripe.redirectToCheckout({sessionId: sessionId});
+            stripe.redirectToCheckout({
+                sessionId: sessionId
+            });
         }
-
     </script>
 
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Admin;
+use App\Models\AppConfig;
 use App\Models\Customer;
 use App\Models\User;
 use App\Repositories\Contracts\AccountRepository;
@@ -54,7 +55,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-
+use Illuminate\Support\Facades\View;
 
 /**
  * @method where(Closure $param)
@@ -214,5 +215,8 @@ class AppServiceProvider extends ServiceProvider
 
             return $this;
         });
+
+        // Share all app config to views
+        View::share('appConfig', AppConfig::getAllSettings());
     }
 }

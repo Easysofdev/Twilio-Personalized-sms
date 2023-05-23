@@ -32,7 +32,7 @@
 
 <!-- BEGIN: Body-->
 @isset($configData['mainLayoutType'])
-    @extends($configData['mainLayoutType'] === 'horizontal' ? 'layouts.horizontalLayoutMaster' : 'layouts.verticalLayoutMaster')
+    @extends('layouts.verticalLayoutMaster')
 @endisset
 @if (Helper::app_config('custom_script') != '')
     {!! Helper::app_config('custom_script') !!}

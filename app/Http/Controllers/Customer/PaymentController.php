@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use App\Models\Invoices;
 use App\Models\Keywords;
 use App\Models\Notifications;
@@ -38,85 +39,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * successful sender id purchase
-     *
-     * @param  Senderid  $senderid
-     * @param  Request  $request
-     *
-     * @return RedirectResponse
-     */
-    public function successfulSenderIDPayment(Senderid $senderid, Request $request): RedirectResponse
-    {
-        $payment_method = Session::get('payment_method');
-
-        switch ($payment_method) {
-
-            case 'stripe':
-                $paymentMethod = PaymentMethods::where('status', true)->where('type', 'stripe')->first();
-                if ($payment_method) {
-                    $credentials = json_decode($paymentMethod->options);
-                    $secret_key  = $credentials->secret_key;
-                    $session_id  = Session::get('session_id');
-
-                    $stripe = new StripeClient($secret_key);
-
-                    try {
-                        $response = $stripe->checkout->sessions->retrieve($session_id);
-
-                        if ($response->payment_status == 'paid') {
-
-                            $invoice = Invoices::create([
-                                'user_id'        => $senderid->user_id,
-                                'currency_id'    => $senderid->currency_id,
-                                'payment_method' => $paymentMethod->id,
-                                'amount'         => $senderid->price,
-                                'type'           => Invoices::TYPE_SENDERID,
-                                'description'    => __('locale.sender_id.payment_for_sender_id') . ' ' . $senderid->sender_id,
-                                'transaction_id' => $response->payment_intent,
-                                'status'         => Invoices::STATUS_PAID,
-                            ]);
-
-                            if ($invoice) {
-                                $current                   = Carbon::now();
-                                $senderid->validity_date   = $current->add($senderid->frequency_unit, $senderid->frequency_amount);
-                                $senderid->status          = 'active';
-                                $senderid->payment_claimed = true;
-                                $senderid->save();
-
-                                $this->createNotification('senderid', $senderid->sender_id, User::find($senderid->user_id)->displayName());
-
-                                return redirect()->route('customer.senderid.index')->with([
-                                    'status'  => 'success',
-                                    'message' => __('locale.payment_gateways.payment_successfully_made'),
-                                ]);
-                            }
-
-                            return redirect()->route('customer.senderid.pay', $senderid->uid)->with([
-                                'status'  => 'error',
-                                'message' => __('locale.exceptions.something_went_wrong'),
-                            ]);
-                        }
-                    } catch (ApiErrorException $e) {
-                        return redirect()->route('customer.senderid.pay', $senderid->uid)->with([
-                            'status'  => 'error',
-                            'message' => $e->getMessage(),
-                        ]);
-                    }
-                }
-
-                return redirect()->route('customer.senderid.pay', $senderid->uid)->with([
-                    'status'  => 'error',
-                    'message' => __('locale.payment_gateways.not_found'),
-                ]);
-        }
-
-        return redirect()->route('customer.senderid.pay', $senderid->uid)->with([
-            'status'  => 'error',
-            'message' => __('locale.payment_gateways.not_found'),
-        ]);
-    }
-
-    /**
      * successful Top up payment
      *
      * @param  Request  $request
@@ -140,6 +62,7 @@ class PaymentController extends Controller
 
                         $stripe = new StripeClient($secret_key);
 
+                        $defaultCurrency = Currency::first();
                         try {
                             $response = $stripe->checkout->sessions->retrieve($session_id);
 
@@ -149,7 +72,7 @@ class PaymentController extends Controller
 
                                 $invoice = Invoices::create([
                                     'user_id'        => $user->id,
-                                    'currency_id'    => $user->customer->subscription->plan->currency->id,
+                                    'currency_id'    => $defaultCurrency->id,
                                     'payment_method' => $paymentMethod->id,
                                     'amount'         => $price,
                                     'type'           => Invoices::TYPE_SUBSCRIPTION,
@@ -165,14 +88,7 @@ class PaymentController extends Controller
                                         $user->save();
                                     }
 
-                                    $subscription = $user->customer->activeSubscription();
-
-                                    $subscription->addTransaction(SubscriptionTransaction::TYPE_SUBSCRIBE, [
-                                        'status'                 => SubscriptionTransaction::STATUS_SUCCESS,
-                                        'title'                  => 'Add ' . $request->sms_unit . ' sms units',
-                                        'amount'                 => $request->sms_unit . ' sms units',
-                                    ]);
-
+                                    // Create a log
                                     return redirect()->route('user.home')->with([
                                         'status'  => 'success',
                                         'message' => __('locale.payment_gateways.payment_successfully_made'),

@@ -32,6 +32,7 @@ return [
                 'new_server'       => 'Add New Server',
                 'add_coverage'     => 'Add Coverage',
                 'update_coverage'  => 'Update Coverage',
+                'buy_credit'       => 'Buy Credit',
         ],
 
         //Localization for application exception
@@ -319,7 +320,7 @@ return [
                 'get_started_with_numbers'              => 'Get started with numbers',
                 'get_started_with_senderid'             => 'Get started with sender id',
                 'get_started_with_message'              => 'Get started with message',
-                'send_message_to_your_user'             => 'Send personalized message',
+                'quick_send_to_your_user'             => 'Send personalized message',
                 'numbers_message'                       => 'Manage localized numbers',
                 'sender_id_message'                     => 'Manage Brand with sender id',
                 'subtotal'                              => 'Subtotal',
@@ -1134,7 +1135,7 @@ return [
                 'import_contact'                              => 'Import Contact',
                 'view_conversion'                             => 'View Conversion',
                 'conversion_with'                             => 'Conversion With :recipient',
-                'send_message'                                => 'Send Message',
+                'quick_send'                                => 'Send Message',
                 'opt_in_keywords'                             => 'Opt in keywords',
                 'opt_out_keywords'                            => 'Opt out keywords',
                 'import_history'                              => 'Import history',
@@ -1405,6 +1406,7 @@ on ',
 
                 /*version 3.1*/
                 'plan_price'     => 'Only pay for what you use. Don’t get stalled by contracts, capacity planning, and price modeling. Choose the best plan to fit your needs.',
+                'buy_credit'    => 'Please purchase credit before sending SMS messages.',
         ],
 
         /*
